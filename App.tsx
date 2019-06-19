@@ -13,6 +13,8 @@ import React from 'react'
 import * as RNLocalize from 'react-native-localize'
 import { useScreens } from 'react-native-screens'
 import { createAppContainer, createStackNavigator } from 'react-navigation'
+import { Provider } from 'react-redux'
+import configStore from 'shared/store/configStore'
 
 // tslint:disable-next-line:react-hooks-nesting
 useScreens()
@@ -44,6 +46,7 @@ const AppNavigator = createStackNavigator(
   }
 )
 const AppContainer = createAppContainer(AppNavigator)
+const store = configStore()
 
 export default class App extends React.Component {
   constructor(props: any) {
@@ -61,6 +64,10 @@ export default class App extends React.Component {
   }
 
   render() {
-    return <AppContainer />
+    return (
+      <Provider store={store}>
+        <AppContainer />
+      </Provider>
+    )
   }
 }

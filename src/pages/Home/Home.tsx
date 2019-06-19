@@ -64,7 +64,7 @@ export class Home extends Component<Props, State> {
     if (Platform.OS === 'ios') {
       Alert.alert(
         'App',
-        'onLeadingNavButtonPressed',
+        'Im clicked',
         [{ text: 'OK', onPress: () => console.info('OK Pressed') }],
         { cancelable: true }
       )

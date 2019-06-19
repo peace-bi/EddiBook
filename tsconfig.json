@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "paths": {
       "pages/*": ["src/pages/*"],
-      "components/*": ["src/components/*"],
+      "shared/*": ["src/shared/*"],
       "core/*": ["src/core/*"]
     },
     "allowJs": true,

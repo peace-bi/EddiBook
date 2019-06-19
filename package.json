@@ -24,6 +24,8 @@
     "react-native-screens": "^1.0.0-alpha.22",
     "react-navigation": "^3.8.1",
     "react-navigation-hooks": "https://github.com/react-navigation/react-navigation-hooks.git",
+    "react-redux": "^7.1.0",
+    "redux": "^4.0.1",
     "styled-components": "^4.2.0"
   },
   "devDependencies": {
@@ -39,8 +41,11 @@
     "@types/node": "^12.0.8",
     "@types/react": "^16.8.13",
     "@types/react-native": "^0.57.45",
+    "@types/react-redux": "^7.1.0",
     "@types/react-test-renderer": "^16.8.1",
+    "@types/remote-redux-devtools": "^0.5.3",
     "@types/styled-components": "^4.1.14",
+    "@types/webpack-env": "^1.13.9",
     "babel-jest": "^24.7.1",
     "babel-loader": "^8.0.6",
     "babel-plugin-module-resolver": "^3.2.0",
@@ -49,6 +54,7 @@
     "prettier": "^1.18.2",
     "react-dom": "16.8.3",
     "react-test-renderer": "16.8.3",
+    "remote-redux-devtools": "^0.5.16",
     "ts-jest": "^24.0.2",
     "tslint": "^5.16.0",
     "tslint-config-prettier": "^1.18.0",
