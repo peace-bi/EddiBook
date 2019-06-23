@@ -3,6 +3,7 @@ package com.eddibook;
 import android.support.multidex.MultiDexApplication;
 
 import com.facebook.react.ReactApplication;
+import com.reactlibrary.RNPdfTronUtilsPackage;
 import com.pdftron.reactnative.RNPdftronPackage;
 import com.reactcommunity.rnlocalize.RNLocalizePackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -27,6 +28,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNPdfTronUtilsPackage(),
             new RNPdftronPackage(),
             new RNLocalizePackage(),
             new RNGestureHandlerPackage(),

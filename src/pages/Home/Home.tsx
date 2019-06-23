@@ -16,6 +16,7 @@ import {
 } from 'react-native'
 
 import { DocumentView, RNPdftron } from 'react-native-pdftron'
+import RNPdfTronUtils from 'react-native-pdftron-utils'
 
 interface Props {}
 interface State {
@@ -69,7 +70,14 @@ export class Home extends Component<Props, State> {
         { cancelable: true }
       )
     } else {
-      BackHandler.exitApp()
+      RNPdfTronUtils.exportAnnotations(
+        'PDFTRON_mobile_about',
+        (url: string) => {
+          console.log('url', url)
+        },
+        console.log
+      )
+      // BackHandler.exitApp()
     }
   }
 
@@ -82,7 +90,8 @@ export class Home extends Component<Props, State> {
       )
     }
 
-    const path = 'sample'
+    const path =
+      'https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf'
 
     return (
       <DocumentView

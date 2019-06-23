@@ -8624,6 +8624,9 @@ react-native-modal-popover@^0.0.12:
     lodash.debounce "^4.0.8"
     prop-types "^15.6.2"
 
+"react-native-pdftron-utils@file:libs/PdfTronUtils":
+  version "1.0.0"
+
 "react-native-pdftron@git+https://github.com/PDFTron/pdftron-react-native.git":
   version "1.0.0"
   resolved "git+https://github.com/PDFTron/pdftron-react-native.git#07573de33db68c625c01fef9775c6b7da33b686d"

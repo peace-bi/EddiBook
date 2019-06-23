@@ -1,4 +1,6 @@
 rootProject.name = 'EddiBook'
+include ':react-native-pdftron-utils'
+project(':react-native-pdftron-utils').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-pdftron-utils/android')
 include ':react-native-pdftron'
 project(':react-native-pdftron').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-pdftron/android')
 include ':react-native-localize'
