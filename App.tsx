@@ -8,6 +8,7 @@
  * @format
  */
 
+import { Provider as AntProvider } from '@ant-design/react-native'
 import { Home } from 'pages/Home'
 import React from 'react'
 import * as RNLocalize from 'react-native-localize'
@@ -48,10 +49,18 @@ const AppNavigator = createStackNavigator(
 const AppContainer = createAppContainer(AppNavigator)
 const store = configStore()
 
-export default class App extends React.Component {
+interface State {
+  theme: any
+  currentTheme: any
+}
+
+export default class App extends React.Component<{}, State> {
   constructor(props: any) {
     super(props)
-
+    this.state = {
+      currentTheme: null,
+      theme: null
+    }
     RNLocalize.addEventListener('change', this.handleLocalizationChange)
   }
 
@@ -59,14 +68,23 @@ export default class App extends React.Component {
     // Implment change language
   }
 
+  changeTheme = (theme: any, currentTheme: any) => {
+    this.setState({ theme, currentTheme })
+  }
+
   componentWillUnmount() {
     RNLocalize.removeEventListener('change', this.handleLocalizationChange)
   }
 
   render() {
+    const { theme, currentTheme } = this.state
     return (
       <Provider store={store}>
-        <AppContainer />
+        <AntProvider theme={theme}>
+          <AppContainer
+            screenProps={{ changeTheme: this.changeTheme, currentTheme }}
+          />
+        </AntProvider>
       </Provider>
     )
   }

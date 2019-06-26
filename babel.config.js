@@ -17,6 +17,6 @@ module.exports = {
           "core": "./src/core"
         }
       }
-    ],
+    ]
   ]
 };

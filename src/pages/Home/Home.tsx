@@ -1,3 +1,4 @@
+import { Button, Toast } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
 import React, { useState } from 'react'
 import { View } from 'react-native'
@@ -13,7 +14,7 @@ const StyledText = styled.Text`
   color: palevioletred;
 `
 
-const StyledButton = styled.Button``
+const StyledButton = styled(Button)``
 
 export function Home() {
   const [count, setCount] = useState(0)
@@ -27,9 +28,17 @@ export function Home() {
         } ${count}`}</StyledText>
       </StyledView>
       <StyledButton
-        title="Hello"
-        onPress={() => setCount((prev) => prev + 1)}
-      />
+        type="primary"
+        onPress={() => {
+          setCount((prev) => {
+            const newCount = prev + 1
+            Toast.info(`Increase count to ${newCount}`)
+            return newCount
+          })
+        }}
+      >
+        Start
+      </StyledButton>
     </View>
   )
 }
