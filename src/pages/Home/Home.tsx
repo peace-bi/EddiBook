@@ -1,118 +1,35 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+import { Localize } from 'core/localize'
+import React, { useState } from 'react'
+import { View } from 'react-native'
+import { NavigationStateRoute } from 'react-navigation'
+import { useNavigationState } from 'react-navigation-hooks'
+import styled from 'styled-components/native'
 
-import React, { Component } from 'react'
-import {
-  Alert,
-  BackHandler,
-  PermissionsAndroid,
-  Platform,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native'
+const StyledView = styled.View`
+  background-color: papayawhip;
+`
 
-import { DocumentView, RNPdftron } from 'react-native-pdftron'
-import RNPdfTronUtils from 'react-native-pdftron-utils'
+const StyledText = styled.Text`
+  color: palevioletred;
+`
 
-interface Props {}
-interface State {
-  permissionGranted: boolean
-}
-export class Home extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
+const StyledButton = styled.Button``
 
-    this.state = {
-      permissionGranted: Platform.OS === 'ios' ? true : false
-    }
+export function Home() {
+  const [count, setCount] = useState(0)
+  const navigationState = useNavigationState() as NavigationStateRoute<void>
 
-    RNPdftron.initialize('')
-  }
-
-  componentDidMount() {
-    if (Platform.OS === 'android') {
-      this.requestStoragePermission()
-    }
-  }
-
-  async requestStoragePermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-      )
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        this.setState({
-          permissionGranted: true
-        })
-        console.info('Storage permission granted')
-      } else {
-        this.setState({
-          permissionGranted: false
-        })
-        console.info('Storage permission denied')
-      }
-    } catch (err) {
-      console.warn(err)
-    }
-  }
-
-  onLeadingNavButtonPressed = () => {
-    console.info('leading nav button pressed')
-    if (Platform.OS === 'ios') {
-      Alert.alert(
-        'App',
-        'Im clicked',
-        [{ text: 'OK', onPress: () => console.info('OK Pressed') }],
-        { cancelable: true }
-      )
-    } else {
-      RNPdfTronUtils.exportAnnotations(
-        'PDFTRON_mobile_about',
-        (url: string) => {
-          console.log('url', url)
-        },
-        console.log
-      )
-      // BackHandler.exitApp()
-    }
-  }
-
-  render() {
-    if (!this.state.permissionGranted) {
-      return (
-        <View style={styles.container}>
-          <Text>Storage permission required.</Text>
-        </View>
-      )
-    }
-
-    const path =
-      'https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf'
-
-    return (
-      <DocumentView
-        document={path}
-        showLeadingNavButton={true}
-        leadingNavButtonIcon={
-          Platform.OS === 'ios'
-            ? 'ic_close_black_24px.png'
-            : 'ic_arrow_back_white_24dp'
-        }
-        onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
+  return (
+    <View>
+      <StyledView>
+        <StyledText>{`${Localize.t('hello')} Bi: ${
+          navigationState.routeName
+        } ${count}`}</StyledText>
+      </StyledView>
+      <StyledButton
+        title="Hello"
+        onPress={() => setCount((prev) => prev + 1)}
       />
-    )
-  }
+    </View>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF'
-  }
-})

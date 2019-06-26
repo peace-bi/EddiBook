@@ -26,8 +26,7 @@ public class RNPdfTronUtilsModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void exportAnnotations(String fileName
-          , @Nullable Callback successCallback, @Nullable Callback failureCallback) {
+  public void exportAnnotations(String fileName, Promise promise) {
     try {
       String mCacheDir = getCurrentActivity().getCacheDir().getAbsolutePath();
       PDFDoc pdfDoc = new PDFDoc(mCacheDir + '/' + fileName + ".pdf");
@@ -39,11 +38,11 @@ public class RNPdfTronUtilsModule extends ReactContextBaseJavaModule {
       String xfdfFileUrl = mCacheDir + '/' + fileName + ".xfdf";
       docAnnots.saveAsXFDF(xfdfFileUrl);
 
-      successCallback.invoke(xfdfFileUrl);
+      promise.resolve(xfdfFileUrl);
 
     } catch (PDFNetException e) {
       e.printStackTrace();
-      failureCallback.invoke(e.getMessage());
+      promise.reject(e.getMessage());
     }
   }
 }
