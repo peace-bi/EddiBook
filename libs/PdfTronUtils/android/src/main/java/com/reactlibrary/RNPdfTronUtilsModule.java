@@ -3,10 +3,10 @@ package com.reactlibrary;
 
 import android.support.annotation.Nullable;
 
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
 import com.pdftron.common.PDFNetException;
 import com.pdftron.fdf.FDFDoc;
 import com.pdftron.pdf.PDFDoc;
