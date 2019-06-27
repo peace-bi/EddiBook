@@ -33,4 +33,15 @@ allprojects {
            url "https://pdftron-maven.s3.amazonaws.com/release"
        }
     }
+    subprojects {
+        afterEvaluate {
+            project ->
+                if (project.hasProperty("android")) {
+                    android {
+                        compileSdkVersion = 28
+                        buildToolsVersion = "28.0.3"
+                    }
+                }
+        }
+    }
 }

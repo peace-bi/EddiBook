@@ -1,3 +1,5 @@
 export default {
-  hello: 'Hello'
+  Tab1: 'Bookshelf',
+  Tab2: 'Downloaded',
+  Tab3: 'More'
 }

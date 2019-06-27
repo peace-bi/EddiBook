@@ -23,19 +23,19 @@ useScreens()
 const AppNavigator = createStackNavigator(
   {
     Home: {
-      screen: Home,
-      navigationOptions: () => ({
-        title: 'Home',
-        headerBackTitle: 'A much too long text for back button from B to A',
-        headerTruncatedBackTitle: 'to A'
-      })
+      screen: Home
+      // navigationOptions: () => ({
+      //   title: 'Home',
+      //   headerBackTitle: 'A much too long text for back button from B to A',
+      //   headerTruncatedBackTitle: 'to A'
+      // })
     }
   },
   {
     initialRouteName: 'Home',
     /* The header config from HomeScreen is now here */
     defaultNavigationOptions: {
-      title: 'Nancy',
+      // title: 'Nancy',
       headerStyle: {
         backgroundColor: '#f4511e'
       },

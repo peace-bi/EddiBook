@@ -1,3 +1,5 @@
 export default {
-  hello: 'Xin chào'
+  Tab1: 'Sách',
+  Tab2: 'Đã lưu',
+  Tab3: 'Thêm'
 }
