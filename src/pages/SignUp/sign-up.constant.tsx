@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-export const SignInStyles = StyleSheet.create({
+export const SignUpStyles = StyleSheet.create({
   wrapper: {
     maxWidth: 350,
     width: '100%',
@@ -22,33 +22,28 @@ export const SignInStyles = StyleSheet.create({
   fieldWrapper: {
     marginTop: 20
   },
-  forgotPasswordWrapper: {
-    marginTop: 24
-  },
-  forgotPasswordText: {
-    color: '#1E8EEB'
-  },
-  signInButtonWrapper: {
+  signUpButtonWrapper: {
     marginTop: 38
   },
-  signInButton: {
+  signUpButton: {
     backgroundColor: '#F23F3C'
   },
-  signInButtonText: {
+  signUpButtonText: {
     color: '#fff'
   },
-  noAccountContainer: {
+  policyContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     flex: 1
   },
-  noAccountWrapper: {
+  policyWrapper: {
     justifyContent: 'center',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignSelf: 'flex-end',
     marginBottom: 30
   },
-  signUpButtonText: {
-    color: '#F23F3C'
+  policyText: {
+    fontSize: 15
   }
 })

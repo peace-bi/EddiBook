@@ -7,16 +7,18 @@
  *
  * @format
  */
-
 import { Provider as AntProvider } from '@ant-design/react-native'
+import AuthenticateMail from 'pages/AuthenticateMail/authenticate-mail'
 import { Home } from 'pages/Home'
 import SignIn from 'pages/SignIn/sign-in'
+import SignUp from 'pages/SignUp/sign-up'
 import React from 'react'
 import * as RNLocalize from 'react-native-localize'
 import { useScreens } from 'react-native-screens'
 import { createAppContainer, createStackNavigator } from 'react-navigation'
 import { Provider } from 'react-redux'
 import configStore from 'shared/store/configStore'
+
 // tslint:disable-next-line:react-hooks-nesting
 useScreens()
 
@@ -31,10 +33,13 @@ const AppNavigator = createStackNavigator(
       })
     },
     SignIn: {
-      screen: SignIn,
-      navigationOptions: () => ({
-        title: 'Sign In'
-      })
+      screen: SignIn
+    },
+    SignUp: {
+      screen: SignUp
+    },
+    AuthenticateMail: {
+      screen: AuthenticateMail
     }
   },
   {
