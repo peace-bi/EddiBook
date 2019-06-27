@@ -10,29 +10,35 @@
 
 import { Provider as AntProvider } from '@ant-design/react-native'
 import { Home } from 'pages/Home'
+import SignIn from 'pages/SignIn/sign-in'
 import React from 'react'
 import * as RNLocalize from 'react-native-localize'
 import { useScreens } from 'react-native-screens'
 import { createAppContainer, createStackNavigator } from 'react-navigation'
 import { Provider } from 'react-redux'
 import configStore from 'shared/store/configStore'
-
 // tslint:disable-next-line:react-hooks-nesting
 useScreens()
 
 const AppNavigator = createStackNavigator(
   {
     Home: {
-      screen: Home
-      // navigationOptions: () => ({
-      //   title: 'Home',
-      //   headerBackTitle: 'A much too long text for back button from B to A',
-      //   headerTruncatedBackTitle: 'to A'
-      // })
+      screen: Home,
+      navigationOptions: () => ({
+        title: 'Home',
+        headerBackTitle: 'A much too long text for back button from B to A',
+        headerTruncatedBackTitle: 'to A'
+      })
+    },
+    SignIn: {
+      screen: SignIn,
+      navigationOptions: () => ({
+        title: 'Sign In'
+      })
     }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'SignIn',
     /* The header config from HomeScreen is now here */
     defaultNavigationOptions: {
       // title: 'Nancy',

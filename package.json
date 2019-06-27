@@ -27,6 +27,7 @@
     "react-navigation-hooks": "https://github.com/react-navigation/react-navigation-hooks.git",
     "react-redux": "^7.1.0",
     "redux": "^4.0.1",
+    "rxjs": "^6.5.2",
     "styled-components": "^4.2.0"
   },
   "devDependencies": {
