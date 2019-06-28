@@ -21,7 +21,7 @@ export default {
   SignUp$Password: 'Password',
   SignUp$PasswordPlaceholder: 'Enter Password',
   SignUp$ConfirmPassword: 'Confirm Password',
-  SignUp$ConfirmPasswordPlaceholder: 'Enter Password',
+  SignUp$ConfirmPasswordPlaceholder: 'Re-enter Password',
   SignUp$SignUpButton: 'Sign Up',
   SignUp$Policy1: 'By signing up, you agree to the ',
   SignUp$Policy2: 'Privacy Policy ',

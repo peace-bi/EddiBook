@@ -51,7 +51,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'ResetPassword',
+    initialRouteName: 'SignUp',
     /* The header config from HomeScreen is now here */
     defaultNavigationOptions: {
       // title: 'Nancy',
