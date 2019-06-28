@@ -9,7 +9,9 @@
  */
 import { Provider as AntProvider } from '@ant-design/react-native'
 import AuthenticateMail from 'pages/AuthenticateMail/authenticate-mail'
+import ForgotPassword from 'pages/ForgotPassword/forgot-password'
 import { Home } from 'pages/Home'
+import ResetPassword from 'pages/ResetPassword/reset-password'
 import SignIn from 'pages/SignIn/sign-in'
 import SignUp from 'pages/SignUp/sign-up'
 import React from 'react'
@@ -40,10 +42,16 @@ const AppNavigator = createStackNavigator(
     },
     AuthenticateMail: {
       screen: AuthenticateMail
+    },
+    ForgotPassword: {
+      screen: ForgotPassword
+    },
+    ResetPassword: {
+      screen: ResetPassword
     }
   },
   {
-    initialRouteName: 'SignIn',
+    initialRouteName: 'ResetPassword',
     /* The header config from HomeScreen is now here */
     defaultNavigationOptions: {
       // title: 'Nancy',

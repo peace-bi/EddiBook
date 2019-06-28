@@ -31,5 +31,17 @@ export default {
   AuthenticateMail$Content1: 'We have sent you an email ',
   AuthenticateMail$Content2: 'Please check your mailbox to activate account. ',
   AuthenticateMail$SignIn: 'Sign In',
-  AuthenticateMail$ResendEmail: 'Resend email'
+  AuthenticateMail$ResendEmail: 'Resend email',
+  ForgotPassword$Title: 'Forgot Password',
+  ForgotPassword$Content: 'Please enter your email to reset your password',
+  ForgotPassword$EmailLabel: 'Email',
+  ForgotPassword$EmailPlaceholder: 'Enter Mail',
+  ForgotPassword$SendButton: 'Send',
+  ResetPassword$Title: 'Reset Password',
+  ResetPassword$Content: 'Please update your password to login your account',
+  ResetPassword$PasswordLabel: 'New Password',
+  ResetPassword$PasswordPlaceholder: 'Enter New Password',
+  ResetPassword$ConfirmPasswordLabel: 'Confirm Password',
+  ResetPassword$ConfirmPasswordPlaceholder: 'Enter Confirm Password',
+  ResetPassword$SaveButton: 'Save'
 }
