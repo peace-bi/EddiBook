@@ -5,6 +5,7 @@ import android.support.multidex.MultiDexApplication;
 import com.facebook.react.ReactApplication;
 import com.dylanvann.fastimage.FastImageViewPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.BV.LinearGradient.LinearGradientPackage;
 import com.reactlibrary.RNPdfTronUtilsPackage;
 import com.pdftron.reactnative.RNPdftronPackage;
 import com.reactcommunity.rnlocalize.RNLocalizePackage;
@@ -30,6 +31,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new LinearGradientPackage(),
             new FastImageViewPackage(),
             new RNDeviceInfo(),
             new RNPdfTronUtilsPackage(),

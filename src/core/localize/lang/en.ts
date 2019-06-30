@@ -43,5 +43,16 @@ export default {
   ResetPassword$PasswordPlaceholder: 'Enter New Password',
   ResetPassword$ConfirmPasswordLabel: 'Confirm Password',
   ResetPassword$ConfirmPasswordPlaceholder: 'Enter Confirm Password',
-  ResetPassword$SaveButton: 'Save'
+  ResetPassword$SaveButton: 'Save',
+  Profile$Email: 'Email',
+  Profile$FirstName: 'First Name',
+  Profile$LastName: 'Last Name',
+  Profile$PhoneNumber: 'Phone Number',
+  Profile$Country: 'Country',
+  Profile$State: 'State',
+  Profile$City: 'City',
+  Profile$ZipCode: 'Zip code/ Postal',
+  Profile$Address1: 'Address 1',
+  Profile$Address2: 'Address 2',
+  Profile$SaveButton: 'Save Change'
 }

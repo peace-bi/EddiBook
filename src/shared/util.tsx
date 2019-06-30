@@ -1,4 +1,4 @@
-import { GeolocationReturnType } from 'react-native'
+import { GeolocationReturnType, StatusBar } from 'react-native'
 import { Observable } from 'rxjs/internal/Observable'
 import { Observer } from 'rxjs/internal/types'
 import { delay } from 'rxjs/operators'
@@ -18,4 +18,8 @@ export function getLocation(): Observable<GeolocationReturnType> {
       }
     )
   ).pipe(delay(5000))
+}
+export function toggleStatusBar(show: boolean) {
+  StatusBar.setTranslucent(show)
+  StatusBar.setBackgroundColor(show ? '#fff' : 'transparent')
 }

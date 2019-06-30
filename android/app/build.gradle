@@ -142,6 +142,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-linear-gradient')
     implementation project(':react-native-fast-image')
     implementation project(':react-native-device-info')
     implementation project(':react-native-pdftron-utils')
