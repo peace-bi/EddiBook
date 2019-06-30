@@ -7,9 +7,13 @@
  *
  * @format
  */
-
 import { Provider as AntProvider } from '@ant-design/react-native'
+import AuthenticateMail from 'pages/AuthenticateMail/authenticate-mail'
+import ForgotPassword from 'pages/ForgotPassword/forgot-password'
 import { Home } from 'pages/Home'
+import ResetPassword from 'pages/ResetPassword/reset-password'
+import SignIn from 'pages/SignIn/sign-in'
+import SignUp from 'pages/SignUp/sign-up'
 import React from 'react'
 import * as RNLocalize from 'react-native-localize'
 import { useScreens } from 'react-native-screens'
@@ -23,16 +27,31 @@ useScreens()
 const AppNavigator = createStackNavigator(
   {
     Home: {
-      screen: Home
-      // navigationOptions: () => ({
-      //   title: 'Home',
-      //   headerBackTitle: 'A much too long text for back button from B to A',
-      //   headerTruncatedBackTitle: 'to A'
-      // })
+      screen: Home,
+      navigationOptions: () => ({
+        title: 'Home',
+        headerBackTitle: 'A much too long text for back button from B to A',
+        headerTruncatedBackTitle: 'to A'
+      })
+    },
+    SignIn: {
+      screen: SignIn
+    },
+    SignUp: {
+      screen: SignUp
+    },
+    AuthenticateMail: {
+      screen: AuthenticateMail
+    },
+    ForgotPassword: {
+      screen: ForgotPassword
+    },
+    ResetPassword: {
+      screen: ResetPassword
     }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'SignUp',
     /* The header config from HomeScreen is now here */
     defaultNavigationOptions: {
       // title: 'Nancy',
