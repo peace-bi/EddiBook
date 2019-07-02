@@ -54,7 +54,7 @@ export default {
     ConfirmPasswordPlaceholder: 'Enter Confirm Password',
     SaveButton: 'Save'
   },
-  Profile: {
+  EditProfile: {
     Email: 'Email',
     Edit: 'Edit',
     FirstName: 'First Name',
@@ -67,5 +67,8 @@ export default {
     Address1: 'Address 1',
     Address2: 'Address 2',
     SaveButton: 'Save Change'
+  },
+  Profile: {
+    Title: 'Profile'
   }
 }

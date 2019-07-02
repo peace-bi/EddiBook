@@ -17,7 +17,7 @@
     "noEmit": true,
     "strict": true,
     "target": "esnext",
-
+    "resolveJsonModule": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -30,5 +30,10 @@
     "noFallthroughCasesInSwitch": true,
     "strictNullChecks": true
   },
-  "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"]
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ]
 }

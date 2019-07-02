@@ -29,6 +29,7 @@
     "react-native-pdftron": "git+https://github.com/PDFTron/pdftron-react-native.git",
     "react-native-pdftron-utils": "file:libs/PdfTronUtils",
     "react-native-screens": "^1.0.0-alpha.22",
+    "react-native-vector-icons": "^6.6.0",
     "react-navigation": "^3.8.1",
     "react-navigation-hooks": "https://github.com/react-navigation/react-navigation-hooks.git",
     "react-redux": "^7.1.0",
@@ -52,6 +53,7 @@
     "@types/node": "^12.0.8",
     "@types/react": "^16.8.13",
     "@types/react-native": "^0.57.45",
+    "@types/react-native-vector-icons": "^6.4.1",
     "@types/react-redux": "^7.1.0",
     "@types/react-test-renderer": "^16.8.1",
     "@types/remote-redux-devtools": "^0.5.3",
@@ -82,7 +84,8 @@
   },
   "rnpm": {
     "assets": [
-      "src/assets"
+      "src/assets",
+      "src/assets/fonts"
     ]
   }
 }

@@ -3,7 +3,7 @@ import { throttle } from 'lodash'
 import React, { useEffect, useRef, useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 
-import { countryPickerStyles as styles } from '../profile.constant'
+import { countryPickerStyles as styles } from '../edit-profile.constant'
 
 interface Props {
   data: Array<{

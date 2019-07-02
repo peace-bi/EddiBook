@@ -11,6 +11,7 @@ import { Provider as AntProvider } from '@ant-design/react-native/'
 import enUS from '@ant-design/react-native/es/locale-provider/en_US'
 import AuthenticateMail from 'pages/AuthenticateMail/authenticate-mail'
 import BookDetail from 'pages/BookDetail/book-detail'
+import EditProfile from 'pages/EditProfile/edit-profile'
 import ForgotPassword from 'pages/ForgotPassword/forgot-password'
 import { Home } from 'pages/Home'
 import Profile from 'pages/Profile/profile'
@@ -56,6 +57,9 @@ const AppNavigator = createStackNavigator(
     },
     BookDetail: {
       screen: BookDetail
+    },
+    EditProfile: {
+      screen: EditProfile
     },
     Profile: {
       screen: Profile

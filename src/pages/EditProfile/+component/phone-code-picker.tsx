@@ -2,7 +2,7 @@ import { Icon } from '@ant-design/react-native'
 import React from 'react'
 import { Image, Picker, Text, View, ViewStyle } from 'react-native'
 
-import { phoneCodePickerStyles as styles } from '../profile.constant'
+import { phoneCodePickerStyles as styles } from '../edit-profile.constant'
 
 interface MCountry {
   countryId: number
