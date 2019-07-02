@@ -45,6 +45,7 @@ export default {
   ResetPassword$ConfirmPasswordPlaceholder: 'Enter Confirm Password',
   ResetPassword$SaveButton: 'Save',
   Profile$Email: 'Email',
+  Profile$Edit: 'Edit',
   Profile$FirstName: 'First Name',
   Profile$LastName: 'Last Name',
   Profile$PhoneNumber: 'Phone Number',

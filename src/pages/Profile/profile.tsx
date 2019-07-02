@@ -1,4 +1,4 @@
-import { Button } from '@ant-design/react-native'
+import { Button, Icon, Modal } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
 import { Formik } from 'formik'
 import React from 'react'
@@ -18,12 +18,15 @@ import {
 } from 'react-navigation'
 import { CustomInput } from 'shared/components/CustomInput'
 
+import { CountryPickerModal } from './+component/countryPicker'
 import { PhoneCodePicker } from './+component/phone-code-picker'
-import { styles } from './profile.constant'
+import { mockCountry, styles } from './profile.constant'
 
 const tResolver = (path: string): string => `Profile$${path}`
 interface Props {}
-interface State {}
+interface State {
+  openCountryModal: boolean
+}
 interface FormProps {
   email: string
   firstname: string
@@ -45,67 +48,45 @@ export default class Profile extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props)
+    this.state = {
+      openCountryModal: false
+    }
     this.submit = this.submit.bind(this)
+    this.toggleCountryPickerModal = this.toggleCountryPickerModal.bind(this)
   }
 
   submit(values: FormProps) {
     Alert.alert(JSON.stringify(values, null, 2))
     Keyboard.dismiss()
   }
+
+  toggleCountryPickerModal() {
+    this.setState({
+      openCountryModal: !this.state.openCountryModal
+    })
+  }
+
   render() {
     return (
       <View style={{ flex: 1 }}>
         <ScrollView showsHorizontalScrollIndicator={false}>
           <View style={styles.wrapper}>
-            <View
-              style={{
-                alignSelf: 'center',
-                marginTop: 16,
-                position: 'relative'
-              }}
-            >
+            <View style={styles.avatarViewContainer}>
               <Image
-                style={{ width: 120, height: 120, borderRadius: 120 }}
+                style={styles.avatar}
                 source={{ uri: 'https://i.imgur.com/cPFHT2k.jpg' }}
               />
               <TouchableWithoutFeedback onPress={() => console.info(2)}>
-                <View
-                  style={{
-                    width: 120,
-                    height: 120,
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    overflow: 'hidden'
-                  }}
-                >
+                <View style={styles.avatarContainerInteract}>
                   <LinearGradient
                     colors={['rgba(0,0,0,0)', 'rgba(0,0,0,.8)']}
                     start={{ x: 0.5, y: 0 }}
                     end={{ x: 0.5, y: 1 }}
-                    style={{
-                      width: 120,
-                      height: 60,
-                      position: 'absolute',
-                      top: 60,
-                      left: 0,
-                      borderBottomLeftRadius: 60,
-                      borderBottomRightRadius: 60
-                    }}
+                    style={styles.avatarWrapper}
                   >
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        flex: 1
-                      }}
-                    >
-                      <Text
-                        style={{
-                          color: '#fff',
-                          textAlign: 'center'
-                        }}
-                      >
-                        Edit
+                    <View style={styles.avatarContainer}>
+                      <Text style={styles.avatarEditText}>
+                        {Localize.t(tResolver('Edit'))}
                       </Text>
                     </View>
                   </LinearGradient>
@@ -122,9 +103,9 @@ export default class Profile extends React.Component<Props, State> {
                 country: '',
                 state: '',
                 city: '',
-                zipcode: 'string',
-                address1: ' string',
-                address2: ' string'
+                zipcode: '',
+                address1: '',
+                address2: ''
               }}
               onSubmit={this.submit}
             >
@@ -180,10 +161,39 @@ export default class Profile extends React.Component<Props, State> {
                     <Text style={styles.label}>
                       {Localize.t(tResolver('Country'))} *
                     </Text>
-                    <CustomInput
-                      value={values.lastname}
-                      onChangeText={handleChange('country')}
-                    />
+                    <View style={styles.countryPickerContainer}>
+                      <TouchableWithoutFeedback
+                        onPress={this.toggleCountryPickerModal}
+                      >
+                        <View style={styles.countryField}>
+                          <Text style={styles.countryLabel}>
+                            {(() => {
+                              const result = mockCountry.find(
+                                ({ value }) => values.country === value
+                              )
+                              return result && result.label
+                            })()}
+                          </Text>
+                          <Icon
+                            style={styles.countryPickerIcon}
+                            name="caret-down"
+                          />
+                        </View>
+                      </TouchableWithoutFeedback>
+                    </View>
+                    <Modal
+                      transparent={false}
+                      visible={this.state.openCountryModal}
+                      animationType="slide-up"
+                      onClose={this.toggleCountryPickerModal}
+                    >
+                      <CountryPickerModal
+                        closeModal={this.toggleCountryPickerModal}
+                        data={mockCountry}
+                        handleChange={handleChange}
+                        selectedValue={values.country}
+                      />
+                    </Modal>
                   </View>
 
                   <View style={styles.fieldWrapper}>
