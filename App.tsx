@@ -7,7 +7,8 @@
  *
  * @format
  */
-import { Provider as AntProvider } from '@ant-design/react-native'
+import { Provider as AntProvider } from '@ant-design/react-native/'
+import enUS from '@ant-design/react-native/es/locale-provider/en_US'
 import AuthenticateMail from 'pages/AuthenticateMail/authenticate-mail'
 import ForgotPassword from 'pages/ForgotPassword/forgot-password'
 import { Home } from 'pages/Home'
@@ -20,6 +21,8 @@ import { useScreens } from 'react-native-screens'
 import { createAppContainer, createStackNavigator } from 'react-navigation'
 import { Provider } from 'react-redux'
 import configStore from 'shared/store/configStore'
+import { Theme } from 'shared/themes'
+import { ThemeProvider } from 'styled-components/native'
 
 // tslint:disable-next-line:react-hooks-nesting
 useScreens()
@@ -51,7 +54,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'SignUp',
+    initialRouteName: 'Home',
     /* The header config from HomeScreen is now here */
     defaultNavigationOptions: {
       // title: 'Nancy',
@@ -69,16 +72,14 @@ const AppContainer = createAppContainer(AppNavigator)
 const store = configStore()
 
 interface State {
-  theme: any
-  currentTheme: any
+  theme: Theme
 }
 
 export default class App extends React.Component<{}, State> {
   constructor(props: any) {
     super(props)
     this.state = {
-      currentTheme: null,
-      theme: null
+      theme: Theme.getTheme()
     }
     RNLocalize.addEventListener('change', this.handleLocalizationChange)
   }
@@ -87,8 +88,8 @@ export default class App extends React.Component<{}, State> {
     // Implment change language
   }
 
-  changeTheme = (theme: any, currentTheme: any) => {
-    this.setState({ theme, currentTheme })
+  changeTheme = (themeName: string) => {
+    this.setState({ theme: Theme.getTheme(themeName) })
   }
 
   componentWillUnmount() {
@@ -96,13 +97,15 @@ export default class App extends React.Component<{}, State> {
   }
 
   render() {
-    const { theme, currentTheme } = this.state
+    const { theme } = this.state
     return (
       <Provider store={store}>
-        <AntProvider theme={theme}>
-          <AppContainer
-            screenProps={{ changeTheme: this.changeTheme, currentTheme }}
-          />
+        <AntProvider theme={theme} locale={enUS as any}>
+          <ThemeProvider theme={theme}>
+            <AppContainer
+              screenProps={{ changeTheme: this.changeTheme, theme }}
+            />
+          </ThemeProvider>
         </AntProvider>
       </Provider>
     )

@@ -169,8 +169,7 @@ const styles = StyleSheet.create({
     borderRadius: 9,
     paddingLeft: 14,
     paddingRight: 30,
-    fontSize: 15,
-    fontFamily: 'Poppins-Regular'
+    fontSize: 15
   },
   inputWithBorder: {
     borderWidth: 1

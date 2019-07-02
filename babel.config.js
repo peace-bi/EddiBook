@@ -14,7 +14,8 @@ module.exports = {
         alias: {
           "pages": "./src/pages",
           "shared": "./src/shared",
-          "core": "./src/core"
+          "core": "./src/core",
+          "assets": "./src/assets"
         }
       }
     ]

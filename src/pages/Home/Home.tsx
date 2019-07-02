@@ -1,15 +1,13 @@
-import { Button, Icon, TabBar, Toast } from '@ant-design/react-native'
+import { Button, Icon, TabBar } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
+import { BookShelf } from 'pages/BookShelf'
 import React, { useState } from 'react'
-import { View } from 'react-native'
-import {
-  NavigationRoute,
-  NavigationScreenProp,
-  NavigationStateRoute
-} from 'react-navigation'
-import { useNavigation, useNavigationState } from 'react-navigation-hooks'
+import { NavigationRoute, NavigationScreenProp } from 'react-navigation'
+import { useNavigation } from 'react-navigation-hooks'
+import { NavigationScreenPropExtend } from 'shared/navigation'
 import styled from 'styled-components/native'
 import { TabType } from './+model'
+import { HomeHeader } from './Header'
 
 const StyledView = styled.View`
   background-color: papayawhip;
@@ -19,17 +17,19 @@ const StyledText = styled.Text`
   color: palevioletred;
 `
 
-const StyledButton = styled(Button)``
-
 export function Home() {
   const [selectedTab, setSelectedTab] = useState(TabType.BOOKSHELF)
-  const [count, setCount] = useState(0)
-  const navigationState = useNavigationState() as NavigationStateRoute<void>
-  const navigation: NavigationScreenProp<NavigationRoute> = useNavigation()
+  // const [count, setCount] = useState(0)
+  // const navigationState = useNavigationState() as NavigationStateRoute<void>
+  const navigation: NavigationScreenPropExtend<
+    NavigationRoute
+  > = useNavigation()
+  const screenProps = navigation.getScreenProps()
 
   const onSelectedTab = (tabName: TabType) => {
     navigation.setParams({
-      title: Localize.t(tabName)
+      title: Localize.t(tabName),
+      tabType: tabName
     })
     setSelectedTab(tabName)
   }
@@ -42,23 +42,7 @@ export function Home() {
         onPress={() => onSelectedTab(TabType.BOOKSHELF)}
         icon={<Icon name="home" />}
       >
-        <View>
-          <StyledView>
-            <StyledText>{`Hello Bi: ${navigationState.routeName} ${count}`}</StyledText>
-          </StyledView>
-          <StyledButton
-            type="primary"
-            onPress={() => {
-              Toast.info(`Increase count to ${count + 1}`)
-              return setCount((prev) => {
-                const newCount = prev + 1
-                return newCount
-              })
-            }}
-          >
-            Start
-          </StyledButton>
-        </View>
+        <BookShelf />
       </TabBar.Item>
       <TabBar.Item
         title={Localize.t(TabType.DOWNLOADED)}
@@ -67,6 +51,12 @@ export function Home() {
         icon={<Icon name="ordered-list" />}
       >
         <StyledView>
+          <Button
+            type="primary"
+            onPress={() => screenProps.changeTheme('chin')}
+          >
+            Hello
+          </Button>
           <StyledText>Tab 2</StyledText>
         </StyledView>
       </TabBar.Item>
@@ -89,5 +79,6 @@ Home.navigationOptions = ({
 }: {
   navigation: NavigationScreenProp<NavigationRoute>
 }) => ({
-  title: navigation.getParam('title', Localize.t(TabType.BOOKSHELF))
+  header: <HomeHeader {...navigation} />
+  // headerStyle: { height: 64, backgroundColor: 'blue' }
 })

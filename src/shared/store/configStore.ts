@@ -1,4 +1,5 @@
 import { applyMiddleware, createStore, DeepPartial, Middleware } from 'redux'
+import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'remote-redux-devtools'
 import loggerMW from './middleware/logger'
 import rootReducer from './rootReducer'
@@ -6,7 +7,7 @@ import rootReducer from './rootReducer'
 export default function configStore(
   preloadedState?: DeepPartial<unknown> | undefined
 ) {
-  const middlewares: Middleware[] = []
+  const middlewares: Middleware[] = [thunk]
   if (process.env.NODE_ENV === 'development') {
     middlewares.push(loggerMW())
   }

@@ -7,10 +7,18 @@ interface Props {
   color?: string
   subColor?: string
   textColor?: string
+  textContent?: string
 }
 
-export function BookMarker(props: Props) {
-  const { size, textSize, color, subColor, textColor } = props
+export function Ribbon(props: Props) {
+  const {
+    size,
+    textSize,
+    color,
+    subColor,
+    textColor,
+    textContent = 'New'
+  } = props
   return (
     <View
       style={{
@@ -50,10 +58,11 @@ export function BookMarker(props: Props) {
               left: 0,
               width: size,
               alignSelf: 'center',
-              fontSize: textSize
+              fontSize: textSize,
+              fontWeight: '900'
             }}
           >
-            New
+            {textContent}
           </Text>
           <View
             style={{
