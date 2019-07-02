@@ -10,8 +10,6 @@ import { CustomInput } from 'shared/components/CustomInput'
 
 import { SignUpStyles } from './sign-up.constant'
 
-const tResolver = (path: string): string => `SignUp$${path}`
-
 interface Props extends NavigationScreenProps<any> {}
 
 interface State {}
@@ -61,59 +59,59 @@ class SignUpComponent extends React.Component<Props, State> {
             {({ handleChange, handleSubmit, values }) => (
               <View>
                 <Text style={SignUpStyles.title}>
-                  {Localize.t(tResolver('Title'))}
+                  {Localize.t('SignUp.Title')}
                 </Text>
                 <View style={SignUpStyles.fieldWrapper}>
                   <Text style={SignUpStyles.label}>
-                    {Localize.t(tResolver('Email'))}
+                    {Localize.t('SignUp.Email')}
                   </Text>
                   <CustomInput
                     value={values.email}
                     onChangeText={handleChange('email')}
-                    placeholder={Localize.t(tResolver('EmailPlaceholder'))}
+                    placeholder={Localize.t('SignUp.EmailPlaceholder')}
                   />
                 </View>
                 <View style={SignUpStyles.fieldWrapper}>
                   <Text style={SignUpStyles.label}>
-                    {Localize.t(tResolver('FirstName'))}*
+                    {Localize.t('SignUp.FirstName')}*
                   </Text>
                   <CustomInput
                     value={values.firstname}
                     onChangeText={handleChange('firstname')}
-                    placeholder={Localize.t(tResolver('FirstNamePlaceholder'))}
+                    placeholder={Localize.t('SignUp.FirstNamePlaceholder')}
                   />
                 </View>
                 <View style={SignUpStyles.fieldWrapper}>
                   <Text style={SignUpStyles.label}>
-                    {Localize.t(tResolver('LastName'))} *
+                    {Localize.t('SignUp.LastName')} *
                   </Text>
                   <CustomInput
                     value={values.lastname}
                     onChangeText={handleChange('lastname')}
-                    placeholder={Localize.t(tResolver('LastNamePlaceholder'))}
+                    placeholder={Localize.t('SignUp.LastNamePlaceholder')}
                   />
                 </View>
                 <View style={SignUpStyles.fieldWrapper}>
                   <Text style={SignUpStyles.label}>
-                    {Localize.t(tResolver('Password'))} *
+                    {Localize.t('SignUp.Password')} *
                   </Text>
                   <CustomInput
                     value={values.password}
                     onChangeText={handleChange('password')}
-                    placeholder={Localize.t(tResolver('PasswordPlaceholder'))}
+                    placeholder={Localize.t('SignUp.PasswordPlaceholder')}
                     valid={true}
                     secureTextEntry={true}
                   />
                 </View>
                 <View style={SignUpStyles.fieldWrapper}>
                   <Text style={SignUpStyles.label}>
-                    {Localize.t(tResolver('ConfirmPassword'))} *
+                    {Localize.t('SignUp.ConfirmPassword')} *
                   </Text>
                   <CustomInput
                     value={values.confirmPassword}
                     onChangeText={handleChange('confirmPassword')}
                     placeholder={Localize.t(
-                      tResolver('ConfirmPasswordPlaceholder')
+                      'SignUp.ConfirmPasswordPlaceholder'
                     )}
                     secureTextEntry={true}
                   />
@@ -124,7 +122,7 @@ class SignUpComponent extends React.Component<Props, State> {
                     onPress={handleSubmit}
                   >
                     <Text style={SignUpStyles.signUpButtonText}>
-                      {Localize.t(tResolver('SignUpButton'))}
+                      {Localize.t('SignUp.SignUpButton')}
                     </Text>
                   </Button>
                 </View>
@@ -135,19 +133,19 @@ class SignUpComponent extends React.Component<Props, State> {
         <View style={SignUpStyles.policyContainer}>
           <View style={SignUpStyles.policyWrapper}>
             <Text style={SignUpStyles.policyText}>
-              {Localize.t(tResolver('Policy1'))}
+              {Localize.t('SignUp.Policy1')}
             </Text>
             <TouchableWithoutFeedback>
               <Text style={{ ...SignUpStyles.policyText, fontWeight: '600' }}>
-                {Localize.t(tResolver('Policy2'))}
+                {Localize.t('SignUp.Policy2')}
               </Text>
             </TouchableWithoutFeedback>
             <Text style={SignUpStyles.policyText}>
-              {Localize.t(tResolver('Policy3'))}{' '}
+              {Localize.t('SignUp.Policy3')}{' '}
             </Text>
             <TouchableWithoutFeedback>
               <Text style={{ ...SignUpStyles.policyText, fontWeight: '600' }}>
-                {Localize.t(tResolver('Policy4'))}
+                {Localize.t('SignUp.Policy4')}
               </Text>
             </TouchableWithoutFeedback>
           </View>

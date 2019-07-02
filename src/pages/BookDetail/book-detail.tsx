@@ -6,8 +6,6 @@ const HEADER_MAX_HEIGHT = 300
 const HEADER_MIN_HEIGHT = 0
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
 
-export const tResolver = (path: string): string => `BookDetail$${path}`
-
 interface Props extends NavigationScreenProps<any> {}
 
 interface State {}

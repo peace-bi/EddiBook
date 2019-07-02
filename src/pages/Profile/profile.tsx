@@ -22,7 +22,6 @@ import { CountryPickerModal } from './+component/countryPicker'
 import { PhoneCodePicker } from './+component/phone-code-picker'
 import { mockCountry, styles } from './profile.constant'
 
-const tResolver = (path: string): string => `Profile$${path}`
 interface Props {}
 interface State {
   openCountryModal: boolean
@@ -86,7 +85,7 @@ export default class Profile extends React.Component<Props, State> {
                   >
                     <View style={styles.avatarContainer}>
                       <Text style={styles.avatarEditText}>
-                        {Localize.t(tResolver('Edit'))}
+                        {Localize.t('Profile.Edit')}
                       </Text>
                     </View>
                   </LinearGradient>
@@ -113,7 +112,7 @@ export default class Profile extends React.Component<Props, State> {
                 <View>
                   <View style={styles.fieldWrapper}>
                     <Text style={styles.label}>
-                      {Localize.t(tResolver('Email'))}
+                      {Localize.t('Profile.Email')}
                     </Text>
                     <CustomInput
                       value={values.email}
@@ -122,7 +121,7 @@ export default class Profile extends React.Component<Props, State> {
                   </View>
                   <View style={styles.fieldWrapper}>
                     <Text style={styles.label}>
-                      {Localize.t(tResolver('FirstName'))}*
+                      {Localize.t('Profile.FirstName')}*
                     </Text>
                     <CustomInput
                       value={values.firstname}
@@ -131,7 +130,7 @@ export default class Profile extends React.Component<Props, State> {
                   </View>
                   <View style={styles.fieldWrapper}>
                     <Text style={styles.label}>
-                      {Localize.t(tResolver('LastName'))} *
+                      {Localize.t('Profile.LastName')} *
                     </Text>
                     <CustomInput
                       value={values.lastname}
@@ -140,7 +139,7 @@ export default class Profile extends React.Component<Props, State> {
                   </View>
                   <View style={styles.fieldWrapper}>
                     <Text style={styles.label}>
-                      {Localize.t(tResolver('PhoneNumber'))} *
+                      {Localize.t('Profile.PhoneNumber')} *
                     </Text>
                     <View style={styles.phoneNumberWrapper}>
                       <PhoneCodePicker
@@ -159,7 +158,7 @@ export default class Profile extends React.Component<Props, State> {
 
                   <View style={styles.fieldWrapper}>
                     <Text style={styles.label}>
-                      {Localize.t(tResolver('Country'))} *
+                      {Localize.t('Profile.Country')} *
                     </Text>
                     <View style={styles.countryPickerContainer}>
                       <TouchableWithoutFeedback
@@ -198,7 +197,7 @@ export default class Profile extends React.Component<Props, State> {
 
                   <View style={styles.fieldWrapper}>
                     <Text style={styles.label}>
-                      {Localize.t(tResolver('State'))} *
+                      {Localize.t('Profile.State')} *
                     </Text>
                     <CustomInput
                       value={values.lastname}
@@ -207,7 +206,7 @@ export default class Profile extends React.Component<Props, State> {
                   </View>
                   <View style={styles.fieldWrapper}>
                     <Text style={styles.label}>
-                      {Localize.t(tResolver('City'))} *
+                      {Localize.t('Profile.City')} *
                     </Text>
                     <CustomInput
                       value={values.lastname}
@@ -216,7 +215,7 @@ export default class Profile extends React.Component<Props, State> {
                   </View>
                   <View style={styles.fieldWrapper}>
                     <Text style={styles.label}>
-                      {Localize.t(tResolver('ZipCode'))} *
+                      {Localize.t('Profile.ZipCode')} *
                     </Text>
                     <CustomInput
                       value={values.lastname}
@@ -225,7 +224,7 @@ export default class Profile extends React.Component<Props, State> {
                   </View>
                   <View style={styles.fieldWrapper}>
                     <Text style={styles.label}>
-                      {Localize.t(tResolver('Address1'))} *
+                      {Localize.t('Profile.Address1')} *
                     </Text>
                     <CustomInput
                       value={values.lastname}
@@ -234,7 +233,7 @@ export default class Profile extends React.Component<Props, State> {
                   </View>
                   <View style={styles.fieldWrapper}>
                     <Text style={styles.label}>
-                      {Localize.t(tResolver('Address2'))}
+                      {Localize.t('Profile.Address2')}
                     </Text>
                     <CustomInput
                       value={values.lastname}
@@ -245,7 +244,7 @@ export default class Profile extends React.Component<Props, State> {
                   <View style={styles.saveButtonWrapper}>
                     <Button style={styles.saveButton} onPress={handleSubmit}>
                       <Text style={styles.saveButtonText}>
-                        {Localize.t(tResolver('SaveButton'))}
+                        {Localize.t('Profile.SaveButton')}
                       </Text>
                     </Button>
                   </View>

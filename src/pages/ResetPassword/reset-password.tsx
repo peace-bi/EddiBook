@@ -7,8 +7,6 @@ import { CustomInput } from 'shared/components/CustomInput'
 
 import { forgotPasswordStyles as styles } from './reset-password.constant'
 
-const tResolver = (path: string): string => `ResetPassword$${path}`
-
 interface Props extends NavigationScreenProps<any> {}
 
 interface State {}
@@ -33,29 +31,31 @@ export default class ResetPassword extends React.Component<Props, State> {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.wrapper}>
-          <Text style={styles.title}>{Localize.t(tResolver('Title'))}</Text>
+          <Text style={styles.title}>{Localize.t('ResetPassword.Title')}</Text>
           <View style={styles.content}>
-            <Text>{Localize.t(tResolver('Content'))} </Text>
+            <Text>{Localize.t('ResetPassword.Content')} </Text>
           </View>
           <View style={styles.fieldWrapper}>
             <Text style={styles.label}>
-              {Localize.t(tResolver('PasswordLabel'))} *
+              {Localize.t('ResetPassword.PasswordLabel')} *
             </Text>
             <CustomInput
-              placeholder={Localize.t(tResolver('PasswordPlaceholder'))}
+              placeholder={Localize.t('ResetPassword.PasswordPlaceholder')}
             />
           </View>
           <View style={styles.fieldWrapper}>
             <Text style={styles.label}>
-              {Localize.t(tResolver('ConfirmPasswordLabel'))} *
+              {Localize.t('ResetPassword.ConfirmPasswordLabel')} *
             </Text>
             <CustomInput
-              placeholder={Localize.t(tResolver('ConfirmPasswordPlaceholder'))}
+              placeholder={Localize.t(
+                'ResetPassword.ConfirmPasswordPlaceholder'
+              )}
             />
           </View>
           <Button style={styles.sendButton}>
             <Text style={styles.sendButtonText}>
-              {Localize.t(tResolver('SaveButton'))}
+              {Localize.t('ResetPassword.SaveButton')}
             </Text>
           </Button>
         </View>
