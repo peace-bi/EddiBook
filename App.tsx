@@ -14,6 +14,7 @@ import BookDetail from 'pages/BookDetail/book-detail'
 import EditProfile from 'pages/EditProfile/edit-profile'
 import ForgotPassword from 'pages/ForgotPassword/forgot-password'
 import { Home } from 'pages/Home'
+import More from 'pages/More/more'
 import Profile from 'pages/Profile/profile'
 import ResetPassword from 'pages/ResetPassword/reset-password'
 import SignIn from 'pages/SignIn/sign-in'
@@ -63,10 +64,13 @@ const AppNavigator = createStackNavigator(
     },
     Profile: {
       screen: Profile
+    },
+    More: {
+      screen: More
     }
   },
   {
-    initialRouteName: 'Profile',
+    initialRouteName: 'BookDetail',
     /* The header config from HomeScreen is now here */
     headerLayoutPreset: 'center',
     defaultNavigationOptions: {
