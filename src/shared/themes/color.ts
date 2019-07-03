@@ -33,6 +33,10 @@ export interface ThemeAttribute {
   searchColorIcon: string
   noticeBarFill: string
   switchFill: string
+  descriptionColor: string
+  mutedColor: string
+  textColor: string
+  dividerColor: string
 }
 
 export interface ThemeColor {
@@ -74,7 +78,11 @@ export const ThemeColor: ThemeColor = {
     searchBarFill: '#efeff4',
     searchColorIcon: '#bbbbbb',
     noticeBarFill: '#fffada',
-    switchFill: '#4dd865'
+    switchFill: '#4dd865',
+    descriptionColor: '#43484B',
+    mutedColor: '#888888',
+    textColor: '#4F4F4F',
+    dividerColor: '#F2F3F5'
   },
   chin: {
     primaryColor: '#f4333c',
@@ -110,6 +118,10 @@ export const ThemeColor: ThemeColor = {
     searchBarFill: '#efeff4',
     searchColorIcon: '#bbbbbb',
     noticeBarFill: '#fffada',
-    switchFill: '#4dd865'
+    switchFill: '#4dd865',
+    descriptionColor: '#43484B',
+    mutedColor: '#888888',
+    textColor: '#4F4F4F',
+    dividerColor: '#F2F3F5'
   }
 }

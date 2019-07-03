@@ -12,12 +12,15 @@ export const styles = StyleSheet.create({
   },
   contentContainerStyle: {
     justifyContent: 'center',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    width: '100%'
   },
   bookCover: {
-    width: 300,
+    width: 200,
     height: 300,
-    marginTop: Header.HEIGHT + 52
+    marginTop: Header.HEIGHT + 52,
+    alignSelf: 'center',
+    borderRadius: 8
   },
   backgroundCover: {
     position: 'absolute',

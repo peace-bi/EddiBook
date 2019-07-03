@@ -48,6 +48,7 @@ function Profile(/*props: Props*/) {
             style={styles.avatar}
             source={{
               uri:
+                // tslint:disable-next-line:max-line-length
                 'https://is3-ssl.mzstatic.com/image/thumb/Purple123/v4/14/a0/51/14a05155-d7ae-e3ff-4c8e-a50c17dd3d5a/AppIcon-0-1x_U007emarketing-0-0-GLES2_U002c0-512MB-sRGB-0-0-0-85-220-0-0-0-7.png/246x0w.jpg'
             }}
           />

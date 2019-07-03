@@ -2,7 +2,7 @@ import { Card, WhiteSpace, WingBlank } from '@ant-design/react-native'
 import React from 'react'
 import { Platform, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
-import { Ribbon } from 'shared/components'
+import { Ribbon, StyledCategory } from 'shared/components'
 import styled, { css } from 'styled-components/native'
 import { Book } from './+model'
 
@@ -37,15 +37,6 @@ const StyledPdfImage = styled(FastImage)`
   width: 95px;
   height: 150px;
   margin-top: -30;
-`
-
-const StyledCategory = styled.Text`
-  padding: 4px;
-  border: 1px solid #e4e6ea;
-  border-radius: 4px;
-  align-self: flex-start;
-  margin-top: 8px;
-  font-size: 12px;
 `
 
 // prettier-ignore
@@ -98,7 +89,9 @@ export const BookShelfItem = ({ item }: Props) => {
                   {item.name}
                 </StyledTitleText>
                 <StyledMutedText>License end date 10/12/2020</StyledMutedText>
-                <StyledCategory>Foreign Language</StyledCategory>
+                <StyledCategory style={{ marginTop: 8 }}>
+                  Foreign Language
+                </StyledCategory>
               </StyledBodyContent>
             </StyledView>
           </Card.Body>

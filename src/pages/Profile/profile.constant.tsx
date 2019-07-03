@@ -37,7 +37,7 @@ export const ProfileStyles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   doneButtonText: {
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-end'
   },
   avatarViewContainer: {
     alignSelf: 'center',

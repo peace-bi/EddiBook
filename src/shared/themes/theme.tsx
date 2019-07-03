@@ -3,7 +3,12 @@ import { ThemeColor } from '.'
 
 export interface Theme extends AntTheme {
   // Add more attributes here
+  primary_color: string
   header_color: string
+  description_color: string
+  muted_color: string
+  text_color: string
+  divider_color: string
 }
 
 export const Theme = {
@@ -197,7 +202,12 @@ export const Theme = {
       modal_zindex: 999,
 
       // Add more attributes here
-      header_color: theme.primaryColor
+      primary_color: theme.primaryColor,
+      header_color: theme.primaryColor,
+      description_color: theme.descriptionColor,
+      muted_color: theme.mutedColor,
+      text_color: theme.textColor,
+      divider_color: theme.dividerColor
     }
   }
 }

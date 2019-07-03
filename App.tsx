@@ -66,7 +66,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Profile',
+    initialRouteName: 'BookDetail',
     /* The header config from HomeScreen is now here */
     headerLayoutPreset: 'center',
     defaultNavigationOptions: {
