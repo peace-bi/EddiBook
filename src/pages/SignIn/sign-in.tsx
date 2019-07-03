@@ -14,8 +14,6 @@ import { compose } from 'redux'
 import { CustomInput } from 'shared/components/CustomInput'
 import { SignInStyles } from './sign-in.constant'
 
-const tResolver = (path: string): string => `SignIn$${path}`
-
 interface Props extends NavigationScreenProps<any> {}
 
 interface State {}
@@ -48,9 +46,7 @@ class SignInComponent extends React.Component<Props, State> {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={SignInStyles.wrapper}>
-          <Text style={SignInStyles.title}>
-            {Localize.t(tResolver('Title'))}
-          </Text>
+          <Text style={SignInStyles.title}>{Localize.t('SignIn.Title')}</Text>
           <Formik
             initialValues={{ email: '', password: '' }}
             onSubmit={this.submit}
@@ -59,29 +55,29 @@ class SignInComponent extends React.Component<Props, State> {
               <View>
                 <View style={SignInStyles.fieldWrapper}>
                   <Text style={SignInStyles.label}>
-                    {Localize.t(tResolver('EmailTitle'))}
+                    {Localize.t('SignIn.EmailTitle')}
                   </Text>
                   <CustomInput
                     value={values.email}
                     onChangeText={handleChange('email')}
-                    placeholder={Localize.t(tResolver('EmailPlaceholder'))}
+                    placeholder={Localize.t('SignIn.EmailPlaceholder')}
                   />
                 </View>
                 <View style={SignInStyles.fieldWrapper}>
                   <Text style={SignInStyles.label}>
-                    {Localize.t(tResolver('PasswordTitle'))}
+                    {Localize.t('SignIn.PasswordTitle')}
                   </Text>
                   <CustomInput
                     value={values.password}
                     onChangeText={handleChange('password')}
-                    placeholder={Localize.t(tResolver('PasswordPlaceholder'))}
+                    placeholder={Localize.t('SignIn.PasswordPlaceholder')}
                     secureTextEntry={true}
                   />
                 </View>
                 <View style={SignInStyles.fieldWrapper}>
                   <TouchableWithoutFeedback>
                     <Text style={SignInStyles.forgotPasswordText}>
-                      {Localize.t(tResolver('ForgotPassword'))}
+                      {Localize.t('SignIn.ForgotPassword')}
                     </Text>
                   </TouchableWithoutFeedback>
                 </View>
@@ -91,7 +87,7 @@ class SignInComponent extends React.Component<Props, State> {
                     onPress={handleSubmit}
                   >
                     <Text style={SignInStyles.signInButtonText}>
-                      {Localize.t(tResolver('Button'))}
+                      {Localize.t('SignIn.Button')}
                     </Text>
                   </Button>
                 </View>
@@ -101,10 +97,10 @@ class SignInComponent extends React.Component<Props, State> {
         </View>
         <View style={SignInStyles.noAccountContainer}>
           <View style={SignInStyles.noAccountWrapper}>
-            <Text>{Localize.t(tResolver('NoAccount'))}</Text>
+            <Text>{Localize.t('SignIn.NoAccount')}</Text>
             <TouchableWithoutFeedback onPress={this.navigateSignUp}>
               <Text style={SignInStyles.signUpButtonText}>
-                {Localize.t(tResolver('NavSignUp'))}
+                {Localize.t('SignIn.NavSignUp')}
               </Text>
             </TouchableWithoutFeedback>
           </View>

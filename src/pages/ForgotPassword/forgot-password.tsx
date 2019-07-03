@@ -7,8 +7,6 @@ import { CustomInput } from 'shared/components/CustomInput'
 
 import { forgotPasswordStyles as styles } from './forgot-password.constant'
 
-const tResolver = (path: string): string => `ForgotPassword$${path}`
-
 interface Props extends NavigationScreenProps<any> {}
 
 interface State {}
@@ -33,13 +31,13 @@ export default class ForgotPassword extends React.Component<Props, State> {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.wrapper}>
-          <Text style={styles.title}>{Localize.t(tResolver('Title'))}</Text>
+          <Text style={styles.title}>{Localize.t('ForgotPassword.Title')}</Text>
           <View style={styles.content}>
-            <Text>{Localize.t(tResolver('Content'))} </Text>
+            <Text>{Localize.t('ForgotPassword.Content')} </Text>
           </View>
           <View style={styles.fieldWrapper}>
             <Text style={styles.label}>
-              {Localize.t(tResolver('EmailLabel'))}
+              {Localize.t('ForgotPassword.EmailLabel')}
             </Text>
             <CustomInput
               valid={(text) =>
@@ -48,12 +46,12 @@ export default class ForgotPassword extends React.Component<Props, State> {
                   : undefined
               }
               keyboardType="email-address"
-              placeholder={Localize.t(tResolver('EmailPlaceholder'))}
+              placeholder={Localize.t('ForgotPassword.EmailPlaceholder')}
             />
           </View>
           <Button style={styles.sendButton}>
             <Text style={styles.sendButtonText}>
-              {Localize.t(tResolver('SendButton'))}
+              {Localize.t('ForgotPassword.SendButton')}
             </Text>
           </Button>
         </View>

@@ -4,8 +4,6 @@ import React from 'react'
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
 import { NavigationScreenProps, SafeAreaView } from 'react-navigation'
 
-const tResolver = (path: string): string => `AuthenticateMail$${path}`
-
 const styles = StyleSheet.create({
   wrapper: {
     maxWidth: 350,
@@ -66,22 +64,24 @@ export default class AuthenticateMail extends React.Component<Props, State> {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.wrapper}>
-          <Text style={styles.title}>{Localize.t(tResolver('Title'))}</Text>
+          <Text style={styles.title}>
+            {Localize.t('AuthenticateMail.Title')}
+          </Text>
           <View style={styles.content}>
-            <Text>{Localize.t(tResolver('Content1'))} </Text>
+            <Text>{Localize.t('AuthenticateMail.Content1')} </Text>
             <TouchableWithoutFeedback>
               <Text style={styles.email}>test@gmail.com.</Text>
             </TouchableWithoutFeedback>
-            <Text>{Localize.t(tResolver('Content2'))}</Text>
+            <Text>{Localize.t('AuthenticateMail.Content2')}</Text>
           </View>
           <Button style={styles.signInButton} onPress={this.navigateSignIn}>
             <Text style={styles.signInButtonText}>
-              {Localize.t(tResolver('SignIn'))}
+              {Localize.t('AuthenticateMail.SignIn')}
             </Text>
           </Button>
           <Button style={styles.resendEmailButton}>
             <Text style={styles.resendEmailButtonText}>
-              {Localize.t(tResolver('ResendEmail'))}
+              {Localize.t('AuthenticateMail.ResendEmail')}
             </Text>
           </Button>
         </View>
