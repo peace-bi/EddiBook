@@ -37,6 +37,16 @@ export const ProfileStyles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   doneButtonText: {
-    color: '#F23F3C'
+    alignSelf: 'flex-end',
+  },
+  avatarViewContainer: {
+    alignSelf: 'center',
+    marginTop: 16,
+    position: 'relative'
+  },
+  avatar: {
+    width: 120,
+    height: 120,
+    borderRadius: 120
   }
 })

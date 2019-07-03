@@ -14,7 +14,8 @@ import {
 import LinearGradient from 'react-native-linear-gradient'
 import {
   NavigationScreenConfig,
-  NavigationScreenOptions
+  NavigationScreenOptions,
+  NavigationScreenProps
 } from 'react-navigation'
 import { CustomInput } from 'shared/components/CustomInput'
 
@@ -22,7 +23,7 @@ import { CountryPickerModal } from './+component/countryPicker'
 import { PhoneCodePicker } from './+component/phone-code-picker'
 import { mockCountry, styles } from './edit-profile.constant'
 
-interface Props {}
+interface Props extends NavigationScreenProps<any> {}
 interface State {
   openCountryModal: boolean
   editMode: boolean
@@ -43,7 +44,7 @@ interface FormProps {
 
 export default class EditProfile extends React.Component<Props, State> {
   static navigationOptions: NavigationScreenConfig<NavigationScreenOptions> = {
-    headerTitle: 'Profile'
+    header: null
   }
 
   constructor(props: Props) {
@@ -70,6 +71,20 @@ export default class EditProfile extends React.Component<Props, State> {
   render() {
     return (
       <View style={{ flex: 1 }}>
+        <View style={styles.viewWrapper}>
+          <View style={styles.backButtonWrapper}>
+            <Button
+              activeStyle={{ backgroundColor: 'transparent' }}
+              style={styles.backButton}
+              onPress={() => this.props.navigation.goBack(null)}
+            >
+              <Icon name="close" style={styles.backButtonIcon} />
+            </Button>
+          </View>
+          <View style={styles.titleWrapper}>
+            <Text style={styles.title}>{Localize.t('Profile.Title')}</Text>
+          </View>
+        </View>
         <ScrollView showsHorizontalScrollIndicator={false}>
           <View style={styles.wrapper}>
             <View style={styles.avatarViewContainer}>
