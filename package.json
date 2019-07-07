@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "run-android": "node node_modules/react-native/local-cli/cli.js run-android && yarn start",
+    "lc": "adb logcat -c && clear || cls && adb logcat -s ReactNativeJS",
     "test": "jest",
     "openDebug": "open 'rndebugger://set-debugger-loc?host=localhost&port=8081'",
     "bundle:ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",

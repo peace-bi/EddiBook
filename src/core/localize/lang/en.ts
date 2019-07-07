@@ -81,5 +81,13 @@ export default {
     Size: 'Size: {{p}}',
     Publisher: 'Publisher: {{p}}',
     RelatedBook: 'Related Book'
+  },
+  More: {
+    ChangePassword: 'Change Password',
+    Settings: 'Settings',
+    PrivacyPolicy: 'Privacy Policy',
+    AboutUs: 'About Us',
+    TermsConditions: 'Terms & Conditions',
+    Logout: 'Logout'
   }
 }
