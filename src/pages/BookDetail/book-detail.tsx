@@ -1,3 +1,5 @@
+import { Button, Icon, WhiteSpace, WingBlank } from '@ant-design/react-native'
+import { Localize } from 'core/localize'
 import React from 'react'
 import {
   Animated,
@@ -8,9 +10,6 @@ import {
 } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { Header, NavigationScreenProps, ScrollView } from 'react-navigation'
-
-import { Button, Icon, WhiteSpace, WingBlank } from '@ant-design/react-native'
-import { Localize } from 'core/localize'
 import {
   StyledBodyText,
   StyledCategory,
@@ -20,6 +19,7 @@ import {
   StyledTouchableText
 } from 'shared/components'
 import styled, { DefaultTheme } from 'styled-components/native'
+
 import { styles } from './book-detail.constant'
 import { RelatedBook } from './RelatedBook'
 
@@ -78,12 +78,33 @@ const StyledContainer = styled.View`
   background-color: ${(props) => props.theme.container_background_color};
 `
 
+const StyledAnimatedHeaderView = styled.View`
+  position: absolute;
+  top: 0;
+  z-index: 0;
+  left: -25%;
+  width: 150%;
+  height: 50%;
+  right: 0;
+  overflow: hidden;
+`
+const StyledHeader = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9;
+  max-height: ${HEADER_MIN_HEIGHT};
+`
+
+const HeaderComponent = Animated.createAnimatedComponent(
+  StyledAnimatedHeaderView
+)
 export default class BookDetail extends React.Component<Props, State> {
   static navigationOptions = () => ({
     header: null
   })
   scrollY = new Animated.Value(0)
-
   constructor(props: Props) {
     super(props)
   }
@@ -94,9 +115,14 @@ export default class BookDetail extends React.Component<Props, State> {
       outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
       extrapolate: 'clamp'
     })
+    const headerHeightInverted = this.scrollY.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE * 1.25],
+      outputRange: [0, -HEADER_MAX_HEIGHT],
+      extrapolate: 'clamp'
+    })
     const opacity = this.scrollY.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE],
-      outputRange: [1, 0],
+      outputRange: [4, 0],
       extrapolate: 'clamp'
     })
     return (
@@ -104,21 +130,16 @@ export default class BookDetail extends React.Component<Props, State> {
         <StatusBar translucent={true} backgroundColor="transparent" />
         <View style={styles.contentWrapper}>
           <ScrollView
+            snapToOffsets={[HEADER_MAX_HEIGHT]}
+            snapToEnd={false}
+            snapToStart={true}
             overScrollMode="always"
             scrollEventThrottle={16}
             onScroll={Animated.event([
               { nativeEvent: { contentOffset: { y: this.scrollY } } }
             ])}
-            contentContainerStyle={styles.contentContainerStyle}
           >
-            <FastImage
-              style={styles.bookCover}
-              resizeMode="stretch"
-              source={{
-                uri:
-                  'https://editorial01.shutterstock.com/wm-preview-1500/10104654b/006d1b09/alita-battle-angel-film-2019-shutterstock-editorial-10104654b.jpg'
-              }}
-            />
+            <View style={{ height: 300 + Header.HEIGHT + 52 }} />
             <WingBlank>
               <StyledView alignItems={'center'}>
                 <WhiteSpace />
@@ -145,32 +166,30 @@ export default class BookDetail extends React.Component<Props, State> {
               </StyledHorizontalView>
               <WhiteSpace size="lg" />
               <WhiteSpace size="xs" />
-              <>
-                <StyledHorizontalView alignItems="center" py-0={true}>
-                  <StyledDescMutedText>
-                    {Localize.t('BookingDetail.ExpiryDate', {
-                      p: Localize.strftime(new Date(), '%m/%d/%Y')
-                    })}
-                  </StyledDescMutedText>
-                  <StyledDescMutedText>
-                    {Localize.t('BookingDetail.Size', { p: '150mb' })}
-                  </StyledDescMutedText>
-                </StyledHorizontalView>
-                <WhiteSpace size="xs" />
+              <StyledHorizontalView alignItems="center" py-0={true}>
                 <StyledDescMutedText>
-                  {Localize.t('BookingDetail.Publisher', {
-                    p: 'Nhan Van Bookstore'
+                  {Localize.t('BookingDetail.ExpiryDate', {
+                    p: Localize.strftime(new Date(), '%m/%d/%Y')
                   })}
                 </StyledDescMutedText>
-                <WhiteSpace size="md" />
-                <StyledBodyText>
-                  Bill Gates, born in Seattle, Washington, in 1955, is an
-                  American business magnate, investor, philanthropist, and
-                  author. In this Who Was...? biography, children will learn of
-                  Gates' childhood passion for computer technology, which led
-                  him to revolutionize personal computers
-                </StyledBodyText>
-              </>
+                <StyledDescMutedText>
+                  {Localize.t('BookingDetail.Size', { p: '150mb' })}
+                </StyledDescMutedText>
+              </StyledHorizontalView>
+              <WhiteSpace size="xs" />
+              <StyledDescMutedText>
+                {Localize.t('BookingDetail.Publisher', {
+                  p: 'Nhan Van Bookstore'
+                })}
+              </StyledDescMutedText>
+              <WhiteSpace size="md" />
+              <StyledBodyText>
+                Bill Gates, born in Seattle, Washington, in 1955, is an American
+                business magnate, investor, philanthropist, and author. In this
+                Who Was...? biography, children will learn of Gates' childhood
+                passion for computer technology, which led him to revolutionize
+                personal computers
+              </StyledBodyText>
             </WingBlank>
             <StyledDivider />
             <WhiteSpace size="md" />
@@ -199,15 +218,7 @@ export default class BookDetail extends React.Component<Props, State> {
             <WhiteSpace />
           </ScrollView>
         </View>
-        <View
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 9
-          }}
-        >
+        <StyledHeader>
           <View style={{ height: STATUS_BAR_HEIGHT }} />
           <View
             style={{
@@ -230,10 +241,19 @@ export default class BookDetail extends React.Component<Props, State> {
               </View>
             </View>
           </View>
-        </View>
-        <Animated.View
+          <Animated.View style={{ opacity, top: headerHeightInverted }}>
+            <FastImage
+              style={styles.bookCover}
+              resizeMode="stretch"
+              source={{
+                uri:
+                  'https://editorial01.shutterstock.com/wm-preview-1500/10104654b/006d1b09/alita-battle-angel-film-2019-shutterstock-editorial-10104654b.jpg'
+              }}
+            />
+          </Animated.View>
+        </StyledHeader>
+        <HeaderComponent
           style={{
-            ...styles.backgroundCover,
             borderBottomLeftRadius: headerHeightExtended,
             borderBottomRightRadius: headerHeightExtended,
             height: headerHeightExtended
@@ -256,7 +276,7 @@ export default class BookDetail extends React.Component<Props, State> {
               }}
             />
           </Animated.View>
-        </Animated.View>
+        </HeaderComponent>
       </StyledContainer>
     )
   }

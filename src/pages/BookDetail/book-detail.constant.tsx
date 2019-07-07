@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     position: 'relative'
   },
   contentWrapper: {
-    zIndex: 2
+    zIndex: -1
   },
   contentContainerStyle: {
     justifyContent: 'center',
@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
   bookCover: {
     width: 200,
     height: 300,
-    marginTop: Header.HEIGHT + 52,
+
     alignSelf: 'center',
     borderRadius: 8
   },
