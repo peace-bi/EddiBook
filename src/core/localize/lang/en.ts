@@ -2,6 +2,9 @@ export default {
   Tab1: 'Bookshelf',
   Tab2: 'Downloaded',
   Tab3: 'More',
+  Common: {
+    ViewAll: 'View All'
+  },
   SignIn: {
     Title: 'Sign In',
     EmailTitle: 'Email',
@@ -70,5 +73,13 @@ export default {
   },
   Profile: {
     Title: 'Profile'
+  },
+  BookingDetail: {
+    Intro: 'Intro',
+    Download: 'Download',
+    ExpiryDate: 'Expiry date {{p}}',
+    Size: 'Size: {{p}}',
+    Publisher: 'Publisher: {{p}}',
+    RelatedBook: 'Related Book'
   }
 }

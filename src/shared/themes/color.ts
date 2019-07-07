@@ -33,10 +33,9 @@ export interface ThemeAttribute {
   searchColorIcon: string
   noticeBarFill: string
   switchFill: string
-  descriptionColor: string
-  mutedColor: string
-  textColor: string
   dividerColor: string
+  containerBackgroundColor: string
+  colorTextMuted: string
 }
 
 export interface ThemeColor {
@@ -44,17 +43,18 @@ export interface ThemeColor {
 }
 
 export const ThemeColor: ThemeColor = {
-  hanya: {
+  light: {
     primaryColor: '#6abf47',
     brandPrimary: '#6abf47',
     brandPrimaryTap: '#6abf47',
-    colorTextBase: '#000000',
+    colorTextBase: '#4F4F4F',
     colorTextBaseInverse: '#ffffff',
     colorTextSecondary: '#a4a9b0',
     colorTextPlaceholder: '#bbbbbb',
     colorTextDisabled: '#bbbbbb',
-    colorTextCaption: '#888888',
-    colorTextParagraph: '#333333',
+    colorTextCaption: '#333333',
+    colorTextParagraph: '#43484B',
+    colorTextMuted: '#888888',
     fillBase: '#ffffff',
     fillBody: '#f5f5f9',
     fillTap: '#dddddd',
@@ -79,22 +79,21 @@ export const ThemeColor: ThemeColor = {
     searchColorIcon: '#bbbbbb',
     noticeBarFill: '#fffada',
     switchFill: '#4dd865',
-    descriptionColor: '#43484B',
-    mutedColor: '#888888',
-    textColor: '#4F4F4F',
-    dividerColor: '#F2F3F5'
+    dividerColor: '#F2F3F5',
+    containerBackgroundColor: '#ffffff'
   },
-  chin: {
+  dark: {
     primaryColor: '#f4333c',
     brandPrimary: '#f4333c',
     brandPrimaryTap: '#f4333c',
-    colorTextBase: '#000000',
-    colorTextBaseInverse: '#ffffff',
+    colorTextBase: '#ffffff',
+    colorTextBaseInverse: '#000000',
     colorTextSecondary: '#a4a9b0',
     colorTextPlaceholder: '#bbbbbb',
     colorTextDisabled: '#bbbbbb',
     colorTextCaption: '#888888',
-    colorTextParagraph: '#333333',
+    colorTextParagraph: '#a4a9b0',
+    colorTextMuted: '#888888',
     fillBase: '#ffffff',
     fillBody: '#f5f5f9',
     fillTap: '#dddddd',
@@ -119,9 +118,7 @@ export const ThemeColor: ThemeColor = {
     searchColorIcon: '#bbbbbb',
     noticeBarFill: '#fffada',
     switchFill: '#4dd865',
-    descriptionColor: '#43484B',
-    mutedColor: '#888888',
-    textColor: '#4F4F4F',
-    dividerColor: '#F2F3F5'
+    dividerColor: '#F2F3F5',
+    containerBackgroundColor: '#000000'
   }
 }

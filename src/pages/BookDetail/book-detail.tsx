@@ -10,6 +10,7 @@ import FastImage from 'react-native-fast-image'
 import { Header, NavigationScreenProps, ScrollView } from 'react-navigation'
 
 import { Button, Icon, WhiteSpace, WingBlank } from '@ant-design/react-native'
+import { Localize } from 'core/localize'
 import {
   StyledBodyText,
   StyledCategory,
@@ -20,6 +21,7 @@ import {
 } from 'shared/components'
 import styled, { DefaultTheme } from 'styled-components/native'
 import { styles } from './book-detail.constant'
+import { RelatedBook } from './RelatedBook'
 
 const HEADER_MAX_HEIGHT = 300
 const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 20
@@ -36,6 +38,7 @@ interface StyledView {
 }
 
 const StyledBookName = styled.Text`
+  color: ${(props) => props.theme.color_text_caption};
   font-size: 16px;
   font-weight: 500;
 `
@@ -51,16 +54,28 @@ const StyledHorizontalView = styled(StyledView)`
   justify-content: space-between;
 `
 
-const StyledCategoryGrey = styled(StyledCategory)`
-  background-color: #f2f3f5;
+const StyledCategoryCustom = styled(StyledCategory)`
+  background-color: ${(props) => props.theme.divider_color};
   font-size: 10px;
 `
 
 const StyledDivider = styled.View`
   height: 10;
-  background-color: ${(props) => props.theme.divider_color}
+  background-color: ${(props) => props.theme.divider_color};
   margin-top: 20px;
   margin-bottom: 20px;
+`
+
+const StyledAnimatedHeader = styled(Animated.View)`
+  z-index: 0;
+  height: 100%;
+  position: absolute;
+  background-color: ${(props) => (props.theme as DefaultTheme).header_color};
+  width: 100%;
+`
+
+const StyledContainer = styled.View`
+  background-color: ${(props) => props.theme.container_background_color};
 `
 
 export default class BookDetail extends React.Component<Props, State> {
@@ -85,7 +100,7 @@ export default class BookDetail extends React.Component<Props, State> {
       extrapolate: 'clamp'
     })
     return (
-      <View style={styles.container}>
+      <StyledContainer style={styles.container}>
         <StatusBar translucent={true} backgroundColor="transparent" />
         <View style={styles.contentWrapper}>
           <ScrollView
@@ -116,28 +131,36 @@ export default class BookDetail extends React.Component<Props, State> {
                   onPress={() => {}}
                   style={{ alignSelf: 'stretch', marginTop: 36 }}
                 >
-                  Download
+                  {Localize.t('BookingDetail.Download')}
                 </Button>
               </StyledView>
               <WhiteSpace />
               <WhiteSpace />
               <WhiteSpace />
               <StyledHorizontalView alignItems="center">
-                <StyledTitleText>Intro</StyledTitleText>
-                <StyledCategoryGrey>Kiếm hiệp Kim Dung</StyledCategoryGrey>
+                <StyledTitleText>
+                  {Localize.t('BookingDetail.Intro')}
+                </StyledTitleText>
+                <StyledCategoryCustom>Kiếm hiệp Kim Dung</StyledCategoryCustom>
               </StyledHorizontalView>
               <WhiteSpace size="lg" />
               <WhiteSpace size="xs" />
               <>
                 <StyledHorizontalView alignItems="center" py-0={true}>
                   <StyledDescMutedText>
-                    Expiry date: 6/30/2019
+                    {Localize.t('BookingDetail.ExpiryDate', {
+                      p: Localize.strftime(new Date(), '%m/%d/%Y')
+                    })}
                   </StyledDescMutedText>
-                  <StyledDescMutedText>Size: 150 MB</StyledDescMutedText>
+                  <StyledDescMutedText>
+                    {Localize.t('BookingDetail.Size', { p: '150mb' })}
+                  </StyledDescMutedText>
                 </StyledHorizontalView>
                 <WhiteSpace size="xs" />
                 <StyledDescMutedText>
-                  Publisher: Nhan Van Bookstore
+                  {Localize.t('BookingDetail.Publisher', {
+                    p: 'Nhan Van Bookstore'
+                  })}
                 </StyledDescMutedText>
                 <WhiteSpace size="md" />
                 <StyledBodyText>
@@ -153,16 +176,25 @@ export default class BookDetail extends React.Component<Props, State> {
             <WhiteSpace size="md" />
             <WingBlank>
               <StyledHorizontalView alignItems="center">
-                <StyledTitleText>Intro</StyledTitleText>
+                <StyledTitleText>
+                  {Localize.t('BookingDetail.RelatedBook')}
+                </StyledTitleText>
                 <TouchableWithoutFeedback
                   onPress={() => {
-                    // console.log(Theme.currentTheme)
+                    if (this.props.screenProps) {
+                      this.props.screenProps.changeTheme('dark')
+                    }
                   }}
                 >
-                  <StyledTouchableText>View All</StyledTouchableText>
+                  <StyledTouchableText>
+                    {Localize.t('Common.ViewAll')}
+                  </StyledTouchableText>
                 </TouchableWithoutFeedback>
               </StyledHorizontalView>
             </WingBlank>
+            <WhiteSpace />
+            <WhiteSpace />
+            <RelatedBook />
             <WhiteSpace />
             <WhiteSpace />
           </ScrollView>
@@ -207,15 +239,7 @@ export default class BookDetail extends React.Component<Props, State> {
             height: headerHeightExtended
           }}
         >
-          <Animated.View
-            style={{
-              zIndex: 0,
-              height: '100%',
-              position: 'absolute',
-              backgroundColor: '#F23F3C',
-              width: '100%'
-            }}
-          />
+          <StyledAnimatedHeader />
           <Animated.View style={{ opacity, flex: 1 }}>
             <FastImage
               style={{
@@ -233,7 +257,7 @@ export default class BookDetail extends React.Component<Props, State> {
             />
           </Animated.View>
         </Animated.View>
-      </View>
+      </StyledContainer>
     )
   }
 }

@@ -53,7 +53,7 @@ export function Home() {
         <StyledView>
           <Button
             type="primary"
-            onPress={() => screenProps.changeTheme('chin')}
+            onPress={() => screenProps.changeTheme('dark')}
           >
             Hello
           </Button>

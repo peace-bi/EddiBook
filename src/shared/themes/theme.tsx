@@ -5,10 +5,9 @@ export interface Theme extends AntTheme {
   // Add more attributes here
   primary_color: string
   header_color: string
-  description_color: string
-  muted_color: string
-  text_color: string
   divider_color: string
+  container_background_color: string
+  color_text_muted: string
 }
 
 export const Theme = {
@@ -38,6 +37,7 @@ export const Theme = {
       color_text_disabled: theme.colorTextDisabled, // 失效
       color_text_caption: theme.colorTextCaption, // 辅助描述
       color_text_paragraph: theme.colorTextParagraph, // 段落
+      color_text_muted: theme.colorTextMuted,
       color_link: brandPrimary, // 链接
 
       // 背景色
@@ -204,10 +204,8 @@ export const Theme = {
       // Add more attributes here
       primary_color: theme.primaryColor,
       header_color: theme.primaryColor,
-      description_color: theme.descriptionColor,
-      muted_color: theme.mutedColor,
-      text_color: theme.textColor,
-      divider_color: theme.dividerColor
+      divider_color: theme.dividerColor,
+      container_background_color: theme.containerBackgroundColor
     }
   }
 }

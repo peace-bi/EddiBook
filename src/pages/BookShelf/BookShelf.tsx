@@ -1,14 +1,14 @@
 import React, { useCallback, useState } from 'react'
 import { FlatList, SafeAreaView } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import { Book, RenderItem } from './+model'
+import { Book, BookRenderItem } from './+model'
 import { BookShelfItem } from './BookShelfItem'
 
 function keyExtractor(item: any) {
   return item.key
 }
 
-const renderItem = ({ item }: RenderItem<Book, string>) => (
+const renderItem = ({ item }: BookRenderItem<Book, string>) => (
   <BookShelfItem item={item} />
 )
 
