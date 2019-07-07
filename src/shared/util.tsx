@@ -1,4 +1,6 @@
+import EddiIconConfig from 'assets/icon/config.json'
 import { GeolocationReturnType, StatusBar } from 'react-native'
+import { createIconSetFromFontello } from 'react-native-vector-icons'
 import { Observable } from 'rxjs/internal/Observable'
 import { Observer } from 'rxjs/internal/types'
 import { delay } from 'rxjs/operators'
@@ -23,3 +25,4 @@ export function toggleStatusBar(show: boolean) {
   StatusBar.setTranslucent(show)
   StatusBar.setBackgroundColor(show ? '#fff' : 'transparent')
 }
+export const EddiIcon = createIconSetFromFontello(EddiIconConfig)
