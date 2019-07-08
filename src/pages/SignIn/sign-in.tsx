@@ -1,32 +1,40 @@
 import { Localize } from 'core/localize'
 import { Formik } from 'formik'
 import React from 'react'
-import { Alert, Keyboard, TouchableWithoutFeedback, View } from 'react-native'
+import { TouchableWithoutFeedback, View } from 'react-native'
 import { useNavigation } from 'react-navigation-hooks'
+import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { CustomInput } from 'shared/components/CustomInput'
 
+import { SignIn } from './+state/sign-in.effect'
 import * as Styled from './sign-in.constant'
+import { SignInState } from './sign-in.model'
 
 interface FormProps {
   email: string
   password: string
 }
 const SignInComponent = () => {
+  const store = useSelector((s) => s as SignInState)
+  const dispatch = useDispatch()
   const { navigate } = useNavigation()
+
   function navigateSignUp() {
     navigate('SignUp')
   }
 
   function submit(values: FormProps) {
-    Alert.alert(JSON.stringify(values, null, 2))
-    Keyboard.dismiss()
+    console.info(SignIn)
+    dispatch(SignIn(values.email, values.password))
   }
 
   return (
     <Styled.PageContainer>
       <Styled.PageWrapper>
-        <Styled.Title>{Localize.t('SignIn.Title')}</Styled.Title>
+        <Styled.Title>
+          {Localize.t('SignIn.Title')} {store.loggedIn}
+        </Styled.Title>
         <Formik initialValues={{ email: '', password: '' }} onSubmit={submit}>
           {({ handleChange, handleSubmit, values }) => (
             <View>

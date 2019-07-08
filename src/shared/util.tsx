@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/internal/Observable'
 import { Observer } from 'rxjs/internal/types'
 import { delay } from 'rxjs/operators'
 
+import AppConfig from '../../app.json'
+
 export function getLocation(): Observable<GeolocationReturnType> {
   return Observable.create((observer: Observer<GeolocationReturnType>) =>
     navigator.geolocation.getCurrentPosition(
@@ -26,3 +28,5 @@ export function toggleStatusBar(show: boolean) {
   StatusBar.setBackgroundColor(show ? '#fff' : 'transparent')
 }
 export const EddiIcon = createIconSetFromFontello(EddiIconConfig)
+
+export const Config = AppConfig.config
