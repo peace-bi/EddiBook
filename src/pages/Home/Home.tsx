@@ -4,7 +4,6 @@ import { BookShelf } from 'pages/BookShelf'
 import React, { useState } from 'react'
 import { NavigationRoute, NavigationScreenProp } from 'react-navigation'
 import { useNavigation } from 'react-navigation-hooks'
-import { NavigationScreenPropExtend } from 'shared/navigation'
 import styled from 'styled-components/native'
 import { TabType } from './+model'
 import { HomeHeader } from './Header'
@@ -21,9 +20,7 @@ export function Home() {
   const [selectedTab, setSelectedTab] = useState(TabType.BOOKSHELF)
   // const [count, setCount] = useState(0)
   // const navigationState = useNavigationState() as NavigationStateRoute<void>
-  const navigation: NavigationScreenPropExtend<
-    NavigationRoute
-  > = useNavigation()
+  const navigation = useNavigation()
   const screenProps = navigation.getScreenProps()
 
   const onSelectedTab = (tabName: TabType) => {

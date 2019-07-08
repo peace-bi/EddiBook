@@ -9,21 +9,11 @@
  */
 import { Provider as AntProvider } from '@ant-design/react-native/'
 import enUS from '@ant-design/react-native/es/locale-provider/en_US'
-import AuthenticateMail from 'pages/AuthenticateMail/authenticate-mail'
-import BookDetail from 'pages/BookDetail/book-detail'
-import EditProfile from 'pages/EditProfile/edit-profile'
-import ForgotPassword from 'pages/ForgotPassword/forgot-password'
-import { Home } from 'pages/Home'
-import More from 'pages/More/more'
-import Profile from 'pages/Profile/profile'
-import ResetPassword from 'pages/ResetPassword/reset-password'
-import SignIn from 'pages/SignIn/sign-in'
-import SignUp from 'pages/SignUp/sign-up'
 import React from 'react'
 import * as RNLocalize from 'react-native-localize'
 import { useScreens } from 'react-native-screens'
-import { createAppContainer, createStackNavigator } from 'react-navigation'
 import { Provider } from 'react-redux'
+import AppContainer from 'shared/navigation'
 import configStore from 'shared/store/configStore'
 import { Theme } from 'shared/themes'
 import { ThemeProvider } from 'styled-components/native'
@@ -31,61 +21,6 @@ import { ThemeProvider } from 'styled-components/native'
 // tslint:disable-next-line:react-hooks-nesting
 useScreens()
 
-const AppNavigator = createStackNavigator(
-  {
-    Home: {
-      screen: Home,
-      navigationOptions: () => ({
-        title: 'Home',
-        headerBackTitle: 'A much too long text for back button from B to A',
-        headerTruncatedBackTitle: 'to A'
-      })
-    },
-    SignIn: {
-      screen: SignIn
-    },
-    SignUp: {
-      screen: SignUp
-    },
-    AuthenticateMail: {
-      screen: AuthenticateMail
-    },
-    ForgotPassword: {
-      screen: ForgotPassword
-    },
-    ResetPassword: {
-      screen: ResetPassword
-    },
-    BookDetail: {
-      screen: BookDetail
-    },
-    EditProfile: {
-      screen: EditProfile
-    },
-    Profile: {
-      screen: Profile
-    },
-    More: {
-      screen: More
-    }
-  },
-  {
-    initialRouteName: 'SignIn',
-    /* The header config from HomeScreen is now here */
-    headerLayoutPreset: 'center',
-    defaultNavigationOptions: {
-      // title: 'Nancy',
-      headerStyle: {
-        backgroundColor: '#f4511e'
-      },
-      headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontWeight: 'bold'
-      }
-    }
-  }
-)
-const AppContainer = createAppContainer(AppNavigator)
 const store = configStore()
 
 interface State {
