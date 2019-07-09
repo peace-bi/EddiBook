@@ -109,6 +109,10 @@ export default class BookDetail extends React.Component<Props, State> {
     super(props)
   }
 
+  backPress = () => {
+    this.props.navigation.pop()
+  }
+
   render() {
     const headerHeightExtended = this.scrollY.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE * 1.25],
@@ -232,6 +236,7 @@ export default class BookDetail extends React.Component<Props, State> {
                 <Button
                   activeStyle={{ backgroundColor: 'transparent' }}
                   style={styles.backButton}
+                  onPress={this.backPress}
                 >
                   <Icon name="left" style={styles.backButtonIcon} />
                 </Button>

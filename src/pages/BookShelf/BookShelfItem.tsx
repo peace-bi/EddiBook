@@ -1,7 +1,8 @@
 import { Card, WhiteSpace, WingBlank } from '@ant-design/react-native'
-import React from 'react'
-import { Platform, View } from 'react-native'
+import React, { useCallback } from 'react'
+import { Platform, TouchableWithoutFeedback, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
+import { useNavigation } from 'react-navigation-hooks'
 import { Ribbon, StyledCategory } from 'shared/components'
 import styled, { css } from 'styled-components/native'
 import { Book } from './+model'
@@ -57,46 +58,55 @@ const StyledStatusContainer = styled.View`
 const StyledStatusRibbon = styled(Ribbon)``
 
 export const BookShelfItem = ({ item }: Props) => {
-  return (
-    <View style={{ flex: 1 }}>
-      <WhiteSpace size="lg" style={{ paddingTop: 15 }} />
-      <WingBlank style={{ paddingBottom: 20 }}>
-        <StyledStatusContainer>
-          <StyledStatusRibbon size={30} textSize={8} />
-        </StyledStatusContainer>
+  const { navigate } = useNavigation()
+  const navigateDetail = useCallback(() => {
+    navigate('BookDetail', {
+      id: '1234'
+    })
+  }, [])
 
-        <Card
-          style={{
-            borderWidth: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.1)',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.5,
-            shadowRadius: 2,
-            elevation: 2
-          }}
-        >
-          <Card.Body style={{ borderTopWidth: 0, paddingBottom: 16 }}>
-            <StyledView>
-              <StyledPdfImage
-                resizeMode={FastImage.resizeMode.cover}
-                source={{
-                  uri: item.coverUrl
-                }}
-              />
-              <StyledBodyContent>
-                <WhiteSpace size="xl" />
-                <StyledTitleText numberOfLines={2} ellipsizeMode="tail">
-                  {item.name}
-                </StyledTitleText>
-                <StyledMutedText>License end date 10/12/2020</StyledMutedText>
-                <StyledCategory style={{ marginTop: 8 }}>
-                  Foreign Language
-                </StyledCategory>
-              </StyledBodyContent>
-            </StyledView>
-          </Card.Body>
-        </Card>
-      </WingBlank>
-    </View>
+  return (
+    <TouchableWithoutFeedback onPress={navigateDetail}>
+      <View style={{ flex: 1 }}>
+        <WhiteSpace size="lg" style={{ paddingTop: 15 }} />
+        <WingBlank style={{ paddingBottom: 20 }}>
+          <StyledStatusContainer>
+            <StyledStatusRibbon size={30} textSize={8} />
+          </StyledStatusContainer>
+
+          <Card
+            style={{
+              borderWidth: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.1)',
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.5,
+              shadowRadius: 2,
+              elevation: 2
+            }}
+          >
+            <Card.Body style={{ borderTopWidth: 0, paddingBottom: 16 }}>
+              <StyledView>
+                <StyledPdfImage
+                  resizeMode={FastImage.resizeMode.cover}
+                  source={{
+                    uri: item.coverUrl
+                  }}
+                />
+                <StyledBodyContent>
+                  <WhiteSpace size="xl" />
+                  <StyledTitleText numberOfLines={2} ellipsizeMode="tail">
+                    {item.name}
+                  </StyledTitleText>
+                  <StyledMutedText>License end date 10/12/2020</StyledMutedText>
+                  <StyledCategory style={{ marginTop: 8 }}>
+                    Foreign Language
+                  </StyledCategory>
+                </StyledBodyContent>
+              </StyledView>
+            </Card.Body>
+          </Card>
+        </WingBlank>
+      </View>
+    </TouchableWithoutFeedback>
   )
 }

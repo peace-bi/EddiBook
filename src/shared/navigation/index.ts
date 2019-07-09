@@ -12,10 +12,13 @@ const navigation = createSwitchNavigator(
   {
     AuthLoading,
     AuthStack,
-    MainStack
+    MainStack: {
+      screen: MainStack,
+      path: 'main'
+    }
   },
   {
-    initialRouteName: 'AuthStack'
+    initialRouteName: 'AuthLoading'
   }
 )
 

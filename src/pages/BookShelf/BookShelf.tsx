@@ -1,6 +1,10 @@
-import React, { useCallback, useState } from 'react'
-import { FlatList, SafeAreaView } from 'react-native'
+import { SearchBar } from '@ant-design/react-native'
+import { Localize } from 'core/localize'
+import React, { useCallback, useEffect, useState } from 'react'
+import { FlatList } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
+import { StyledHeader, StyledHeaderSafeView } from 'shared/components'
+import { TabType } from 'shared/model'
 import { Book, BookRenderItem } from './+model'
 import { BookShelfItem } from './BookShelfItem'
 
@@ -55,21 +59,39 @@ const data: Book[] = [
 
 export const BookShelf = () => {
   const [bookStatus, setBookStatus] = useState<string[]>([])
+  const [bookData, setBookData] = useState<Book[]>([])
   const renderItemCall = useCallback(
     ({ item, index }) => renderItem({ item, index, bookStatus, setBookStatus }),
     []
   )
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setBookData(data)
+    })
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [bookData])
+
   return (
-    <SafeAreaView style={{ backgroundColor: '#F2F3F5', flex: 1 }}>
+    <StyledHeaderSafeView style={{ backgroundColor: '#F2F3F5', flex: 1 }}>
+      <StyledHeader>
+        <SearchBar defaultValue={Localize.t(TabType.BOOKSHELF)} />
+      </StyledHeader>
       <FlatList
+        style={{ flex: 1 }}
         horizontal={false}
         extraData={bookStatus}
-        data={data}
+        data={bookData}
         renderItem={renderItemCall}
         keyExtractor={keyExtractor}
         numColumns={DeviceInfo.isTablet() ? 2 : 1}
       />
-    </SafeAreaView>
+    </StyledHeaderSafeView>
   )
 }
+
+BookShelf.navigationOptions = () => ({
+  tabBarLabel: Localize.t(TabType.BOOKSHELF)
+})

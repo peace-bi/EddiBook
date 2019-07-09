@@ -8,6 +8,8 @@ export interface Theme extends AntTheme {
   divider_color: string
   container_background_color: string
   color_text_muted: string
+  active_tint_color: string
+  inactive_tint_color: string
 }
 
 export const Theme = {
@@ -205,7 +207,9 @@ export const Theme = {
       primary_color: theme.primaryColor,
       header_color: theme.primaryColor,
       divider_color: theme.dividerColor,
-      container_background_color: theme.containerBackgroundColor
+      container_background_color: theme.containerBackgroundColor,
+      active_tint_color: theme.primaryColor,
+      inactive_tint_color: theme.colorTextMuted
     }
   }
 }

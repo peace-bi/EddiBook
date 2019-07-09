@@ -4,6 +4,7 @@ import { Localize } from 'core/localize'
 import React from 'react'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useNavigation } from 'react-navigation-hooks'
+import { TabType } from 'shared/model'
 import * as Styled from './more.constant'
 
 export default function More() {
@@ -84,6 +85,6 @@ export default function More() {
   )
 }
 
-More.navigationOptions = {
-  header: null
-}
+More.navigationOptions = () => ({
+  tabBarLabel: Localize.t(TabType.MORE)
+})

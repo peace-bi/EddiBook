@@ -28,6 +28,9 @@ interface State {
 }
 
 export default class App extends React.Component<{}, State> {
+  // prefix = /https?:\/\/edds.banvien.com.vn|https?:\/\/www.edds.banvien.com.vn|edds.banvien.com.vn|eddibook:\//
+  prefix = 'eddibook://'
+
   constructor(props: any) {
     super(props)
     this.state = {
@@ -55,6 +58,7 @@ export default class App extends React.Component<{}, State> {
         <AntProvider theme={theme} locale={enUS as any}>
           <ThemeProvider theme={theme}>
             <AppContainer
+              uriPrefix={this.prefix}
               screenProps={{ changeTheme: this.changeTheme, theme }}
             />
           </ThemeProvider>

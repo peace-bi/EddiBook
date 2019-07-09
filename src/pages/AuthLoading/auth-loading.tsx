@@ -5,7 +5,8 @@ export const AuthLoading = () => {
   const navigation = useNavigation()
 
   useEffect(() => {
-    navigation.navigate('MainStack')
+    // navigation.navigate('MainStack')
+    navigation.navigate('AuthStack')
   }, [])
 
   return <Fragment />
