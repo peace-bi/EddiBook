@@ -12,13 +12,12 @@ export function SignIn(username: string, password: string) {
       method: 'POST',
       param: {
         username,
-        password
+        password,
+        scope: 'ui',
+        grant_type: 'password'
       }
-    })
-      .catch((e) => console.info(e))
-      .then(() => dispatch({ type: 'SIGNIN_SUCCESS' }))
-      .catch((err) => {
-        console.info(err)
-        return dispatch({ type: 'SIGNIN_FAILED' })
-      })
+    }).subscribe(
+      () => dispatch({ type: 'SIGNIN_SUCCESS' }),
+      () => dispatch({ type: 'SIGNIN_FAILED' })
+    )
 }

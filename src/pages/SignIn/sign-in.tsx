@@ -25,7 +25,6 @@ const SignInComponent = () => {
   }
 
   function submit(values: FormProps) {
-    console.info(SignIn)
     dispatch(SignIn(values.email, values.password))
   }
 

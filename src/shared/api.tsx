@@ -1,4 +1,8 @@
-import RNFetchBlob, { FetchBlobResponse, StatefulPromise } from 'rn-fetch-blob'
+import axios from 'axios'
+// tslint:disable-next-line: import-blacklist
+import { from, Observable } from 'rxjs'
+
+import { take, timeout } from 'rxjs/operators'
 import { Config } from './util'
 
 interface RequestParam {
@@ -8,15 +12,32 @@ interface RequestParam {
 }
 
 const headers: { [s: string]: any } = {
-  'Content-Type': 'application/json'
+  Authorization: 'Basic YnJvd3Nlcjo='
 }
 
-export function requestApi(
+export function requestApi<T>(
   param: RequestParam
-): StatefulPromise<FetchBlobResponse> {
+): Observable<{ result: T | string; status: number }> {
   const env = !!__DEV__ ? 'DEV' : 'PROD'
   const url = `${Config.HOST[env].API}/${param.url}`
   const parameters = param.param
-  console.info(url)
-  return RNFetchBlob.fetch(param.method, url, headers, parameters)
+  return from(
+    axios
+      .request({
+        url,
+        method: param.method,
+        data: parameters,
+        headers
+      })
+      .then(({ data, status }) => ({ result: data, status }))
+      .catch((e) => {
+        throw {
+          result: e.response.data.error,
+          status: e.response.status
+        }
+      })
+  ).pipe(
+    take(1),
+    timeout(20000)
+  )
 }
