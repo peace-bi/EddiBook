@@ -75,7 +75,7 @@ export const ThemeColor: ThemeColor = {
     inputColorIcon: '#cccccc',
     tabBarFill: '#ebeeef',
     toastFill: 'rgba(0, 0, 0, .8)',
-    searchBarFill: '#efeff4',
+    searchBarFill: '#ffffff',
     searchColorIcon: '#bbbbbb',
     noticeBarFill: '#fffada',
     switchFill: '#4dd865',

@@ -3,7 +3,8 @@ export default {
   Tab2: 'Downloaded',
   Tab3: 'More',
   Common: {
-    ViewAll: 'View All'
+    ViewAll: 'View All',
+    Cancel: 'Cancel'
   },
   SignIn: {
     Title: 'Sign In',
@@ -73,6 +74,9 @@ export default {
   },
   Profile: {
     Title: 'Profile'
+  },
+  Book: {
+    SearchPlaceholder: 'Search for a book...'
   },
   BookingDetail: {
     Intro: 'Intro',

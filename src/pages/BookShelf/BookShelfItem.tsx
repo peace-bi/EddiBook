@@ -38,6 +38,8 @@ const StyledPdfImage = styled(FastImage)`
   width: 95px;
   height: 150px;
   margin-top: -30;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
 `
 
 // prettier-ignore

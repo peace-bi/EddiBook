@@ -1,14 +1,14 @@
 import { SearchBar } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { FlatList } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import { StyledHeader, StyledHeaderSafeView } from 'shared/components'
 import { TabType } from 'shared/model'
 import { Book, BookRenderItem } from './+model'
+import * as Styled from './BookShelf.contant'
 import { BookShelfItem } from './BookShelfItem'
 
-function keyExtractor(item: any) {
+const keyExtractor = (item: any) => {
   return item.key
 }
 
@@ -57,38 +57,84 @@ const data: Book[] = [
   }
 ]
 
+const useBook = (bookId: string) => {
+  const [value, setValue] = useState<Book[]>([])
+  const [search, setSearch] = useState<string>('')
+
+  useEffect(() => {
+    setValue(data)
+  }, [bookId, search])
+
+  return {
+    value,
+    setValue,
+    search: useCallback((text: string) => setSearch(text), [])
+  }
+}
+
+interface Search {
+  search: (text: string) => void
+}
+
+const Search = ({ search }: Search) => {
+  const searchRef = useRef<SearchBar>(null)
+  const [searchText, setSearchText] = useState<string>('')
+  const [lastSearch, setLastSearch] = useState<string>('')
+  const searchCancel = useCallback(() => {
+    if (searchRef.current && searchRef.current.inputRef) {
+      searchRef.current.inputRef.blur()
+    }
+    setSearchText(lastSearch)
+  }, [lastSearch])
+  const searchChange = useCallback((value) => {
+    setSearchText(value)
+  }, [])
+  const submitSearch = useCallback((value) => {
+    search(value)
+    setLastSearch(value)
+  }, [])
+
+  return (
+    <Styled.Search
+      ref={searchRef}
+      value={searchText}
+      showCancelButton={false}
+      placeholder={Localize.t('Book.SearchPlaceholder')}
+      cancelText={Localize.t('Common.Cancel')}
+      onChange={searchChange}
+      onCancel={searchCancel}
+      onSubmit={submitSearch}
+    />
+  )
+}
+
 export const BookShelf = () => {
+  // Using for change book item status
   const [bookStatus, setBookStatus] = useState<string[]>([])
-  const [bookData, setBookData] = useState<Book[]>([])
-  const renderItemCall = useCallback(
+  const renderBookItem = useCallback(
     ({ item, index }) => renderItem({ item, index, bookStatus, setBookStatus }),
     []
   )
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setBookData(data)
-    })
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [bookData])
+  // Hook get book from api
+  const book = useBook('123')
 
   return (
-    <StyledHeaderSafeView style={{ backgroundColor: '#F2F3F5', flex: 1 }}>
-      <StyledHeader>
-        <SearchBar defaultValue={Localize.t(TabType.BOOKSHELF)} />
-      </StyledHeader>
+    <Styled.HeaderSafeView>
+      <Styled.StatusBar />
+      <Styled.Header>
+        <Search search={book.search} />
+      </Styled.Header>
       <FlatList
-        style={{ flex: 1 }}
+        style={{ flex: 1, backgroundColor: '#F2F3F5', paddingTop: 8 }}
         horizontal={false}
         extraData={bookStatus}
-        data={bookData}
-        renderItem={renderItemCall}
+        data={book.value}
+        renderItem={renderBookItem}
         keyExtractor={keyExtractor}
         numColumns={DeviceInfo.isTablet() ? 2 : 1}
       />
-    </StyledHeaderSafeView>
+    </Styled.HeaderSafeView>
   )
 }
 
