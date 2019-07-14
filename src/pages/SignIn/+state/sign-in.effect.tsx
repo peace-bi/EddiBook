@@ -1,4 +1,4 @@
-import { Alert } from 'react-native'
+import * as io from 'io-ts'
 import { AnyAction } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { requestApi } from 'shared/api'
@@ -16,7 +16,7 @@ export function SignIn(username: string, password: string) {
         scope: 'ui',
         grant_type: 'password'
       }
-    }).subscribe(
+    })(io.any).subscribe(
       () => dispatch({ type: 'SIGNIN_SUCCESS' }),
       () => dispatch({ type: 'SIGNIN_FAILED' })
     )
