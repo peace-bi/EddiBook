@@ -8,14 +8,6 @@ import { Book, BookRenderItem } from './+model'
 import * as Styled from './BookShelf.contant'
 import { BookShelfItem } from './BookShelfItem'
 
-const keyExtractor = (item: any) => {
-  return item.key
-}
-
-const renderItem = ({ item }: BookRenderItem<Book, string>) => (
-  <BookShelfItem item={item} />
-)
-
 const data: Book[] = [
   {
     key: '1',
@@ -25,7 +17,8 @@ const data: Book[] = [
     downloaded: false,
     status: 'NEW',
     coverUrl:
-      'https://static1.squarespace.com/static/57d0be8b197aea6ac8094583/57d0e2c5d482e9cbbd0163ba/57d0e31af7e0ab55388eb78c/1473307419491/Ros+Cover+10SP+pdf.png?format=1000w'
+      'https://static1.squarespace.com/static/57d0be8b197aea6ac8094583/57d0e2c5d482e9cbbd0163ba/57d0e31af7e0ab55388eb78c/1473307419491/Ros+Cover+10SP+pdf.png?format=1000w',
+    action: 'DOWNLOAD'
   },
   {
     key: '2',
@@ -35,7 +28,8 @@ const data: Book[] = [
     downloaded: false,
     status: 'NEW',
     coverUrl:
-      'http://static1.squarespace.com/static/57d0be8b197aea6ac8094583/57d0e2c5d482e9cbbd0163ba/580e1cd2f5e23112ec389748/1477319890779/Say+it+again+Cover+10SP+PDF+ONLY.png'
+      'http://static1.squarespace.com/static/57d0be8b197aea6ac8094583/57d0e2c5d482e9cbbd0163ba/580e1cd2f5e23112ec389748/1477319890779/Say+it+again+Cover+10SP+PDF+ONLY.png',
+    action: 'DOWNLOAD'
   },
   {
     key: '3',
@@ -107,6 +101,14 @@ const Search = ({ search }: Search) => {
     />
   )
 }
+
+const keyExtractor = (item: any) => {
+  return item.key
+}
+
+const renderItem = ({ item }: BookRenderItem<Book, string>) => (
+  <BookShelfItem item={item} />
+)
 
 export const BookShelf = () => {
   // Using for change book item status

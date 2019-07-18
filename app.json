@@ -8,7 +8,7 @@
         "API": "http://edds.banvien.com.vn:9000"
       },
       "DEV": {
-        "API": "http://192.168.2.40:9000"
+        "API": "http://edds.banvien.com.vn"
       }
     }
   }

@@ -1,11 +1,20 @@
-import { Card, WhiteSpace, WingBlank } from '@ant-design/react-native'
-import React, { useCallback } from 'react'
-import { Platform, TouchableWithoutFeedback, View } from 'react-native'
+import { Card, Modal, WhiteSpace, WingBlank } from '@ant-design/react-native'
+import React, { useCallback, useState } from 'react'
+import {
+  Alert,
+  Platform,
+  Text,
+  TouchableWithoutFeedback,
+  View
+} from 'react-native'
 import FastImage from 'react-native-fast-image'
+import * as Progress from 'react-native-progress'
 import { useNavigation } from 'react-navigation-hooks'
+import * as RNFetchBlob from 'rn-fetch-blob'
 import { Ribbon, StyledCategory } from 'shared/components'
+import { EddiIcon } from 'shared/util'
 import styled, { css } from 'styled-components/native'
-import { Book } from './+model'
+import { Book, BookAction } from './+model'
 
 interface Props {
   item: Book
@@ -59,11 +68,75 @@ const StyledStatusContainer = styled.View`
 
 const StyledStatusRibbon = styled(Ribbon)``
 
+const getAction = (status?: string, progress?: number) => {
+  if (!status || status === BookAction.READ) {
+    return <Text>Read</Text>
+  }
+  if (status === BookAction.DOWNLOADING) {
+    return <Progress.Pie progress={progress} size={24} />
+  }
+  if (status === BookAction.UPDATE) {
+    return <Text>Update</Text>
+  }
+
+  const iconName = status === BookAction.DOWNLOAD ? 'download' : 'next'
+  return <EddiIcon name={iconName} size={38} color="#F23F3C" />
+}
+
+const useFileAction = (initialStatus?: string) => {
+  const [status, setStatus] = useState(initialStatus)
+  const [progress, setProgress] = useState(0)
+
+  const doAction = useCallback(() => {
+    switch (status) {
+      case BookAction.DOWNLOAD:
+        Modal.prompt(
+          'Access Code',
+          'Please enter the access code to view your bookshelf.',
+          (password) => {
+            if (password) {
+              setStatus(BookAction.DOWNLOADING)
+              RNFetchBlob.default
+                .config({
+                  fileCache: true,
+                  appendExt: 'zip'
+                })
+                .fetch('GET', 'https://sample-videos.com/zip/10mb.zip')
+                .progress({ count: 50 }, (received, total) => {
+                  setProgress(received / total)
+                })
+                .then((res) => {
+                  Alert.alert('The file saved to ', res.path())
+                  setStatus(BookAction.READ)
+                })
+            }
+          },
+          'default',
+          undefined,
+          ['Access code']
+        )
+        break
+
+      default:
+        Alert.alert('b' + status)
+        setStatus(BookAction.DOWNLOAD)
+        break
+    }
+  }, [status])
+
+  return {
+    status,
+    progress,
+    doAction
+  }
+}
+
 export const BookShelfItem = ({ item }: Props) => {
+  const fileAction = useFileAction(item.action)
   const { navigate } = useNavigation()
   const navigateDetail = useCallback(() => {
     navigate('BookDetail', {
-      id: '1234'
+      id: item.key
     })
   }, [])
 
@@ -100,9 +173,19 @@ export const BookShelfItem = ({ item }: Props) => {
                     {item.name}
                   </StyledTitleText>
                   <StyledMutedText>License end date 10/12/2020</StyledMutedText>
-                  <StyledCategory style={{ marginTop: 8 }}>
-                    Foreign Language
-                  </StyledCategory>
+                  <View
+                    style={{
+                      marginTop: 8,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <StyledCategory>Foreign Language</StyledCategory>
+                    <TouchableWithoutFeedback onPress={fileAction.doAction}>
+                      {getAction(fileAction.status, fileAction.progress)}
+                    </TouchableWithoutFeedback>
+                  </View>
                 </StyledBodyContent>
               </StyledView>
             </Card.Body>

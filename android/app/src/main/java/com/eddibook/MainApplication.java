@@ -34,7 +34,6 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNFetchBlobPackage(),
             new VectorIconsPackage(),
             new LinearGradientPackage(),
             new FastImageViewPackage(),

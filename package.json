@@ -34,6 +34,7 @@
     "react-native-pdftron": "git+https://github.com/PDFTron/pdftron-react-native.git",
     "react-native-pdftron-utils": "file:libs/PdfTronUtils",
     "react-native-screens": "1.0.0-alpha.22",
+    "react-native-progress": "^3.6.0",
     "react-native-vector-icons": "^6.6.0",
     "react-navigation": "^3.8.1",
     "react-navigation-hooks": "https://github.com/react-navigation/react-navigation-hooks.git",
