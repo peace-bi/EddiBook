@@ -11,6 +11,7 @@ interface RequestParam {
   url: string
   method: 'POST' | 'GET'
   param?: any
+  type?: 'form' | 'json'
 }
 
 interface ApiError {
@@ -34,14 +35,11 @@ export const requestApiEither: (
 ) => (codec) => {
   const env = !!__DEV__ ? 'DEV' : 'PROD'
   const url = `${Config.HOST[env].API}/${param.url}`
-  const parameters = param.param
-
   return from(
     axios
       .request({
         url,
         method: param.method,
-        data: parameters,
         headers
       })
       .then(({ data, status }) => {
@@ -103,15 +101,25 @@ export const requestApi: (
 ) => {
   const env = !!__DEV__ ? 'DEV' : 'PROD'
   const url = `${Config.HOST[env].API}/${param.url}`
-  const parameters = param.param
-
+  if (param.type === 'json') {
+    headers['Content-Type'] = 'application/json'
+  }
+  const parameters =
+    param.type && param.type === 'json'
+      ? {
+          data: param.param
+        }
+      : {
+          params: param.param
+        }
   // const methodCall = mockApi
   const methodCall = () =>
     axios.request({
       url,
       method: param.method,
-      data: parameters,
-      headers
+      // data: parameters,
+      headers,
+      ...parameters
     })
 
   return from(
