@@ -1,7 +1,7 @@
 import { Card, WhiteSpace, WingBlank } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
-import React, { useCallback, useState } from 'react'
-import { Alert, Text, TouchableWithoutFeedback, View } from 'react-native'
+import React, { Fragment, useCallback, useState } from 'react'
+import { Alert, TouchableWithoutFeedback, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import * as Progress from 'react-native-progress'
 import { useNavigation } from 'react-navigation-hooks'
@@ -18,13 +18,19 @@ interface Props {
 
 const getActionView = (status?: string, progress?: number) => {
   if (!status || status === BookAction.READ) {
-    return <Text>Read</Text>
+    return <Fragment />
   }
   if (status === BookAction.DOWNLOADING) {
     return <Progress.Pie progress={progress} size={24} />
   }
   if (status === BookAction.UPDATE) {
-    return <Text>Update</Text>
+    return (
+      <TouchableWithoutFeedback>
+        <Styled.ItemActionButton>
+          <Styled.ItemActionText>Update</Styled.ItemActionText>
+        </Styled.ItemActionButton>
+      </TouchableWithoutFeedback>
+    )
   }
 
   const iconName = status === BookAction.DOWNLOAD ? 'download' : 'next'
@@ -72,7 +78,8 @@ export const BookShelfItem = ({ item }: Props) => {
   const { navigate } = useNavigation()
   const navigateDetail = useCallback(() => {
     navigate('BookDetail', {
-      id: item.bookVersionHistoryId
+      id: item.bookVersionHistoryId,
+      item
     })
   }, [])
 

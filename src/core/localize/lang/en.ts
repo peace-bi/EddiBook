@@ -86,7 +86,8 @@ export default {
     ExpiryDate: 'Expiry date {{p}}',
     Size: 'Size: {{p}}',
     Publisher: 'Publisher: {{p}}',
-    RelatedBook: 'Related Book'
+    RelatedBook: 'Related Book',
+    BookInfo: 'Book Info'
   },
   More: {
     ChangePassword: 'Change Password',

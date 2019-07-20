@@ -20,6 +20,8 @@ import {
 } from 'shared/components'
 import styled, { DefaultTheme } from 'styled-components/native'
 
+import { Book } from 'pages/BookShelf/+model'
+import { getHost } from 'shared/api'
 import { styles } from './book-detail.constant'
 import { RelatedBook } from './RelatedBook'
 
@@ -114,6 +116,8 @@ export default class BookDetail extends React.Component<Props, State> {
   }
 
   render() {
+    const book: Book = this.props.navigation.getParam('item')
+
     const headerHeightExtended = this.scrollY.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE * 1.25],
       outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
@@ -148,7 +152,7 @@ export default class BookDetail extends React.Component<Props, State> {
               <StyledView alignItems={'center'}>
                 <WhiteSpace />
                 <WhiteSpace />
-                <StyledBookName>Who is Bill Gates?</StyledBookName>
+                <StyledBookName>{book.name}</StyledBookName>
                 <WhiteSpace size="xs" />
                 <StyledDescText>Patricia Brennan Demuth</StyledDescText>
                 <Button
@@ -166,7 +170,7 @@ export default class BookDetail extends React.Component<Props, State> {
                 <StyledTitleText>
                   {Localize.t('BookingDetail.Intro')}
                 </StyledTitleText>
-                <StyledCategoryCustom>Kiếm hiệp Kim Dung</StyledCategoryCustom>
+                <StyledCategoryCustom>{book.category}</StyledCategoryCustom>
               </StyledHorizontalView>
               <WhiteSpace size="lg" />
               <WhiteSpace size="xs" />
@@ -242,7 +246,9 @@ export default class BookDetail extends React.Component<Props, State> {
                 </Button>
               </View>
               <View style={styles.titleWrapper}>
-                <Text style={styles.title}>Book Info</Text>
+                <Text style={styles.title}>
+                  {Localize.t('BookingDetail.BookInfo')}
+                </Text>
               </View>
             </View>
           </View>
@@ -251,8 +257,7 @@ export default class BookDetail extends React.Component<Props, State> {
               style={styles.bookCover}
               resizeMode="stretch"
               source={{
-                uri:
-                  'https://editorial01.shutterstock.com/wm-preview-1500/10104654b/006d1b09/alita-battle-angel-film-2019-shutterstock-editorial-10104654b.jpg'
+                uri: `${getHost()}${book.cover}`
               }}
             />
           </Animated.View>
@@ -276,8 +281,7 @@ export default class BookDetail extends React.Component<Props, State> {
               }}
               resizeMode="cover"
               source={{
-                uri:
-                  'https://editorial01.shutterstock.com/wm-preview-1500/10104654b/006d1b09/alita-battle-angel-film-2019-shutterstock-editorial-10104654b.jpg'
+                uri: `${getHost()}${book.cover}`
               }}
             />
           </Animated.View>

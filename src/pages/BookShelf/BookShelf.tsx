@@ -110,10 +110,10 @@ export const BookShelf = () => {
         <Search search={book.search} />
         <Styled.HeaderActionContainer>
           <TouchableWithoutFeedback>
-            <Styled.HeaderActionIcon name="filter" size={32} />
+            <Styled.HeaderActionIcon name="filter" size={28} />
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback onPress={handleActionKey}>
-            <Styled.HeaderActionIcon name="key" size={32} />
+            <Styled.HeaderActionIcon name="key" size={28} />
           </TouchableWithoutFeedback>
         </Styled.HeaderActionContainer>
       </Styled.Header>

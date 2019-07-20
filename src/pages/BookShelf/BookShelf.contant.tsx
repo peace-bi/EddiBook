@@ -91,3 +91,14 @@ export const HeaderActionContainer = styled.View`
 `
 
 export const StatusRibbon = styled(Ribbon)``
+
+export const ItemActionButton = styled.View`
+  background-color: ${(props) => props.theme.fill_body};
+  padding: 4px;
+  border-radius: 4px;
+`
+
+export const ItemActionText = styled.Text`
+  color: ${(props) => props.theme.primary_color};
+  font-weight: bold;
+`

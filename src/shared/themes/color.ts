@@ -44,9 +44,9 @@ export interface ThemeColor {
 
 export const ThemeColor: ThemeColor = {
   light: {
-    primaryColor: '#6abf47',
-    brandPrimary: '#6abf47',
-    brandPrimaryTap: '#6abf47',
+    primaryColor: '#f4333c',
+    brandPrimary: '#f4333c',
+    brandPrimaryTap: '#f4333c',
     colorTextBase: '#4F4F4F',
     colorTextBaseInverse: '#ffffff',
     colorTextSecondary: '#a4a9b0',
