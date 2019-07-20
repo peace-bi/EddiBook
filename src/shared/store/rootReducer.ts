@@ -1,17 +1,47 @@
 import { signInReducer } from 'pages/SignIn/+state/sign-in.reducer'
 import { signUpReducer } from 'pages/SignUp/+state/sign-up.reducer'
 import { combineReducers } from 'redux'
+import { PlainAction } from 'redux-typed-actions'
 
-const initialState = {}
+import { ShowLoading, HideLoading } from './action'
 
-export function appReducer(state = initialState) {
+const initialState = {
+  showLoading: false
+}
+
+export function appReducer(state = initialState, action: PlainAction) {
+  if (ShowLoading.is(action)) {
+    return {
+      showLoading: true
+    }
+  }
+  if (HideLoading.is(action)) {
+    return {
+      showLoading: false
+    }
+  }
+  return state
+}
+
+export function userReducer(state = initialState, action: PlainAction) {
+  if (ShowLoading.is(action)) {
+    return {
+      showLoading: true
+    }
+  }
+  if (HideLoading.is(action)) {
+    return {
+      showLoading: false
+    }
+  }
   return state
 }
 
 const combinedReducer = {
-  signInReducer,
+  SignInState: signInReducer,
   SignUpState: signUpReducer,
-  appReducer
+  AppState: appReducer,
+  UserState: userReducer
 }
 
 const rootReducer = combineReducers(combinedReducer)

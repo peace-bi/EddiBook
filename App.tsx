@@ -13,6 +13,7 @@ import React from 'react'
 import * as RNLocalize from 'react-native-localize'
 import { useScreens } from 'react-native-screens'
 import { Provider } from 'react-redux'
+import { LoadingComponent } from 'shared/components/GlobalLoading'
 import AppContainer from 'shared/navigation'
 import configStore from 'shared/store/configStore'
 import { Theme } from 'shared/themes'
@@ -56,6 +57,7 @@ export default class App extends React.Component<{}, State> {
     return (
       <Provider store={store}>
         <AntProvider theme={theme} locale={enUS as any}>
+          <LoadingComponent />
           <ThemeProvider theme={theme}>
             <AppContainer
               uriPrefix={this.prefix}

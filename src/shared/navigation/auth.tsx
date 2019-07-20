@@ -14,7 +14,7 @@ const navigation = createStackNavigator(
     ForgotPassword
   },
   {
-    initialRouteName: 'SignIn'
+    initialRouteName: 'SignUp'
   }
 )
 

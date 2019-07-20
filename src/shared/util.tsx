@@ -1,4 +1,5 @@
 import EddiIconConfig from 'assets/icon/config.json'
+import { Dispatch } from 'react'
 import { GeolocationReturnType, StatusBar } from 'react-native'
 import { createIconSetFromFontello } from 'react-native-vector-icons'
 import { useDispatch } from 'react-redux'
@@ -9,10 +10,12 @@ import { delay } from 'rxjs/operators'
 
 import AppConfig from '../../app.json'
 
+type ThunkAction = <T>(
+  thunkAction: (dispatch: ThunkDispatch<any, any, any>) => T
+) => T
+
 export function useThunkDispatch() {
-  return useDispatch() as <T>(
-    thunkAction: (dispatch: ThunkDispatch<any, any, any>) => T
-  ) => T
+  return useDispatch() as ThunkAction & Dispatch<any>
 }
 export function getLocation(): Observable<GeolocationReturnType> {
   return Observable.create((observer: Observer<GeolocationReturnType>) =>
