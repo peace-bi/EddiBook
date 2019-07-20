@@ -1,11 +1,36 @@
+import * as io from 'io-ts'
+
 export interface Book {
-  key: string
+  bookVersionHistoryId: number
   name: string
-  status: string
+  licenseDate: string | undefined | null
+  category: string
+  licenseEndDate: string
+  hasUpdate: boolean
+  hasLicenseExpired: boolean
+  pdf: string
+  cover: string
+  new: boolean
   downloaded: boolean
-  coverUrl: string
-  action?: string
 }
+
+export const Book: io.Type<Book> = io.type({
+  bookVersionHistoryId: io.number,
+  category: io.string,
+  cover: io.string,
+  downloaded: io.boolean,
+  hasLicenseExpired: io.boolean,
+  hasUpdate: io.boolean,
+  licenseDate: io.union([io.string, io.undefined, io.null]),
+  licenseEndDate: io.string,
+  name: io.string,
+  new: io.boolean,
+  pdf: io.string
+})
+
+export const BookResponse = io.type({
+  content: io.array(Book)
+})
 
 export enum BookAction {
   DOWNLOAD = 'DOWNLOAD',

@@ -76,34 +76,26 @@ export const requestApiEither: (
   )
 }
 
-// const mockApi = () =>
-//   Promise.resolve({
-//     data: {
-//       username: 'Bi'
-//     },
-//     status: 200
-//   })
-
-// const mockApi = () =>
-//   Promise.reject({
-//     response: {
-//       data: {
-//         error: 'Test error'
-//       },
-//       status: 401
-//     }
-//   })
+export function getHost() {
+  const env = !!__DEV__ ? 'DEV' : 'PROD'
+  return Config.HOST[env].API
+}
 
 export const requestApi: (
   param: RequestParam
 ) => <T>(codec: t.Type<T>) => Observable<ApiResponse<T>> = (param) => (
   codec
 ) => {
-  const env = !!__DEV__ ? 'DEV' : 'PROD'
-  const url = `${Config.HOST[env].API}/${param.url}`
+  const url = `${getHost()}/${param.url}`
   if (param.type === 'json') {
     headers['Content-Type'] = 'application/json'
   }
+
+  // Hard header
+  if (__DEV__) {
+    headers['Authorization'] = 'bearer 6a641c66-dd44-40dd-a4ed-0d9b013f1ab8'
+  }
+
   const parameters =
     param.type && param.type === 'json'
       ? {
@@ -112,18 +104,15 @@ export const requestApi: (
       : {
           params: param.param
         }
-  // const methodCall = mockApi
-  const methodCall = () =>
-    axios.request({
-      url,
-      method: param.method,
-      // data: parameters,
-      headers,
-      ...parameters
-    })
 
   return from(
-    methodCall()
+    axios
+      .request({
+        url,
+        method: param.method,
+        headers,
+        ...parameters
+      })
       .then(({ data, status }) => {
         const decodeResult = codec.decode(data)
 
@@ -147,10 +136,14 @@ export const requestApi: (
         )
       })
       .catch((e) => {
-        throw {
-          error: e.response.data.error,
-          errorDescription: e.response.error_description
-        } as ApiError
+        if (e.response) {
+          throw {
+            error: e.response.data.error,
+            errorDescription: e.response.error_description
+          } as ApiError
+        } else {
+          throw e
+        }
       })
   ).pipe(
     take(1),

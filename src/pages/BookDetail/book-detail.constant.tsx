@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 0,
+    overflow: 'hidden',
     position: 'relative'
   },
   contentWrapper: {

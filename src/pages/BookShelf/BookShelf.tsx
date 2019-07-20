@@ -3,60 +3,23 @@ import { Localize } from 'core/localize'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, FlatList, TouchableWithoutFeedback } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
+import { tap } from 'rxjs/operators'
 import { TabType } from 'shared/model'
+import { useThunkDispatch } from 'shared/util'
 import { Book, BookRenderItem } from './+model'
+import { getBookShelf } from './+state/BookShelf.effect'
 import * as Styled from './BookShelf.contant'
 import { BookShelfItem } from './BookShelfItem'
-
-const data: Book[] = [
-  {
-    key: '1',
-    name:
-      // tslint:disable-next-line:max-line-length
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters',
-    downloaded: false,
-    status: 'NEW',
-    coverUrl:
-      'https://static1.squarespace.com/static/57d0be8b197aea6ac8094583/57d0e2c5d482e9cbbd0163ba/57d0e31af7e0ab55388eb78c/1473307419491/Ros+Cover+10SP+pdf.png?format=1000w',
-    action: 'DOWNLOAD'
-  },
-  {
-    key: '2',
-    name:
-      // tslint:disable-next-line:max-line-length
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters',
-    downloaded: false,
-    status: 'NEW',
-    coverUrl:
-      'http://static1.squarespace.com/static/57d0be8b197aea6ac8094583/57d0e2c5d482e9cbbd0163ba/580e1cd2f5e23112ec389748/1477319890779/Say+it+again+Cover+10SP+PDF+ONLY.png',
-    action: 'DOWNLOAD'
-  },
-  {
-    key: '3',
-    name:
-      // tslint:disable-next-line:max-line-length
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters',
-    downloaded: false,
-    status: 'NEW',
-    coverUrl:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPnSqUTQtf-oe1LfPb8Uz2rwjcTizy8_qXs5QizGw5KC_RV1ww'
-  },
-  {
-    key: '4',
-    name: 'Bon',
-    downloaded: false,
-    status: 'NEW',
-    coverUrl:
-      'https://wildpoland.com/wp-content/uploads/2014/08/biebrza-site-guide-pdf-cover-01.jpg'
-  }
-]
 
 const useBook = (bookId: string) => {
   const [value, setValue] = useState<Book[]>([])
   const [search, setSearch] = useState<string>('')
+  const dispatch = useThunkDispatch()
 
   useEffect(() => {
-    setValue(data)
+    dispatch(getBookShelf())
+      .pipe(tap(setValue))
+      .subscribe()
   }, [bookId, search])
 
   return {
@@ -107,8 +70,8 @@ const Search = ({ search }: Search) => {
   )
 }
 
-const keyExtractor = (item: any) => {
-  return item.key
+const keyExtractor = (item: Book) => {
+  return item.bookVersionHistoryId.toString()
 }
 
 const renderItem = ({ item }: BookRenderItem<Book, string>) => (

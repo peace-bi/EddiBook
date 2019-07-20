@@ -4,7 +4,8 @@ export default {
   Tab3: 'More',
   Common: {
     ViewAll: 'View All',
-    Cancel: 'Cancel'
+    Cancel: 'Cancel',
+    Expired: 'Expired'
   },
   SignIn: {
     Title: 'Sign In',
@@ -21,9 +22,9 @@ export default {
     Title: 'Sign Up',
     Email: 'Email',
     EmailPlaceholder: 'Email',
-    FirstName: 'FirstName',
+    FirstName: 'First Name',
     FirstNamePlaceholder: 'Enter First Name',
-    LastName: 'LastName',
+    LastName: 'Last Name',
     LastNamePlaceholder: 'Enter Last Name',
     Password: 'Password',
     PasswordPlaceholder: 'Enter Password',
@@ -76,7 +77,8 @@ export default {
     Title: 'Profile'
   },
   Book: {
-    SearchPlaceholder: 'Search for a book...'
+    SearchPlaceholder: 'Search for a book...',
+    LicenseDate: 'License end date {{p}}'
   },
   BookingDetail: {
     Intro: 'Intro',

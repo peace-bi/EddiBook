@@ -52,7 +52,7 @@ export const StatusContainer = styled.View`
 `
 
 export const MutedText = styled.Text`
-  color: #bdbdbd;
+  color: ${(props) => props.theme.color_text_muted};
   margin-top: 8px;
   font-size: 12px;
 `

@@ -1,13 +1,14 @@
 import { Card, WhiteSpace, WingBlank } from '@ant-design/react-native'
+import { Localize } from 'core/localize'
 import React, { useCallback, useState } from 'react'
 import { Alert, Text, TouchableWithoutFeedback, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import * as Progress from 'react-native-progress'
 import { useNavigation } from 'react-navigation-hooks'
 import * as RNFetchBlob from 'rn-fetch-blob'
+import { getHost } from 'shared/api'
 import { StyledCategory } from 'shared/components'
 import { savePath } from 'shared/hooks/file'
-import { EddiIcon } from 'shared/util'
 import { Book, BookAction } from './+model'
 import * as Styled from './BookShelf.contant'
 
@@ -15,7 +16,7 @@ interface Props {
   item: Book
 }
 
-const getAction = (status?: string, progress?: number) => {
+const getActionView = (status?: string, progress?: number) => {
   if (!status || status === BookAction.READ) {
     return <Text>Read</Text>
   }
@@ -27,7 +28,7 @@ const getAction = (status?: string, progress?: number) => {
   }
 
   const iconName = status === BookAction.DOWNLOAD ? 'download' : 'next'
-  return <EddiIcon name={iconName} size={38} color="#F23F3C" />
+  return <Styled.HeaderActionIcon name={iconName} size={38} />
 }
 
 const useFileAction = (initialStatus?: string) => {
@@ -67,11 +68,11 @@ const useFileAction = (initialStatus?: string) => {
 }
 
 export const BookShelfItem = ({ item }: Props) => {
-  const fileAction = useFileAction(item.action)
+  const fileAction = useFileAction(item.new ? BookAction.DOWNLOAD : 'NA')
   const { navigate } = useNavigation()
   const navigateDetail = useCallback(() => {
     navigate('BookDetail', {
-      id: item.key
+      id: item.bookVersionHistoryId
     })
   }, [])
 
@@ -81,7 +82,7 @@ export const BookShelfItem = ({ item }: Props) => {
         <WhiteSpace size="lg" style={{ paddingTop: 15 }} />
         <WingBlank style={{ paddingBottom: 20 }}>
           <Styled.StatusContainer>
-            <Styled.StatusRibbon size={30} textSize={8} />
+            {item.new ? <Styled.StatusRibbon size={30} textSize={8} /> : null}
           </Styled.StatusContainer>
 
           <Card
@@ -99,7 +100,7 @@ export const BookShelfItem = ({ item }: Props) => {
                 <Styled.PdfImage
                   resizeMode={FastImage.resizeMode.cover}
                   source={{
-                    uri: item.coverUrl
+                    uri: `${getHost()}${item.cover}`
                   }}
                 />
                 <Styled.ItemBodyContent>
@@ -108,7 +109,14 @@ export const BookShelfItem = ({ item }: Props) => {
                     {item.name}
                   </Styled.TitleText>
                   <Styled.MutedText>
-                    License end date 10/12/2020
+                    {Localize.t('Book.LicenseDate', {
+                      p: item.hasLicenseExpired
+                        ? Localize.t('Common.Expired')
+                        : Localize.strftime(
+                            new Date(item.licenseEndDate),
+                            '%Y/%m/%d'
+                          )
+                    })}
                   </Styled.MutedText>
                   <View
                     style={{
@@ -118,9 +126,9 @@ export const BookShelfItem = ({ item }: Props) => {
                       justifyContent: 'space-between'
                     }}
                   >
-                    <StyledCategory>Foreign Language</StyledCategory>
+                    <StyledCategory>{item.category}</StyledCategory>
                     <TouchableWithoutFeedback onPress={fileAction.doAction}>
-                      {getAction(fileAction.status, fileAction.progress)}
+                      {getActionView(fileAction.status, fileAction.progress)}
                     </TouchableWithoutFeedback>
                   </View>
                 </Styled.ItemBodyContent>
