@@ -1,7 +1,10 @@
 import { SearchBar } from '@ant-design/react-native'
 import { Platform } from 'react-native'
 import FastImage from 'react-native-fast-image'
+import { Icon } from 'react-native-vector-icons/Icon'
 import { Ribbon, StyledHeader, StyledHeaderSafeView } from 'shared/components'
+import { EddiIcon } from 'shared/util'
+import { DefaultTheme, ThemedStyledProps } from 'styled-components'
 import styled, { css } from 'styled-components/native'
 
 export const StatusBar = styled.StatusBar.attrs(() => ({
@@ -17,6 +20,7 @@ export const Search = styled(SearchBar)`
 `
 
 export const Header = styled(StyledHeader)`
+  flex-direction: row;
   background-color: #f2f3f5;
 `
 
@@ -66,6 +70,24 @@ export const PdfImage = styled(FastImage)`
   margin-top: -30;
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
+`
+
+export const HeaderActionIcon = styled(EddiIcon).attrs(
+  (
+    props: ThemedStyledProps<Icon & React.RefAttributes<Icon>, DefaultTheme>
+  ) => ({
+    color: props.theme.primary_color
+  })
+)`
+  align-self: center;
+`
+
+export const HeaderActionContainer = styled.View`
+  flex-direction: row;
+  background-color: ${(props) => props.theme.container_background_color};
+  height: 44px;
+  padding-right: 8px;
+  padding-left: 4px;
 `
 
 export const StatusRibbon = styled(Ribbon)``

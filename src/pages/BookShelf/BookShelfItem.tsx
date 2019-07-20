@@ -1,4 +1,4 @@
-import { Card, Modal, WhiteSpace, WingBlank } from '@ant-design/react-native'
+import { Card, WhiteSpace, WingBlank } from '@ant-design/react-native'
 import React, { useCallback, useState } from 'react'
 import { Alert, Text, TouchableWithoutFeedback, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
@@ -37,33 +37,19 @@ const useFileAction = (initialStatus?: string) => {
   const doAction = useCallback(() => {
     switch (status) {
       case BookAction.DOWNLOAD:
-        Modal.prompt(
-          'Access Code',
-          'Please enter the access code to view your bookshelf.',
-          (password) => {
-            if (password) {
-              setStatus(BookAction.DOWNLOADING)
-              RNFetchBlob.default
-                .config({
-                  path: `${savePath}/example.pdf`
-                })
-                .fetch(
-                  'GET',
-                  'http://www.africau.edu/images/default/sample.pdf'
-                )
-                .progress({ count: 50 }, (received, total) => {
-                  setProgress(received / total)
-                })
-                .then((res) => {
-                  Alert.alert('The file saved to ', res.path())
-                  setStatus(BookAction.READ)
-                })
-            }
-          },
-          'default',
-          undefined,
-          ['Access code']
-        )
+        setStatus(BookAction.DOWNLOADING)
+        RNFetchBlob.default
+          .config({
+            path: `${savePath}/example.pdf`
+          })
+          .fetch('GET', 'http://www.africau.edu/images/default/sample.pdf')
+          .progress({ count: 50 }, (received, total) => {
+            setProgress(received / total)
+          })
+          .then((res) => {
+            Alert.alert('The file saved to ', res.path())
+            setStatus(BookAction.READ)
+          })
         break
 
       default:

@@ -1,7 +1,7 @@
-import { SearchBar } from '@ant-design/react-native'
+import { Modal, SearchBar } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { FlatList } from 'react-native'
+import { Alert, FlatList, TouchableWithoutFeedback } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { TabType } from 'shared/model'
 import { Book, BookRenderItem } from './+model'
@@ -90,6 +90,11 @@ const Search = ({ search }: Search) => {
 
   return (
     <Styled.Search
+      styles={{
+        wrapper: {
+          flex: 1
+        }
+      }}
       ref={searchRef}
       value={searchText}
       showCancelButton={false}
@@ -117,6 +122,20 @@ export const BookShelf = () => {
     ({ item, index }) => renderItem({ item, index, bookStatus, setBookStatus }),
     []
   )
+  const handleActionKey = useCallback(() => {
+    Modal.prompt(
+      'Access Code',
+      'Please enter the access code to view your bookshelf.',
+      (password) => {
+        if (password) {
+          Alert.alert('Success')
+        }
+      },
+      'default',
+      undefined,
+      ['Access code']
+    )
+  }, [])
 
   // Hook get book from api
   const book = useBook('123')
@@ -126,6 +145,14 @@ export const BookShelf = () => {
       <Styled.StatusBar />
       <Styled.Header>
         <Search search={book.search} />
+        <Styled.HeaderActionContainer>
+          <TouchableWithoutFeedback>
+            <Styled.HeaderActionIcon name="filter" size={32} />
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={handleActionKey}>
+            <Styled.HeaderActionIcon name="key" size={32} />
+          </TouchableWithoutFeedback>
+        </Styled.HeaderActionContainer>
       </Styled.Header>
       <FlatList
         style={{ flex: 1, backgroundColor: '#F2F3F5', paddingTop: 8 }}
