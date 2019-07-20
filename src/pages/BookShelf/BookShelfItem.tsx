@@ -1,72 +1,19 @@
 import { Card, Modal, WhiteSpace, WingBlank } from '@ant-design/react-native'
 import React, { useCallback, useState } from 'react'
-import {
-  Alert,
-  Platform,
-  Text,
-  TouchableWithoutFeedback,
-  View
-} from 'react-native'
+import { Alert, Text, TouchableWithoutFeedback, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import * as Progress from 'react-native-progress'
 import { useNavigation } from 'react-navigation-hooks'
 import * as RNFetchBlob from 'rn-fetch-blob'
-import { Ribbon, StyledCategory } from 'shared/components'
+import { StyledCategory } from 'shared/components'
+import { savePath } from 'shared/hooks/file'
 import { EddiIcon } from 'shared/util'
-import styled, { css } from 'styled-components/native'
 import { Book, BookAction } from './+model'
+import * as Styled from './BookShelf.contant'
 
 interface Props {
   item: Book
 }
-
-const StyledView = styled.View`
-  flex: 1;
-  padding-left: 16px;
-  padding-right: 16px;
-  flex-direction: row;
-`
-
-const StyledBodyContent = styled.View`
-  flex: 1;
-  padding-left: 16px;
-`
-const StyledMutedText = styled.Text`
-  color: #bdbdbd;
-  margin-top: 8px;
-  font-size: 12px;
-`
-const StyledTitleText = styled.Text`
-  height: 40px;
-  color: #4f4f4f;
-  font-size: 16px;
-  font-weight: bold;
-`
-
-const StyledPdfImage = styled(FastImage)`
-  width: 95px;
-  height: 150px;
-  margin-top: -30;
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-`
-
-// prettier-ignore
-const StyledStatusContainer = styled.View`
-  position: absolute;
-  right: -3;
-  top: -10;
-  ${Platform.select({
-    ios: css`
-      zIndex: 999;
-    `,
-    android: css`
-      elevation: 999;
-    `
-  })};
-`
-
-const StyledStatusRibbon = styled(Ribbon)``
 
 const getAction = (status?: string, progress?: number) => {
   if (!status || status === BookAction.READ) {
@@ -98,10 +45,12 @@ const useFileAction = (initialStatus?: string) => {
               setStatus(BookAction.DOWNLOADING)
               RNFetchBlob.default
                 .config({
-                  fileCache: true,
-                  appendExt: 'zip'
+                  path: `${savePath}/example.pdf`
                 })
-                .fetch('GET', 'https://sample-videos.com/zip/10mb.zip')
+                .fetch(
+                  'GET',
+                  'http://www.africau.edu/images/default/sample.pdf'
+                )
                 .progress({ count: 50 }, (received, total) => {
                   setProgress(received / total)
                 })
@@ -145,9 +94,9 @@ export const BookShelfItem = ({ item }: Props) => {
       <View style={{ flex: 1 }}>
         <WhiteSpace size="lg" style={{ paddingTop: 15 }} />
         <WingBlank style={{ paddingBottom: 20 }}>
-          <StyledStatusContainer>
-            <StyledStatusRibbon size={30} textSize={8} />
-          </StyledStatusContainer>
+          <Styled.StatusContainer>
+            <Styled.StatusRibbon size={30} textSize={8} />
+          </Styled.StatusContainer>
 
           <Card
             style={{
@@ -160,19 +109,21 @@ export const BookShelfItem = ({ item }: Props) => {
             }}
           >
             <Card.Body style={{ borderTopWidth: 0, paddingBottom: 16 }}>
-              <StyledView>
-                <StyledPdfImage
+              <Styled.ItemContainer>
+                <Styled.PdfImage
                   resizeMode={FastImage.resizeMode.cover}
                   source={{
                     uri: item.coverUrl
                   }}
                 />
-                <StyledBodyContent>
+                <Styled.ItemBodyContent>
                   <WhiteSpace size="xl" />
-                  <StyledTitleText numberOfLines={2} ellipsizeMode="tail">
+                  <Styled.TitleText numberOfLines={2} ellipsizeMode="tail">
                     {item.name}
-                  </StyledTitleText>
-                  <StyledMutedText>License end date 10/12/2020</StyledMutedText>
+                  </Styled.TitleText>
+                  <Styled.MutedText>
+                    License end date 10/12/2020
+                  </Styled.MutedText>
                   <View
                     style={{
                       marginTop: 8,
@@ -186,8 +137,8 @@ export const BookShelfItem = ({ item }: Props) => {
                       {getAction(fileAction.status, fileAction.progress)}
                     </TouchableWithoutFeedback>
                   </View>
-                </StyledBodyContent>
-              </StyledView>
+                </Styled.ItemBodyContent>
+              </Styled.ItemContainer>
             </Card.Body>
           </Card>
         </WingBlank>
