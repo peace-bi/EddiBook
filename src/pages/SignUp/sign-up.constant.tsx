@@ -4,6 +4,7 @@ export const SignUpStyles = StyleSheet.create({
   wrapper: {
     maxWidth: 350,
     width: '100%',
+    marginBottom: 20,
     alignSelf: 'center'
   },
   title: {
@@ -11,8 +12,8 @@ export const SignUpStyles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600',
     color: '#4F4F4F',
-    marginTop: 60,
-    marginBottom: 28
+    marginTop: 30,
+    marginBottom: 10
   },
   label: {
     color: '#43484B',
@@ -20,7 +21,7 @@ export const SignUpStyles = StyleSheet.create({
     marginBottom: 4
   },
   fieldWrapper: {
-    marginTop: 20
+    marginTop: 12
   },
   signUpButtonWrapper: {
     marginTop: 38

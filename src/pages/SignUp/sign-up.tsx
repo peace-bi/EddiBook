@@ -2,28 +2,56 @@ import { Button } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
 import { Formik } from 'formik'
 import React, { useCallback } from 'react'
-import { Alert, KeyboardAvoidingView, Text, View } from 'react-native'
+import { Alert, ScrollView, Text, View } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useNavigation } from 'react-navigation-hooks'
 import { CustomInput } from 'shared/components/CustomInput'
+import { HideLoading, ShowLoading } from 'shared/store/action'
 import { useThunkDispatch } from 'shared/util'
 
 import { SignUp } from './+state/sign-up.effect'
 import { SignUpStyles } from './sign-up.constant'
 import { SignUpForm } from './sign-up.model'
 
-// import { useNavigation } from 'react-navigation-hooks'
 interface FormProps extends SignUpForm {
   confirmPassword: string
 }
-
+type FormError = {
+  [s in keyof FormProps]?: string
+}
+const validate = (values: FormProps) => {
+  const errors: FormError = {}
+  if (!values.email) {
+    errors.email = 'Required'
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = 'Invalid email address'
+  }
+  if (!values.firstName) {
+    errors.firstName = 'Required'
+  }
+  if (!values.lastName) {
+    errors.lastName = 'Required'
+  }
+  if (!values.password) {
+    errors.password = 'Required'
+  } else if (
+    !/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{8,64}$/i.test(values.password)
+  ) {
+    errors.password = 'Not match'
+  } else if (values.confirmPassword !== values.password) {
+    errors.confirmPassword = 'Not match'
+  }
+  return errors
+}
 const SignUpComponent = () => {
   const dispatch = useThunkDispatch()
   const { navigate } = useNavigation()
 
   const submit = useCallback((values: FormProps) => {
     const { confirmPassword, ...rest } = values
+    dispatch(ShowLoading.get())
     dispatch(SignUp(rest)).then((response) => {
+      dispatch(HideLoading.get())
       if (response.type === 'SIGNUP_FAILED') {
         Alert.alert('Failed to resgister!')
       } else if (response.type === 'SIGNUP_SUCCESS') {
@@ -33,19 +61,32 @@ const SignUpComponent = () => {
   }, [])
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={{
+        flex: 1
+      }}
+    >
       <View style={SignUpStyles.wrapper}>
         <Formik
           initialValues={{
-            email: 'thinh.tran@banvien.com.vn',
-            firstName: 'Thinh',
-            lastName: 'Tran',
-            confirmPassword: '12345678@Xs',
-            password: '12345678@Xs'
+            email: '',
+            firstName: '',
+            lastName: '',
+            confirmPassword: '',
+            password: ''
           }}
+          validate={validate}
           onSubmit={submit}
         >
-          {({ handleChange, handleSubmit, values }) => (
+          {({
+            handleChange,
+            handleSubmit,
+            handleBlur,
+            values,
+            errors,
+            touched
+          }) => (
             <View>
               <Text style={SignUpStyles.title}>
                 {Localize.t('SignUp.Title')}
@@ -53,12 +94,19 @@ const SignUpComponent = () => {
               <View style={SignUpStyles.fieldWrapper}>
                 <Text style={SignUpStyles.label}>
                   {Localize.t('SignUp.Email')}
+                  {touched.email}
                 </Text>
                 <CustomInput
                   value={values.email}
                   onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
                   placeholder={Localize.t('SignUp.EmailPlaceholder')}
                 />
+                {
+                  <Text style={{ color: '#F23F3C' }}>
+                    {errors.email && touched.email ? errors.email : ' '}
+                  </Text>
+                }
               </View>
               <View style={SignUpStyles.fieldWrapper}>
                 <Text style={SignUpStyles.label}>
@@ -69,6 +117,13 @@ const SignUpComponent = () => {
                   onChangeText={handleChange('firstname')}
                   placeholder={Localize.t('SignUp.FirstNamePlaceholder')}
                 />
+                {
+                  <Text style={{ color: '#F23F3C' }}>
+                    {errors.firstName && touched.firstName
+                      ? errors.firstName
+                      : ' '}
+                  </Text>
+                }
               </View>
               <View style={SignUpStyles.fieldWrapper}>
                 <Text style={SignUpStyles.label}>
@@ -79,6 +134,13 @@ const SignUpComponent = () => {
                   onChangeText={handleChange('lastname')}
                   placeholder={Localize.t('SignUp.LastNamePlaceholder')}
                 />
+                {
+                  <Text style={{ color: '#F23F3C' }}>
+                    {errors.lastName && touched.lastName
+                      ? errors.lastName
+                      : ' '}
+                  </Text>
+                }
               </View>
               <View style={SignUpStyles.fieldWrapper}>
                 <Text style={SignUpStyles.label}>
@@ -91,6 +153,13 @@ const SignUpComponent = () => {
                   valid={true}
                   secureTextEntry={true}
                 />
+                {
+                  <Text style={{ color: '#F23F3C' }}>
+                    {errors.password && touched.password
+                      ? errors.password
+                      : ' '}
+                  </Text>
+                }
               </View>
               <View style={SignUpStyles.fieldWrapper}>
                 <Text style={SignUpStyles.label}>
@@ -102,6 +171,13 @@ const SignUpComponent = () => {
                   placeholder={Localize.t('SignUp.ConfirmPasswordPlaceholder')}
                   secureTextEntry={true}
                 />
+                {
+                  <Text style={{ color: '#F23F3C' }}>
+                    {errors.confirmPassword && touched.confirmPassword
+                      ? errors.confirmPassword
+                      : ' '}
+                  </Text>
+                }
               </View>
               <View style={SignUpStyles.signUpButtonWrapper}>
                 <Button
@@ -137,7 +213,7 @@ const SignUpComponent = () => {
           </TouchableWithoutFeedback>
         </View>
       </View>
-    </KeyboardAvoidingView>
+    </ScrollView>
   )
 }
 SignUpComponent.navigationOptions = {

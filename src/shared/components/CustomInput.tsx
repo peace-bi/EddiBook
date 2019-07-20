@@ -74,6 +74,7 @@ export class CustomInput extends React.PureComponent<Props, State> {
           placeholderTextColor={'#BDBDBD'}
           value={this.state.input}
           editable={this.props.disabled}
+          onBlur={onBlur}
           onChangeText={(e) => {
             this.handleChangeText.bind(this)(e)
             if (onChangeText) {
