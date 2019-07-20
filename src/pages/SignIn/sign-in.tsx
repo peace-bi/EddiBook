@@ -1,6 +1,6 @@
 import { Localize } from 'core/localize'
 import { Formik } from 'formik'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { TouchableWithoutFeedback, View } from 'react-native'
 import { useNavigation } from 'react-navigation-hooks'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,13 +20,12 @@ const SignInComponent = () => {
   const dispatch = useDispatch()
   const { navigate } = useNavigation()
 
-  function navigateSignUp() {
+  const navigateSignUp = useCallback(() => {
     navigate('SignUp')
-  }
-
-  function submit(values: FormProps) {
+  }, [])
+  const submit = useCallback((values: FormProps) => {
     dispatch(SignIn(values.email, values.password))
-  }
+  }, [])
 
   return (
     <Styled.PageContainer>
