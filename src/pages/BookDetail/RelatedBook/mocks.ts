@@ -1,6 +1,4 @@
-import { Book } from 'pages/BookShelf/+model'
-
-export const data: Book[] = [
+export const data = [
   {
     key: '1',
     name:

@@ -3,7 +3,7 @@ import { signUpReducer } from 'pages/SignUp/+state/sign-up.reducer'
 import { combineReducers } from 'redux'
 import { PlainAction } from 'redux-typed-actions'
 
-import { ShowLoading, HideLoading } from './action'
+import { HideLoading, ShowLoading } from './action'
 
 const initialState = {
   showLoading: false

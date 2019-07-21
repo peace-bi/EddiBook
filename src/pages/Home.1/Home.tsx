@@ -62,7 +62,7 @@ export class Home extends Component<Props, State> {
     console.info('leading nav button pressed')
     RNPdfTronUtils.exportAnnotations(
       '/Users/macbook/Documents/Workplace/TryToBest/EddiBook/ios/sample.pdf'
-    ).then((url: any) => {
+    ).then(() => {
       // console.log('url', url)
     })
 

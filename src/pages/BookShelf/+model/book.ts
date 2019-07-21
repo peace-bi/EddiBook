@@ -31,10 +31,3 @@ export const Book: io.Type<Book> = io.type({
 export const BookResponse = io.type({
   content: io.array(Book)
 })
-
-export enum BookAction {
-  DOWNLOAD = 'DOWNLOAD',
-  UPDATE = 'UPDATE',
-  DOWNLOADING = 'DOWNLOADING',
-  READ = 'READ'
-}

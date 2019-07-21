@@ -1,7 +1,5 @@
-import { AnyAction } from 'redux'
-import { ThunkDispatch } from 'redux-thunk'
 import { Observable } from 'rxjs'
-import { map } from 'rxjs/operators'
+import { catchError, map } from 'rxjs/operators'
 import { requestApi } from 'shared/api'
 import { Book, BookResponse } from '../+model'
 
@@ -39,7 +37,7 @@ import { Book, BookResponse } from '../+model'
 // }
 
 export function getBookShelf() {
-  return (dispatch: ThunkDispatch<{}, {}, AnyAction>): Observable<Book[]> => {
+  return (): Observable<Book[]> => {
     // return of(mock.content)
     return requestApi({
       url: 'library/book/dashboard',
@@ -52,6 +50,14 @@ export function getBookShelf() {
         downloadedOnly: false
       },
       type: 'json'
-    })(BookResponse).pipe(map((res) => res.result.content))
+    })(BookResponse).pipe(
+      map((res) => {
+        return res.result.content
+      }),
+      catchError((err) => {
+        console.info('Can not get err', err)
+        return []
+      })
+    )
   }
 }

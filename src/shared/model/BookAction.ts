@@ -1,0 +1,6 @@
+export enum BookAction {
+  DOWNLOAD = 'DOWNLOAD',
+  UPDATE = 'UPDATE',
+  DOWNLOADING = 'DOWNLOADING',
+  DOWNLOADED = 'DOWNLOADED'
+}

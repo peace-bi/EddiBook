@@ -93,7 +93,7 @@ export const requestApi: (
 
   // Hard header
   if (__DEV__) {
-    headers['Authorization'] = 'bearer 6a641c66-dd44-40dd-a4ed-0d9b013f1ab8'
+    headers['Authorization'] = 'bearer d127df12-3e61-4d24-b55c-a0304559dfa0'
   }
 
   const parameters =
@@ -138,8 +138,7 @@ export const requestApi: (
       .catch((e) => {
         if (e.response) {
           throw {
-            error: e.response.data.error,
-            errorDescription: e.response.error_description
+            error: e.response.data
           } as ApiError
         } else {
           throw e

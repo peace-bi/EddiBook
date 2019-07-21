@@ -5,7 +5,10 @@ export default {
   Common: {
     ViewAll: 'View All',
     Cancel: 'Cancel',
-    Expired: 'Expired'
+    Expired: 'Expired',
+    Read: 'Read',
+    Download: 'Download',
+    Update: 'Update'
   },
   SignIn: {
     Title: 'Sign In',
@@ -82,7 +85,6 @@ export default {
   },
   BookingDetail: {
     Intro: 'Intro',
-    Download: 'Download',
     ExpiryDate: 'Expiry date {{p}}',
     Size: 'Size: {{p}}',
     Publisher: 'Publisher: {{p}}',

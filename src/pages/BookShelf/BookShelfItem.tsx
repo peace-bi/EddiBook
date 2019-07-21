@@ -1,15 +1,15 @@
 import { Card, WhiteSpace, WingBlank } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
-import React, { Fragment, useCallback, useState } from 'react'
-import { Alert, TouchableWithoutFeedback, View } from 'react-native'
+import React, { Fragment, useCallback } from 'react'
+import { TouchableWithoutFeedback, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import * as Progress from 'react-native-progress'
 import { useNavigation } from 'react-navigation-hooks'
-import * as RNFetchBlob from 'rn-fetch-blob'
 import { getHost } from 'shared/api'
 import { StyledCategory } from 'shared/components'
-import { savePath } from 'shared/hooks/file'
-import { Book, BookAction } from './+model'
+import { useFileAction } from 'shared/hooks'
+import { BookAction } from 'shared/model'
+import { Book } from './+model'
 import * as Styled from './BookShelf.contant'
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
 }
 
 const getActionView = (status?: string, progress?: number) => {
-  if (!status || status === BookAction.READ) {
+  if (!status || status === BookAction.DOWNLOADED) {
     return <Fragment />
   }
   if (status === BookAction.DOWNLOADING) {
@@ -25,11 +25,9 @@ const getActionView = (status?: string, progress?: number) => {
   }
   if (status === BookAction.UPDATE) {
     return (
-      <TouchableWithoutFeedback>
-        <Styled.ItemActionButton>
-          <Styled.ItemActionText>Update</Styled.ItemActionText>
-        </Styled.ItemActionButton>
-      </TouchableWithoutFeedback>
+      <Styled.ItemActionButton>
+        <Styled.ItemActionText>Update</Styled.ItemActionText>
+      </Styled.ItemActionButton>
     )
   }
 
@@ -37,44 +35,12 @@ const getActionView = (status?: string, progress?: number) => {
   return <Styled.HeaderActionIcon name={iconName} size={38} />
 }
 
-const useFileAction = (initialStatus?: string) => {
-  const [status, setStatus] = useState(initialStatus)
-  const [progress, setProgress] = useState(0)
-
-  const doAction = useCallback(() => {
-    switch (status) {
-      case BookAction.DOWNLOAD:
-        setStatus(BookAction.DOWNLOADING)
-        RNFetchBlob.default
-          .config({
-            path: `${savePath}/example.pdf`
-          })
-          .fetch('GET', 'http://www.africau.edu/images/default/sample.pdf')
-          .progress({ count: 50 }, (received, total) => {
-            setProgress(received / total)
-          })
-          .then((res) => {
-            Alert.alert('The file saved to ', res.path())
-            setStatus(BookAction.READ)
-          })
-        break
-
-      default:
-        Alert.alert('b' + status)
-        setStatus(BookAction.DOWNLOAD)
-        break
-    }
-  }, [status])
-
-  return {
-    status,
-    progress,
-    doAction
-  }
-}
-
 export const BookShelfItem = ({ item }: Props) => {
-  const fileAction = useFileAction(item.new ? BookAction.DOWNLOAD : 'NA')
+  const fileAction = useFileAction(
+    item.bookVersionHistoryId,
+    `${getHost()}${item.pdf}`,
+    item.new ? BookAction.DOWNLOAD : 'NA'
+  )
   const { navigate } = useNavigation()
   const navigateDetail = useCallback(() => {
     navigate('BookDetail', {

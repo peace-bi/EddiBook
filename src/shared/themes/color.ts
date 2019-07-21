@@ -68,7 +68,7 @@ export const ThemeColor: ThemeColor = {
     brandImportant: '#ff5b05',
     brandWait: '#108ee9',
     borderColorBase: '#dddddd',
-    primaryButtonFillTap: '#0e80d2',
+    primaryButtonFillTap: '#e94f4f',
     warningButtonFill: '#e94f4f',
     warningButtonFillTap: '#e94f4f',
     linkButtonFillTap: '#dddddd',

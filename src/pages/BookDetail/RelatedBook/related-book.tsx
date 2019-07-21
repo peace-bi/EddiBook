@@ -1,6 +1,5 @@
 import { WhiteSpace } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
-import { Book } from 'pages/BookShelf/+model'
 import React, { useCallback } from 'react'
 import { FlatList } from 'react-native'
 import FastImage from 'react-native-fast-image'
@@ -37,7 +36,7 @@ function keyExtractor(item: any) {
   return item.key
 }
 
-const renderItem = ({ item }: RenderItem<Book>) => {
+const renderItem = ({ item }: RenderItem<any>) => {
   return (
     <StyledItemView>
       <StyledPdfImage

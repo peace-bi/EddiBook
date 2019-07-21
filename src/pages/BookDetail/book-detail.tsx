@@ -23,6 +23,7 @@ import styled, { DefaultTheme } from 'styled-components/native'
 import { Book } from 'pages/BookShelf/+model'
 import { getHost } from 'shared/api'
 import { styles } from './book-detail.constant'
+import { BookActionButton } from './BookAction'
 import { RelatedBook } from './RelatedBook'
 
 const HEADER_MAX_HEIGHT = 300
@@ -155,13 +156,11 @@ export default class BookDetail extends React.Component<Props, State> {
                 <StyledBookName>{book.name}</StyledBookName>
                 <WhiteSpace size="xs" />
                 <StyledDescText>Patricia Brennan Demuth</StyledDescText>
-                <Button
-                  type="primary"
-                  onPress={() => {}}
-                  style={{ alignSelf: 'stretch', marginTop: 36 }}
-                >
-                  {Localize.t('BookingDetail.Download')}
-                </Button>
+                <BookActionButton
+                  bookId={book.bookVersionHistoryId}
+                  bookUrl={book.pdf}
+                  new={book.new}
+                />
               </StyledView>
               <WhiteSpace />
               <WhiteSpace />
