@@ -4,7 +4,8 @@ import { from, Observable, of } from 'rxjs'
 
 import { Either, Left, Right } from 'fp-ts/lib/Either'
 import { TypeOf } from 'io-ts'
-import { catchError, take, timeout } from 'rxjs/operators'
+import { catchError, flatMap, map, take, timeout } from 'rxjs/operators'
+import { Storage } from './storage'
 import { Config } from './util'
 
 interface RequestParam {
@@ -91,11 +92,6 @@ export const requestApi: (
     headers['Content-Type'] = 'application/json'
   }
 
-  // Hard header
-  if (__DEV__) {
-    headers['Authorization'] = 'bearer d127df12-3e61-4d24-b55c-a0304559dfa0'
-  }
-
   const parameters =
     param.type && param.type === 'json'
       ? {
@@ -104,47 +100,55 @@ export const requestApi: (
       : {
           params: param.param
         }
+  return from(Storage.getInstance().getJwt()).pipe(
+    map((jwt) => {
+      if (jwt) {
+        headers.Authorization = `bearer ${jwt}`
+      } else {
+        headers.Authorization = `Basic YnJvd3Nlcjo=`
+      }
+      return headers
+    }),
+    flatMap((_headers) =>
+      axios
+        .request({
+          url,
+          method: param.method,
+          headers: _headers,
+          ...parameters
+        })
+        .then(({ data, status }) => {
+          const decodeResult = codec.decode(data)
 
-  return from(
-    axios
-      .request({
-        url,
-        method: param.method,
-        headers,
-        ...parameters
-      })
-      .then(({ data, status }) => {
-        const decodeResult = codec.decode(data)
-
-        return decodeResult.fold<ApiResponse<TypeOf<typeof codec>>>(
-          () => {
-            throw {
-              response: {
-                data: {
-                  error: 'JSON Decode Fail',
-                  error_description: 'JSON Decode Fail'
+          return decodeResult.fold<ApiResponse<TypeOf<typeof codec>>>(
+            () => {
+              throw {
+                response: {
+                  data: {
+                    error: 'JSON Decode Fail',
+                    error_description: 'JSON Decode Fail'
+                  }
                 }
               }
+            },
+            (result) => {
+              return {
+                result,
+                status
+              }
             }
-          },
-          (result) => {
-            return {
-              result,
-              status
-            }
+          )
+        })
+        .catch((e) => {
+          if (e.response) {
+            throw {
+              error: e.response.data
+            } as ApiError
+          } else {
+            throw e
           }
-        )
-      })
-      .catch((e) => {
-        if (e.response) {
-          throw {
-            error: e.response.data
-          } as ApiError
-        } else {
-          throw e
-        }
-      })
-  ).pipe(
+        })
+    ),
     take(1),
     timeout(20000)
   )

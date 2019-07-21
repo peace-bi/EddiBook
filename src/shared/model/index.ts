@@ -1,3 +1,3 @@
 export * from './renderItem'
-export * from './Tab'
+export * from './tab'
 export * from './BookAction'

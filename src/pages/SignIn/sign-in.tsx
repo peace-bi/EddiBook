@@ -8,6 +8,8 @@ import { compose } from 'redux'
 import { CustomInput } from 'shared/components/CustomInput'
 import { useThunkDispatch } from 'shared/util'
 
+import { Storage } from 'shared/storage'
+import { HideLoading, ShowLoading } from 'shared/store/action'
 import { SignInFailed, SignInSuccess } from './+state/sign-in.actions'
 import { SignIn } from './+state/sign-in.effect'
 import * as Styled from './sign-in.constant'
@@ -21,12 +23,12 @@ interface FormProps {
 const validate = (values: FormProps) => {
   const errors: FormikErrors<FormProps> = {}
   if (!values.email) {
-    errors.email = 'Required'
+    errors.email = 'Required' // no-i18n
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address'
+    errors.email = 'Invalid email address' // no-i18n
   }
   if (!values.password) {
-    errors.password = 'Required'
+    errors.password = 'Required' // no-i18n
   }
   return errors
 }
@@ -36,20 +38,28 @@ const SignInComponent = () => {
   const passwordInput = useRef<CustomInput>(null)
   const dispatch = useThunkDispatch()
   const { navigate } = useNavigation()
-
+  Storage.getInstance().setJwt('')
   const navigateSignUp = useCallback(() => {
     navigate('SignUp')
   }, [])
   const submit = useCallback((values: FormProps) => {
+    dispatch(ShowLoading.get())
+    Storage.getInstance()
+      .getJwt()
+      .then(console.info)
     dispatch(SignIn(values.email, values.password)).subscribe((result) => {
       if (SignInSuccess.is(result)) {
         navigate('MainStack')
+        Storage.getInstance().setJwt(result.payload.result.access_token)
+        console.info(result.payload.result.access_token)
       }
       if (SignInFailed.is(result)) {
-        if (result.payload.error === 'invalid_token') {
-          setAsyncErrorMessage('Invalid user info')
+        console.info(result.payload.error)
+        if (result.payload.error.error === 'invalid_token') {
+          setAsyncErrorMessage('Invalid user info') // no-i18n
         }
       }
+      dispatch(HideLoading.get())
     })
   }, [])
 
@@ -62,7 +72,7 @@ const SignInComponent = () => {
         <Formik
           validate={validate}
           initialValues={{
-            email: 'tietthinh@gmail.co',
+            email: 'tietthinh@gmail.com',
             password: '12345678@Xs'
           }}
           onSubmit={submit}
@@ -85,7 +95,6 @@ const SignInComponent = () => {
                   onChangeText={handleChange('email')}
                   placeholder={Localize.t('SignIn.EmailPlaceholder')}
                   returnKeyType={'next'}
-                  autoFocus={true}
                   onBlur={handleBlur('email')}
                   onSubmitEditing={() =>
                     passwordInput.current && passwordInput.current.focus()
@@ -106,8 +115,6 @@ const SignInComponent = () => {
                   onChangeText={handleChange('password')}
                   placeholder={Localize.t('SignIn.PasswordPlaceholder')}
                   secureTextEntry={true}
-                  returnKeyType={'next'}
-                  autoFocus={true}
                   onBlur={handleBlur('password')}
                   onSubmitEditing={() =>
                     passwordInput.current && passwordInput.current.focus()

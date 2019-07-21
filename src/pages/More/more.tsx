@@ -1,14 +1,22 @@
 import { List } from '@ant-design/react-native'
 import Item from '@ant-design/react-native/lib/list/ListItem'
 import { Localize } from 'core/localize'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useNavigation } from 'react-navigation-hooks'
 import { TabType } from 'shared/model'
+import { Storage } from 'shared/storage'
+
 import * as Styled from './more.constant'
 
 export default function More() {
   const { navigate } = useNavigation()
+
+  const signOut = useCallback(() => {
+    Storage.getInstance().setJwt('')
+    navigate('AuthStack')
+  }, [])
+
   return (
     <Styled.Container>
       <Styled.Wrapper>
@@ -74,7 +82,7 @@ export default function More() {
         </Item>
         <Styled.Divider />
         <Item
-          onPressIn={() => navigate('EditProfile')}
+          onPressIn={signOut}
           thumb={<Styled.ListIcon name="logout" />}
           arrow={'horizontal'}
         >

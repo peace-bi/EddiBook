@@ -26,3 +26,18 @@ export function SignIn(username: string, password: string) {
       catchError((data) => of(dispatch(SignInFailed.get(data))))
     )
 }
+
+// export function refreshToken() {
+//   return (dispatch: ThunkDispatch<{}, {}, AnyAction>) =>
+//     requestApi({
+//       url: 'uaa/oauth/token',
+//       method: 'POST',
+//       param: {
+
+//         scope: 'ui',
+//         grant_type: 'password'
+//       }
+//     })(io.any)
+//       .pipe()
+//       .subscribe()
+// }
