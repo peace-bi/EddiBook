@@ -44,17 +44,12 @@ const SignInComponent = () => {
   }, [])
   const submit = useCallback((values: FormProps) => {
     dispatch(ShowLoading.get())
-    Storage.getInstance()
-      .getJwt()
-      .then(console.info)
     dispatch(SignIn(values.email, values.password)).subscribe((result) => {
       if (SignInSuccess.is(result)) {
         navigate('MainStack')
         Storage.getInstance().setJwt(result.payload.result.access_token)
-        console.info(result.payload.result.access_token)
       }
       if (SignInFailed.is(result)) {
-        console.info(result.payload.error)
         if (result.payload.error.error === 'invalid_token') {
           setAsyncErrorMessage('Invalid user info') // no-i18n
         }
@@ -72,8 +67,8 @@ const SignInComponent = () => {
         <Formik
           validate={validate}
           initialValues={{
-            email: 'tietthinh@gmail.com',
-            password: '12345678@Xs'
+            email: '',
+            password: ''
           }}
           onSubmit={submit}
         >
