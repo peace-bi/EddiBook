@@ -1,8 +1,7 @@
-export const SignUpSuccess = (payload: any) => ({
-  type: 'SIGNUP_SUCCESS',
-  payload
-})
-export const SignUpFailed = (payload: any) => ({
-  type: 'SIGNUP_FAILED',
-  payload
-})
+import { defineAction } from 'redux-typed-actions'
+import { SignUpSuccessResponse } from '../sign-up.model'
+
+export const SignUpSuccess = defineAction<SignUpSuccessResponse>(
+  'SIGNUP_SUCCESS'
+)
+export const SignUpFailed = defineAction<any>('SIGNUP_FAILED')

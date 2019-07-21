@@ -20,6 +20,7 @@ interface State {
 }
 // tslint:disable-next-line:function-name
 export class CustomInput extends React.PureComponent<Props, State> {
+  inputRef: React.RefObject<TextInput>
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -27,12 +28,18 @@ export class CustomInput extends React.PureComponent<Props, State> {
       showPassword: props.secureTextEntry || false
     }
     this.showPassword = this.showPassword.bind(this)
+    this.inputRef = React.createRef()
   }
   handleChangeText(e: string) {
     this.setState({ input: e })
   }
   showPassword() {
     this.setState({ showPassword: !this.state.showPassword })
+  }
+  focus() {
+    if (this.inputRef.current) {
+      this.inputRef.current.focus()
+    }
   }
   render() {
     const {
@@ -70,6 +77,7 @@ export class CustomInput extends React.PureComponent<Props, State> {
       >
         <TextInput
           {...restProps}
+          ref={this.inputRef}
           placeholder={this.props.placeholder}
           placeholderTextColor={'#BDBDBD'}
           value={this.state.input}

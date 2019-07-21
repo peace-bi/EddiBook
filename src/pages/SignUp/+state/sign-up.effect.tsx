@@ -15,6 +15,6 @@ export function SignUp(data: SignUpForm) {
       type: 'json'
     })(io.any)
       .toPromise()
-      .then((res) => dispatch(SignUpSuccess(res)))
-      .catch((err) => dispatch(SignUpFailed(err)))
+      .then((res) => dispatch(SignUpSuccess.get(res as any)))
+      .catch((err) => dispatch(SignUpFailed.get(err)))
 }
