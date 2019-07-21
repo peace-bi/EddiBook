@@ -1,20 +1,23 @@
 import * as io from 'io-ts'
+import { ThunkDispatch } from 'redux-thunk'
+import { PlainAction } from 'redux-typed-actions'
+import { Observable, of } from 'rxjs'
+import { catchError, first, map } from 'rxjs/operators'
 import { requestApi } from 'shared/api'
 
 import { SignUpForm } from '../sign-up.model'
 import { SignUpFailed, SignUpSuccess } from './sign-up.actions'
 
-// http://192.168.2.40:9000/uaa/oauth/token
-
 export function SignUp(data: SignUpForm) {
-  return (dispatch: any): Promise<{ type: string; payload: any }> =>
+  return (dispatch: ThunkDispatch<{}, {}, PlainAction>): Observable<PlainAction> =>
     requestApi({
       url: 'account/users/signup',
       method: 'POST',
       param: data,
       type: 'json'
-    })(io.any)
-      .toPromise()
-      .then((res) => dispatch(SignUpSuccess.get(res as any)))
-      .catch((err) => dispatch(SignUpFailed.get(err)))
+    })(io.any).pipe(
+      first(),
+      map((res) => dispatch(SignUpSuccess.get(res as any))),
+      catchError((err) => of(dispatch(SignUpFailed.get(err))))
+    )
 }

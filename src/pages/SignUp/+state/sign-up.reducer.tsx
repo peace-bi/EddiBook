@@ -1,10 +1,12 @@
+import { SignUpFailed, SignUpSuccess } from './sign-up.actions'
+
 export function signUpReducer(s = {}, a: any): any {
-  if (a.type === 'SIGNUP_SUCCESS') {
+  if (SignUpSuccess.is(a)) {
     return {
       ...s
     }
   }
-  if (a.type === 'SIGNUP_FAILED') {
+  if (SignUpFailed.is(a)) {
     return {
       ...s,
       error: a.payload
