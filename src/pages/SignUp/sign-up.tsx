@@ -9,6 +9,7 @@ import { CustomInput } from 'shared/components/CustomInput'
 import { HideLoading, ShowLoading } from 'shared/store/action'
 import { useThunkDispatch } from 'shared/util'
 
+import { SignUpFailed, SignUpSuccess } from './+state/sign-up.actions'
 import { SignUp } from './+state/sign-up.effect'
 import { SignUpStyles } from './sign-up.constant'
 import { SignUpForm } from './sign-up.model'
@@ -19,24 +20,24 @@ interface FormProps extends SignUpForm {
 const validate = (values: FormProps) => {
   const errors: FormikErrors<FormProps> = {}
   if (!values.email) {
-    errors.email = 'Required'
+    errors.email = 'Required' // no-i18n
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address'
+    errors.email = 'Invalid email address' // no-i18n
   }
   if (!values.firstName) {
-    errors.firstName = 'Required'
+    errors.firstName = 'Required' // no-i18n
   }
   if (!values.lastName) {
-    errors.lastName = 'Required'
+    errors.lastName = 'Required' // no-i18n
   }
   if (!values.password) {
-    errors.password = 'Required'
+    errors.password = 'Required' // no-i18n
   } else if (
     !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,64}$/i.test(values.password)
   ) {
-    errors.password = 'Not match'
+    errors.password = 'Not match' // no-i18n
   } else if (values.confirmPassword !== values.password) {
-    errors.confirmPassword = 'Not match'
+    errors.confirmPassword = 'Not match' // no-i18n
   }
   return errors
 }
@@ -51,11 +52,11 @@ const SignUpComponent = () => {
   const submit = useCallback((values: FormProps) => {
     const { confirmPassword, ...rest } = values
     dispatch(ShowLoading.get())
-    dispatch(SignUp(rest)).then((response) => {
+    dispatch(SignUp(rest)).subscribe((response) => {
       dispatch(HideLoading.get())
-      if (response.type === 'SIGNUP_FAILED') {
-        Alert.alert('Failed to resgister!')
-      } else if (response.type === 'SIGNUP_SUCCESS') {
+      if (SignUpSuccess.is(response)) {
+        Alert.alert('Failed to resgister!') // no-i18n
+      } else if (SignUpFailed.is(response)) {
         navigate('AuthenticateMail')
       }
     })
@@ -71,11 +72,11 @@ const SignUpComponent = () => {
       <View style={SignUpStyles.wrapper}>
         <Formik
           initialValues={{
-            email: 'tietthinh@gmail.com',
-            firstName: 'Thinh',
-            lastName: 'Tran',
-            confirmPassword: '12345678@Xa',
-            password: '12345678@Xa'
+            email: '',
+            firstName: '',
+            lastName: '',
+            confirmPassword: '',
+            password: ''
           }}
           validate={validate}
           onSubmit={submit}
