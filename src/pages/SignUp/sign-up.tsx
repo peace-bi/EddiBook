@@ -1,6 +1,6 @@
 import { Button } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
-import { Formik } from 'formik'
+import { Formik, FormikErrors } from 'formik'
 import React, { useCallback, useRef } from 'react'
 import { Alert, ScrollView, Text, View } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
@@ -16,11 +16,8 @@ import { SignUpForm } from './sign-up.model'
 interface FormProps extends SignUpForm {
   confirmPassword: string
 }
-type FormError = {
-  [s in keyof FormProps]?: string
-}
 const validate = (values: FormProps) => {
-  const errors: FormError = {}
+  const errors: FormikErrors<FormProps> = {}
   if (!values.email) {
     errors.email = 'Required'
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
