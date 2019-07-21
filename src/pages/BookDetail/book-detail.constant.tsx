@@ -39,6 +39,7 @@ export const styles = StyleSheet.create({
   },
   viewWrapper: {
     height: Header.HEIGHT,
+    zIndex: 9,
     flexDirection: 'row'
   },
   backButtonWrapper: {

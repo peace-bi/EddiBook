@@ -84,7 +84,7 @@ const StyledContainer = styled.View`
 const StyledAnimatedHeaderView = styled.View`
   position: absolute;
   top: 0;
-  z-index: 0;
+  z-index: -1;
   left: -25%;
   width: 150%;
   height: 50%;
