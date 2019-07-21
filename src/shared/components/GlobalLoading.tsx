@@ -10,23 +10,27 @@ export const LoadingComponent = () => {
   useEffect(() => {
     if (showLoading) {
       Keyboard.dismiss()
-      Animated.timing(zIndexDelay, {
-        toValue: 9
-      }).start()
-      Animated.timing(fade, {
-        toValue: 1,
-        duration: 300
-      }).start()
-    } else {
       Animated.sequence([
-        Animated.timing(fade, {
-          toValue: 0,
-          duration: 300
-        }),
         Animated.timing(zIndexDelay, {
-          toValue: -9
+          toValue: 9
+        }),
+        Animated.timing(fade, {
+          toValue: 1,
+          duration: 300
         })
       ]).start()
+    } else {
+      setTimeout(() => {
+        Animated.sequence([
+          Animated.timing(fade, {
+            toValue: 0,
+            duration: 300
+          }),
+          Animated.timing(zIndexDelay, {
+            toValue: -9
+          })
+        ]).start()
+      }, 300)
     }
   }, [showLoading])
   return (

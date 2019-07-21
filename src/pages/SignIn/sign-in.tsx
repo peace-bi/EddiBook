@@ -1,12 +1,16 @@
 import { Localize } from 'core/localize'
-import { Formik } from 'formik'
-import React from 'react'
-import { TouchableWithoutFeedback, View } from 'react-native'
+import { Formik, FormikErrors } from 'formik'
+import React, { useCallback, useRef, useState } from 'react'
+import { Text, TouchableWithoutFeedback, View } from 'react-native'
 import { useNavigation } from 'react-navigation-hooks'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { CustomInput } from 'shared/components/CustomInput'
+import { useThunkDispatch } from 'shared/util'
 
+import { Storage } from 'shared/storage'
+import { HideLoading, ShowLoading } from 'shared/store/action'
+import { SignInFailed, SignInSuccess } from './+state/sign-in.actions'
 import { SignIn } from './+state/sign-in.effect'
 import * as Styled from './sign-in.constant'
 import { SignInState } from './sign-in.model'
@@ -15,18 +19,44 @@ interface FormProps {
   email: string
   password: string
 }
+
+const validate = (values: FormProps) => {
+  const errors: FormikErrors<FormProps> = {}
+  if (!values.email) {
+    errors.email = 'Required' // no-i18n
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = 'Invalid email address' // no-i18n
+  }
+  if (!values.password) {
+    errors.password = 'Required' // no-i18n
+  }
+  return errors
+}
 const SignInComponent = () => {
+  const [asyncErrorMessage, setAsyncErrorMessage] = useState()
   const store = useSelector((s) => s as SignInState)
-  const dispatch = useDispatch()
+  const passwordInput = useRef<CustomInput>(null)
+  const dispatch = useThunkDispatch()
   const { navigate } = useNavigation()
-
-  function navigateSignUp() {
+  Storage.getInstance().setJwt('')
+  const navigateSignUp = useCallback(() => {
     navigate('SignUp')
-  }
-
-  function submit(values: FormProps) {
-    dispatch(SignIn(values.email, values.password))
-  }
+  }, [])
+  const submit = useCallback((values: FormProps) => {
+    dispatch(ShowLoading.get())
+    dispatch(SignIn(values.email, values.password)).subscribe((result) => {
+      if (SignInSuccess.is(result)) {
+        navigate('MainStack')
+        Storage.getInstance().setJwt(result.payload.result.access_token)
+      }
+      if (SignInFailed.is(result)) {
+        if (result.payload.error.error === 'invalid_token') {
+          setAsyncErrorMessage('Invalid user info') // no-i18n
+        }
+      }
+      dispatch(HideLoading.get())
+    })
+  }, [])
 
   return (
     <Styled.PageContainer>
@@ -34,8 +64,22 @@ const SignInComponent = () => {
         <Styled.Title>
           {Localize.t('SignIn.Title')} {store.loggedIn}
         </Styled.Title>
-        <Formik initialValues={{ email: '', password: '' }} onSubmit={submit}>
-          {({ handleChange, handleSubmit, values }) => (
+        <Formik
+          validate={validate}
+          initialValues={{
+            email: '',
+            password: ''
+          }}
+          onSubmit={submit}
+        >
+          {({
+            handleChange,
+            handleSubmit,
+            handleBlur,
+            values,
+            errors,
+            touched
+          }) => (
             <View>
               <Styled.Wrapper>
                 <Styled.FieldLabel>
@@ -45,7 +89,17 @@ const SignInComponent = () => {
                   value={values.email}
                   onChangeText={handleChange('email')}
                   placeholder={Localize.t('SignIn.EmailPlaceholder')}
+                  returnKeyType={'next'}
+                  onBlur={handleBlur('email')}
+                  onSubmitEditing={() =>
+                    passwordInput.current && passwordInput.current.focus()
+                  }
                 />
+                {
+                  <Text style={{ color: '#F23F3C' }}>
+                    {errors.email && touched.email ? errors.email : ' '}
+                  </Text>
+                }
               </Styled.Wrapper>
               <Styled.Wrapper>
                 <Styled.FieldLabel>
@@ -56,8 +110,24 @@ const SignInComponent = () => {
                   onChangeText={handleChange('password')}
                   placeholder={Localize.t('SignIn.PasswordPlaceholder')}
                   secureTextEntry={true}
+                  onBlur={handleBlur('password')}
+                  onSubmitEditing={() =>
+                    passwordInput.current && passwordInput.current.focus()
+                  }
                 />
+                {
+                  <Text style={{ color: '#F23F3C' }}>
+                    {errors.password && touched.password
+                      ? errors.password
+                      : ' '}
+                  </Text>
+                }
               </Styled.Wrapper>
+              {
+                <Text style={{ color: '#F23F3C', textAlign: 'center' }}>
+                  {asyncErrorMessage ? asyncErrorMessage : ' '}
+                </Text>
+              }
               <Styled.Wrapper>
                 <TouchableWithoutFeedback>
                   <Styled.ForgotPasswordText>

@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 
 export interface StorageKey {
   fileIds: string[]
+  jwt: string
 }
 
 export class Storage {
@@ -54,9 +55,17 @@ export class Storage {
   }
 
   async getFileIds(): Promise<string[]> {
-    const item = await this.getItem('fileIds')
-
+    const item = (await this.getItem('fileIds')) as string[]
     return item || []
+  }
+
+  async getJwt(): Promise<string> {
+    const item = (await this.getItem('jwt')) as string
+    return item || ''
+  }
+
+  async setJwt(value: string) {
+    this.setItem('jwt', value)
   }
 
   async setFileId(id: string) {
