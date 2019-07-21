@@ -1,7 +1,7 @@
 import { Button } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
 import { Formik } from 'formik'
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { Alert, ScrollView, Text, View } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useNavigation } from 'react-navigation-hooks'
@@ -35,7 +35,7 @@ const validate = (values: FormProps) => {
   if (!values.password) {
     errors.password = 'Required'
   } else if (
-    !/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{8,64}$/i.test(values.password)
+    !/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,64}$/i.test(values.password)
   ) {
     errors.password = 'Not match'
   } else if (values.confirmPassword !== values.password) {
@@ -44,6 +44,10 @@ const validate = (values: FormProps) => {
   return errors
 }
 const SignUpComponent = () => {
+  const firstNameInput = useRef<CustomInput>(null)
+  const lastNameInput = useRef<CustomInput>(null)
+  const passwordInput = useRef<CustomInput>(null)
+  const confirmPasswordInput = useRef<CustomInput>(null)
   const dispatch = useThunkDispatch()
   const { navigate } = useNavigation()
 
@@ -70,11 +74,11 @@ const SignUpComponent = () => {
       <View style={SignUpStyles.wrapper}>
         <Formik
           initialValues={{
-            email: '',
-            firstName: '',
-            lastName: '',
-            confirmPassword: '',
-            password: ''
+            email: 'tietthinh@gmail.com',
+            firstName: 'Thinh',
+            lastName: 'Tran',
+            confirmPassword: '12345678@Xa',
+            password: '12345678@Xa'
           }}
           validate={validate}
           onSubmit={submit}
@@ -98,8 +102,13 @@ const SignUpComponent = () => {
                 </Text>
                 <CustomInput
                   value={values.email}
+                  returnKeyType={'next'}
+                  autoFocus={true}
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
+                  onSubmitEditing={() =>
+                    firstNameInput.current && firstNameInput.current.focus()
+                  }
                   placeholder={Localize.t('SignUp.EmailPlaceholder')}
                 />
                 {
@@ -114,7 +123,13 @@ const SignUpComponent = () => {
                 </Text>
                 <CustomInput
                   value={values.firstName}
-                  onChangeText={handleChange('firstname')}
+                  returnKeyType={'next'}
+                  ref={firstNameInput}
+                  onSubmitEditing={() =>
+                    lastNameInput.current && lastNameInput.current.focus()
+                  }
+                  onChangeText={handleChange('firstName')}
+                  onBlur={handleBlur('firstName')}
                   placeholder={Localize.t('SignUp.FirstNamePlaceholder')}
                 />
                 {
@@ -131,7 +146,13 @@ const SignUpComponent = () => {
                 </Text>
                 <CustomInput
                   value={values.lastName}
-                  onChangeText={handleChange('lastname')}
+                  ref={lastNameInput}
+                  returnKeyType={'next'}
+                  onSubmitEditing={() =>
+                    passwordInput.current && passwordInput.current.focus()
+                  }
+                  onChangeText={handleChange('lastName')}
+                  onBlur={handleBlur('lastName')}
                   placeholder={Localize.t('SignUp.LastNamePlaceholder')}
                 />
                 {
@@ -149,6 +170,13 @@ const SignUpComponent = () => {
                 <CustomInput
                   value={values.password}
                   onChangeText={handleChange('password')}
+                  ref={passwordInput}
+                  returnKeyType={'next'}
+                  onSubmitEditing={() =>
+                    confirmPasswordInput.current &&
+                    confirmPasswordInput.current.focus()
+                  }
+                  onBlur={handleBlur('password')}
                   placeholder={Localize.t('SignUp.PasswordPlaceholder')}
                   valid={true}
                   secureTextEntry={true}
@@ -167,7 +195,10 @@ const SignUpComponent = () => {
                 </Text>
                 <CustomInput
                   value={values.confirmPassword}
+                  ref={confirmPasswordInput}
+                  returnKeyType={'next'}
                   onChangeText={handleChange('confirmPassword')}
+                  onBlur={handleBlur('confirmPassword')}
                   placeholder={Localize.t('SignUp.ConfirmPasswordPlaceholder')}
                   secureTextEntry={true}
                 />
