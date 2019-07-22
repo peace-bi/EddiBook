@@ -107,13 +107,11 @@ const SignInComponent = () => {
                 </Styled.FieldLabel>
                 <CustomInput
                   value={values.password}
+                  ref={passwordInput}
                   onChangeText={handleChange('password')}
                   placeholder={Localize.t('SignIn.PasswordPlaceholder')}
                   secureTextEntry={true}
                   onBlur={handleBlur('password')}
-                  onSubmitEditing={() =>
-                    passwordInput.current && passwordInput.current.focus()
-                  }
                 />
                 {
                   <Text style={{ color: '#F23F3C' }}>
