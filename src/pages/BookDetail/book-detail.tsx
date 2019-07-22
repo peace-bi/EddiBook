@@ -1,5 +1,7 @@
 import { Button, Icon, WhiteSpace, WingBlank } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
+
+import { Book } from 'pages/BookShelf/+model'
 import React from 'react'
 import {
   Animated,
@@ -10,6 +12,7 @@ import {
 } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { Header, NavigationScreenProps, ScrollView } from 'react-navigation'
+import { getHost } from 'shared/api'
 import {
   StyledBodyText,
   StyledCategory,
@@ -19,9 +22,6 @@ import {
   StyledTouchableText
 } from 'shared/components'
 import styled, { DefaultTheme } from 'styled-components/native'
-
-import { Book } from 'pages/BookShelf/+model'
-import { getHost } from 'shared/api'
 import { styles } from './book-detail.constant'
 import { BookActionButton } from './BookAction'
 import { RelatedBook } from './RelatedBook'
@@ -108,6 +108,7 @@ export default class BookDetail extends React.Component<Props, State> {
     header: null
   })
   scrollY = new Animated.Value(0)
+
   constructor(props: Props) {
     super(props)
   }
@@ -208,7 +209,7 @@ export default class BookDetail extends React.Component<Props, State> {
                 <TouchableWithoutFeedback
                   onPress={() => {
                     if (this.props.screenProps) {
-                      this.props.screenProps.changeTheme('dark')
+                      // this.props.screenProps.changeTheme('dark')
                     }
                   }}
                 >
@@ -231,7 +232,8 @@ export default class BookDetail extends React.Component<Props, State> {
             style={{
               flex: 1,
               height: Header.HEIGHT,
-              justifyContent: 'center'
+              justifyContent: 'center',
+              zIndex: 1
             }}
           >
             <View style={styles.viewWrapper}>

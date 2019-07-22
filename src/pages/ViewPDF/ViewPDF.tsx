@@ -8,19 +8,29 @@ import React, { Component } from 'react'
 import {
   PermissionsAndroid,
   Platform,
+  SafeAreaView,
+  StatusBar,
   StyleSheet,
   Text,
   View
 } from 'react-native'
 
 import { DocumentView, RNPdftron } from 'react-native-pdftron'
-import RNPdfTronUtils from 'react-native-pdftron-utils'
+// import RNPdfTronUtils from 'react-native-pdftron-utils'
+import { NavigationScreenProps } from 'react-navigation'
 
-interface Props {}
+interface Props extends NavigationScreenProps<any> {}
 interface State {
   permissionGranted: boolean
 }
-export class Home extends Component<Props, State> {
+export class ViewPDF extends Component<Props, State> {
+  static navigationOptions = {
+    header:
+      Platform.OS === 'android' ? (
+        <View style={{ height: 20, backgroundColor: 'blue' }}></View>
+      ) : null
+  }
+
   constructor(props: Props) {
     super(props)
 
@@ -59,14 +69,16 @@ export class Home extends Component<Props, State> {
   }
 
   onLeadingNavButtonPressed = () => {
-    console.info('leading nav button pressed')
-    RNPdfTronUtils.exportAnnotations(
-      '/Users/macbook/Documents/Workplace/TryToBest/EddiBook/ios/sample.pdf'
-    ).then(() => {
-      // console.log('url', url)
-    })
+    // const path: string = this.props.navigation.getParam('url')
+    // console.info('leading nav button pressed')
+    // RNPdfTronUtils.exportAnnotations(
+    //   path
+    // ).then(() => {
+    //   // console.log('url', url)
+    // })
 
     // BackHandler.exitApp()
+    this.props.navigation.goBack()
   }
 
   render() {
@@ -78,19 +90,24 @@ export class Home extends Component<Props, State> {
       )
     }
 
-    const path = 'sample'
+    const path: string = this.props.navigation.getParam('url')
 
     return (
-      <DocumentView
-        document={path}
-        showLeadingNavButton={true}
-        leadingNavButtonIcon={
-          Platform.OS === 'ios'
-            ? 'ic_close_black_24px.png'
-            : 'ic_arrow_back_white_24dp'
-        }
-        onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
-      />
+      <>
+        <StatusBar translucent={true} backgroundColor="blue" />
+        <SafeAreaView></SafeAreaView>
+        <DocumentView
+          document={path}
+          showLeadingNavButton={true}
+          leadingNavButtonIcon={
+            Platform.OS === 'ios'
+              ? 'ic_close_black_24px.png'
+              : 'ic_arrow_back_white_24dp'
+          }
+          onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
+          customHeaders={{ Foo: '1234' }}
+        />
+      </>
     )
   }
 }

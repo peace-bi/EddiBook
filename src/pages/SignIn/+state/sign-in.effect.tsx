@@ -10,7 +10,9 @@ import { SignInFailed, SignInSuccess } from './sign-in.actions'
 // http://192.168.2.40:9000/uaa/oauth/token
 
 export function SignIn(username: string, password: string) {
-  return (dispatch: ThunkDispatch<{}, {}, PlainAction>): Observable<PlainAction> =>
+  return (
+    dispatch: ThunkDispatch<{}, {}, PlainAction>
+  ): Observable<PlainAction> =>
     requestApi({
       url: 'uaa/oauth/token',
       method: 'POST',

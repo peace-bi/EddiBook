@@ -4,6 +4,7 @@ import { Downloaded } from 'pages/Downloaded'
 import EditProfile from 'pages/EditProfile/edit-profile'
 import More from 'pages/More/more'
 import Profile from 'pages/Profile/profile'
+import { ViewPDF } from 'pages/ViewPDF'
 import React from 'react'
 import {
   createAppContainer,
@@ -79,7 +80,8 @@ const navigation = createStackNavigator(
     },
     Profile: {
       screen: Profile
-    }
+    },
+    ViewPDF
   },
   {
     initialRouteName: 'Tab'

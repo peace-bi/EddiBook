@@ -41,7 +41,12 @@ export function PhoneCodePicker(props: Props) {
         <View style={{ flex: 0.4, justifyContent: 'flex-start' }}>
           <Image
             style={{ ...styles.logoPostCode }}
-            source={{ uri: selectedCountry && selectedCountry.flag }}
+            source={{
+              uri:
+                selectedCountry && selectedCountry.flag
+                  ? selectedCountry.flag
+                  : 'https://cdn3.iconfinder.com/data/icons/action-states-vol-3-flat/48/Action___States_-_Vol._3-29-512.png'
+            }}
           />
         </View>
 

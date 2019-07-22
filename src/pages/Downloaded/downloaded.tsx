@@ -7,7 +7,7 @@ export const Downloaded = () => {
   return (
     <SafeAreaView>
       <View>
-        <Text>Hello you</Text>
+        <Text>Downloaded</Text>
       </View>
     </SafeAreaView>
   )

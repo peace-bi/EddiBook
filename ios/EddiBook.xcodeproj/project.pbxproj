@@ -71,6 +71,7 @@
 		FA322C9022E10113007BA196 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA322C8522E100FC007BA196 /* libRNFetchBlob.a */; };
 		FA51698822B7D48F001F0D88 /* libRNPdftron.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA51696122B7CB6D001F0D88 /* libRNPdftron.a */; };
 		FAA4803922C74BCD000F80CE /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAA4803622C74BB4000F80CE /* libRNDeviceInfo.a */; };
+		FAB3D9A722E631F600EF6BAF /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAB3D97422E631D200EF6BAF /* libBVLinearGradient.a */; };
 		FADDEE6822E10A43007F404F /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FADDEE3522E10A2D007F404F /* libART.a */; };
 		FAF28BB322C722CE006F6705 /* libFastImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FAF28B8622C7229D006F6705 /* libFastImage.a */; };
 /* End PBXBuildFile section */
@@ -419,6 +420,20 @@
 			remoteGlobalIDString = E72EC1401F7ABB5A0001BC90;
 			remoteInfo = "RNDeviceInfo-tvOS";
 		};
+		FAB3D97322E631D200EF6BAF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FAB3D96C22E631D200EF6BAF /* BVLinearGradient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = BVLinearGradient;
+		};
+		FAB3D97522E631D200EF6BAF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FAB3D96C22E631D200EF6BAF /* BVLinearGradient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 64AA15081EF7F30100718508;
+			remoteInfo = "BVLinearGradient-tvOS";
+		};
 		FADDEE3422E10A2D007F404F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FADDEE2F22E10A2D007F404F /* ART.xcodeproj */;
@@ -510,6 +525,7 @@
 		FA322C5922E100FB007BA196 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFetchBlob.xcodeproj; path = "../node_modules/rn-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; };
 		FA89A49122D417BA00DF4FB4 /* EddiBook.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = EddiBook.entitlements; path = EddiBook/EddiBook.entitlements; sourceTree = "<group>"; };
 		FAA4803022C74BB4000F80CE /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNDeviceInfo.xcodeproj; path = "../node_modules/react-native-device-info/ios/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; };
+		FAB3D96C22E631D200EF6BAF /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		FAD878C92BA94FF39D4F6C0A /* libRNPdftron.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNPdftron.a; sourceTree = "<group>"; };
 		FADDEE2F22E10A2D007F404F /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
 		FAF28B8022C7229D006F6705 /* FastImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = FastImage.xcodeproj; path = "../node_modules/react-native-fast-image/ios/FastImage.xcodeproj"; sourceTree = "<group>"; };
@@ -530,6 +546,7 @@
 			files = (
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
 				FAA4803922C74BCD000F80CE /* libRNDeviceInfo.a in Frameworks */,
+				FAB3D9A722E631F600EF6BAF /* libBVLinearGradient.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -741,6 +758,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				FAB3D96C22E631D200EF6BAF /* BVLinearGradient.xcodeproj */,
 				FA1CA09022E413C700C66DCC /* RNCAsyncStorage.xcodeproj */,
 				FADDEE2F22E10A2D007F404F /* ART.xcodeproj */,
 				FA322C5922E100FB007BA196 /* RNFetchBlob.xcodeproj */,
@@ -913,6 +931,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		FAB3D96D22E631D200EF6BAF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FAB3D97422E631D200EF6BAF /* libBVLinearGradient.a */,
+				FAB3D97622E631D200EF6BAF /* libBVLinearGradient.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		FADDEE3022E10A2D007F404F /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1059,6 +1086,10 @@
 				{
 					ProductGroup = FADDEE3022E10A2D007F404F /* Products */;
 					ProjectRef = FADDEE2F22E10A2D007F404F /* ART.xcodeproj */;
+				},
+				{
+					ProductGroup = FAB3D96D22E631D200EF6BAF /* Products */;
+					ProjectRef = FAB3D96C22E631D200EF6BAF /* BVLinearGradient.xcodeproj */;
 				},
 				{
 					ProductGroup = FAF28B8122C7229D006F6705 /* Products */;
@@ -1479,6 +1510,20 @@
 			fileType = archive.ar;
 			path = "libRNDeviceInfo-tvOS.a";
 			remoteRef = FAA4803722C74BB4000F80CE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FAB3D97422E631D200EF6BAF /* libBVLinearGradient.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBVLinearGradient.a;
+			remoteRef = FAB3D97322E631D200EF6BAF /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FAB3D97622E631D200EF6BAF /* libBVLinearGradient.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBVLinearGradient.a;
+			remoteRef = FAB3D97522E631D200EF6BAF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		FADDEE3522E10A2D007F404F /* libART.a */ = {

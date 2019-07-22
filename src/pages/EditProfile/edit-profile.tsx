@@ -6,6 +6,7 @@ import {
   Alert,
   Image,
   Keyboard,
+  SafeAreaView,
   ScrollView,
   Text,
   TouchableWithoutFeedback,
@@ -24,10 +25,12 @@ import { PhoneCodePicker } from './+component/phone-code-picker'
 import { mockCountry, styles } from './edit-profile.constant'
 
 interface Props extends NavigationScreenProps<any> {}
+
 interface State {
   openCountryModal: boolean
   editMode: boolean
 }
+
 interface FormProps {
   email: string
   firstname: string
@@ -70,7 +73,7 @@ export default class EditProfile extends React.Component<Props, State> {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <SafeAreaView>
         <View style={styles.viewWrapper}>
           <View style={styles.backButtonWrapper}>
             <Button
@@ -90,7 +93,10 @@ export default class EditProfile extends React.Component<Props, State> {
             <View style={styles.avatarViewContainer}>
               <Image
                 style={styles.avatar}
-                source={{ uri: 'https://i.imgur.com/cPFHT2k.jpg' }}
+                source={{
+                  uri:
+                    'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
+                }}
               />
               <TouchableWithoutFeedback onPress={() => console.info(2)}>
                 <View style={styles.avatarContainerInteract}>
@@ -270,7 +276,7 @@ export default class EditProfile extends React.Component<Props, State> {
             </Formik>
           </View>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     )
   }
 }

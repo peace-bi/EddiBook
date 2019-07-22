@@ -9,7 +9,9 @@ import { SignUpForm } from '../sign-up.model'
 import { SignUpFailed, SignUpSuccess } from './sign-up.actions'
 
 export function SignUp(data: SignUpForm) {
-  return (dispatch: ThunkDispatch<{}, {}, PlainAction>): Observable<PlainAction> =>
+  return (
+    dispatch: ThunkDispatch<{}, {}, PlainAction>
+  ): Observable<PlainAction> =>
     requestApi({
       url: 'account/users/signup',
       method: 'POST',

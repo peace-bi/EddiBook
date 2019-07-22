@@ -1,9 +1,16 @@
 import { useCallback, useEffect, useState } from 'react'
 import { LayoutAnimation } from 'react-native'
+import { useNavigation } from 'react-navigation-hooks'
 import * as RNFetchBlob from 'rn-fetch-blob'
 import { BookAction } from 'shared/model'
 import { Storage } from 'shared/storage'
 
+export interface FileAction {
+  status?: string
+  progress: number
+  doAction: () => void
+  readFile: () => Promise<void>
+}
 export const savePath = RNFetchBlob.default.fs.dirs.CacheDir
 
 export const useFileAction = (
@@ -14,6 +21,7 @@ export const useFileAction = (
   const storage = Storage.getInstance()
   const [status, setStatus] = useState(initialStatus)
   const [progress, setProgress] = useState(0)
+  const navigation = useNavigation()
 
   useEffect(() => {
     async function checkFileExist() {
@@ -65,9 +73,25 @@ export const useFileAction = (
     }
   }, [status])
 
+  const readFile = useCallback(async () => {
+    const fileExist = await RNFetchBlob.default.fs.exists(
+      `${savePath}/${bookId}.pdf`
+    )
+
+    if (!fileExist) {
+      storage.removeFileId(bookId.toString())
+      setStatus(BookAction.DOWNLOAD)
+    } else {
+      navigation.navigate('ViewPDF', {
+        url: `${savePath}/${bookId}.pdf`
+      })
+    }
+  }, [url])
+
   return {
     status,
     progress,
-    doAction
-  }
+    doAction,
+    readFile
+  } as FileAction
 }

@@ -36,7 +36,7 @@ export const BookActionButton = (props: Props) => {
       btnView = (
         <Button
           type="primary"
-          onPress={() => {}}
+          onPress={fileAction.readFile}
           style={{ alignSelf: 'stretch', marginTop: 36 }}
         >
           {Localize.t('Common.Read')}

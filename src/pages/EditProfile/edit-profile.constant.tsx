@@ -94,7 +94,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   saveButtonWrapper: {
-    marginTop: 38
+    marginTop: 38,
+    marginBottom: 10
   },
   saveButton: {
     backgroundColor: '#F23F3C'

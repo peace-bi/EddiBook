@@ -9,7 +9,7 @@ import * as Styled from './profile.constant'
 
 // tslint:disable-next-line: max-line-length
 const mockAvatar =
-  'https://is3-ssl.mzstatic.com/image/thumb/Purple123/v4/14/a0/51/14a05155-d7ae-e3ff-4c8e-a50c17dd3d5a/AppIcon-0-1x_U007emarketing-0-0-GLES2_U002c0-512MB-sRGB-0-0-0-85-220-0-0-0-7.png/246x0w.jpg'
+  'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
 function Profile() {
   const { navigate, goBack } = useNavigation()
   return (
@@ -38,15 +38,15 @@ function Profile() {
           />
         </Styled.AvatarViewContainer>
         <Styled.UserInfoContainer>
-          <Styled.UserName>Linh Feeder</Styled.UserName>
-          <Styled.UserEmail>linh.nguyen9xxx@gmail.com</Styled.UserEmail>
+          <Styled.UserName>User</Styled.UserName>
+          <Styled.UserEmail>user@gmail.com</Styled.UserEmail>
         </Styled.UserInfoContainer>
         <List style={{ marginTop: 54 }}>
-          <Item thumb={<Styled.Icon name="mobile" />}>(+84) 77 948 1368</Item>
+          <Item thumb={<Styled.Icon name="mobile" />}>(+84) x xxx xxxx</Item>
           <Item thumb={<Styled.Icon name="location" />}>
             12, Ton Dan Street, Ward 13, District 4, HCM
           </Item>
-          <Item thumb={<Styled.Icon name="flag" />}>Đất nước Gia Lai</Item>
+          <Item thumb={<Styled.Icon name="flag" />}>N/A</Item>
         </List>
       </View>
     </Styled.PageContainer>
