@@ -14,6 +14,7 @@ import * as Styled from './BookShelf.contant'
 
 interface Props {
   item: Book
+  status: Dictionary<BookAction>
 }
 
 const getActionView = (status?: string, progress?: number) => {
@@ -35,11 +36,12 @@ const getActionView = (status?: string, progress?: number) => {
   return <Styled.HeaderActionIcon name={iconName} size={38} />
 }
 
-export const BookShelfItem = ({ item }: Props) => {
+export const BookShelfItem = ({ item, status }: Props) => {
+  const bookActionStatus = status[item.bookId]
   const fileAction = useFileAction(
     item.bookId,
     `${getHost()}${item.pdf}`,
-    item.new ? BookAction.DOWNLOAD : 'NA'
+    bookActionStatus
   )
   const { navigate } = useNavigation()
   const navigateDetail = useCallback(() => {
@@ -109,7 +111,7 @@ export const BookShelfItem = ({ item }: Props) => {
                   >
                     <StyledCategory>{item.category}</StyledCategory>
                     <TouchableWithoutFeedback onPress={fileAction.doAction}>
-                      {getActionView(fileAction.status, fileAction.progress)}
+                      {getActionView(bookActionStatus, fileAction.progress)}
                     </TouchableWithoutFeedback>
                   </View>
                 </Styled.ItemBodyContent>

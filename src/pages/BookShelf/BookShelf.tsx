@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, FlatList, TouchableWithoutFeedback } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { useSelector } from 'react-redux'
-import { TabType } from 'shared/model'
+import { BookAction, TabType } from 'shared/model'
 import { RootReducer } from 'shared/store/rootReducer'
 import { useThunkDispatch } from 'shared/util'
 import { Book, BookRenderItem } from './+model'
@@ -12,7 +12,7 @@ import { getBookShelf } from './+state/bookshelf.effect'
 import * as Styled from './BookShelf.contant'
 import { BookShelfItem } from './BookShelfItem'
 
-const useBook = (bookId: string) => {
+const useBook = () => {
   const books = useSelector((s: RootReducer) => s.BookShelfState.list)
   const [search, setSearch] = useState<string>('')
   const dispatch = useThunkDispatch()
@@ -23,7 +23,7 @@ const useBook = (bookId: string) => {
     return () => {
       bookshelfThunk.unsubscribe()
     }
-  }, [bookId, search])
+  }, [search])
 
   return {
     value: books,
@@ -76,16 +76,23 @@ const keyExtractor = (item: Book) => {
   return item.bookId.toString()
 }
 
-const renderItem = ({ item }: BookRenderItem<Book, string>) => (
-  <BookShelfItem item={item} />
+const renderItem = ({
+  item,
+  bookActionStatus
+}: BookRenderItem<Book, Dictionary<BookAction>>) => (
+  <BookShelfItem item={item} status={bookActionStatus} />
 )
 
 export const BookShelf = () => {
+  // Hook get book from api
+  const book = useBook()
   // Using for change book item status
-  const [bookStatus, setBookStatus] = useState<string[]>([])
+  const bookActionStatus = useSelector(
+    (s: RootReducer) => s.BookShelfState.actionStatus
+  )
   const renderBookItem = useCallback(
-    ({ item, index }) => renderItem({ item, index, bookStatus, setBookStatus }),
-    []
+    ({ item, index }) => renderItem({ item, index, bookActionStatus }),
+    [bookActionStatus]
   )
   const handleActionKey = useCallback(() => {
     Modal.prompt(
@@ -101,9 +108,6 @@ export const BookShelf = () => {
       ['Access code']
     )
   }, [])
-
-  // Hook get book from api
-  const book = useBook('123')
 
   return (
     <Styled.HeaderSafeView>
@@ -122,7 +126,7 @@ export const BookShelf = () => {
       <FlatList
         style={{ flex: 1, backgroundColor: '#F2F3F5', paddingTop: 8 }}
         horizontal={false}
-        extraData={bookStatus}
+        extraData={bookActionStatus}
         data={book.value}
         renderItem={renderBookItem}
         keyExtractor={keyExtractor}

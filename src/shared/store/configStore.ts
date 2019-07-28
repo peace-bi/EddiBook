@@ -11,11 +11,11 @@ import {
   Middleware,
   Store
 } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import { persistStore } from 'redux-persist'
 import { PersistPartial } from 'redux-persist/es/persistReducer'
 import { Persistor } from 'redux-persist/es/types'
 import thunk from 'redux-thunk'
-import { composeWithDevTools } from 'remote-redux-devtools'
 import { getHost } from 'shared/api'
 import loggerMW from './middleware/logger'
 import rootReducer from './rootReducer'

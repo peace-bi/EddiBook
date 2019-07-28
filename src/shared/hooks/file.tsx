@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
+import { ChangeDownActionStatus } from 'pages/BookShelf/+state/bookshelf.actions'
+import { useCallback, useState } from 'react'
 import { LayoutAnimation } from 'react-native'
 import { useNavigation } from 'react-navigation-hooks'
 import * as RNFetchBlob from 'rn-fetch-blob'
 import { BookAction } from 'shared/model'
 import { Storage } from 'shared/storage'
+import { useThunkDispatch } from 'shared/util'
 
 export interface FileAction {
   status?: string
@@ -16,31 +18,21 @@ export const savePath = RNFetchBlob.default.fs.dirs.CacheDir
 export const useFileAction = (
   bookId: number,
   url: string,
-  initialStatus?: string
+  status: BookAction
 ) => {
   const storage = Storage.getInstance()
-  const [status, setStatus] = useState(initialStatus)
   const [progress, setProgress] = useState(0)
   const navigation = useNavigation()
-
-  useEffect(() => {
-    async function checkFileExist() {
-      const fileIds = await storage.getFileIds()
-
-      if (fileIds.includes(bookId.toString())) {
-        setStatus(BookAction.DOWNLOADED)
-      }
-    }
-
-    checkFileExist()
-  }, [status])
+  const dispatch = useThunkDispatch()
 
   const doAction = useCallback(async () => {
-    const jwt = await Storage.getInstance().getJwt()
+    const jwt = await storage.getJwt()
 
     switch (status) {
       case BookAction.DOWNLOAD:
-        setStatus(BookAction.DOWNLOADING)
+        dispatch(
+          ChangeDownActionStatus.get({ bookId, status: BookAction.DOWNLOADING })
+        )
         const task = RNFetchBlob.default
           .config({
             path: `${savePath}/${bookId}.pdf`
@@ -55,16 +47,29 @@ export const useFileAction = (
         task
           .then(() => {
             // console.log('The file saved to ', res.path())
-            setStatus(BookAction.DOWNLOADED)
+            dispatch(
+              ChangeDownActionStatus.get({
+                bookId,
+                status: BookAction.DOWNLOADED
+              })
+            )
             storage.setFileId(bookId.toString())
           })
           .catch(() => {
-            setStatus(BookAction.DOWNLOAD)
+            dispatch(
+              ChangeDownActionStatus.get({
+                bookId,
+                status: BookAction.DOWNLOAD
+              })
+            )
           })
         break
       case BookAction.UPDATE:
         LayoutAnimation.easeInEaseOut()
-        setStatus(BookAction.DOWNLOADING)
+        // TODO: Implement here
+        dispatch(
+          ChangeDownActionStatus.get({ bookId, status: BookAction.DOWNLOADING })
+        )
         break
       case BookAction.DOWNLOADING:
         // Ask for canceling the request
@@ -72,7 +77,6 @@ export const useFileAction = (
         // setStatus(BookAction.DOWNLOAD)
         break
       default:
-        // Maybe user need read book, ignore here
         break
     }
   }, [status])
@@ -84,7 +88,10 @@ export const useFileAction = (
 
     if (!fileExist) {
       storage.removeFileId(bookId.toString())
-      setStatus(BookAction.DOWNLOAD)
+      dispatch(
+        ChangeDownActionStatus.get({ bookId, status: BookAction.DOWNLOAD })
+      )
+      // setStatus(BookAction.DOWNLOAD)
     } else {
       navigation.navigate('ViewPDF', {
         url: `${savePath}/${bookId}.pdf`

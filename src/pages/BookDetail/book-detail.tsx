@@ -161,11 +161,7 @@ export default class BookDetail extends React.Component<Props, State> {
                 <StyledBookName>{book.name}</StyledBookName>
                 <WhiteSpace size="xs" />
                 <StyledDescText>Patricia Brennan Demuth</StyledDescText>
-                <BookActionButton
-                  bookId={book.bookId}
-                  bookUrl={book.pdf}
-                  new={book.new}
-                />
+                <BookActionButton bookId={book.bookId} bookUrl={book.pdf} />
               </StyledView>
               <WhiteSpace />
               <WhiteSpace />

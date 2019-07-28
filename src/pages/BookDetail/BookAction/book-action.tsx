@@ -2,15 +2,16 @@ import { Button } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
 import React, { Fragment } from 'react'
 import { View } from 'react-native'
+import { useSelector } from 'react-redux'
 import { getHost } from 'shared/api'
 import { useFileAction } from 'shared/hooks'
 import { BookAction } from 'shared/model'
+import { RootReducer } from 'shared/store/rootReducer'
 import styled from 'styled-components/native'
 
 interface Props {
   bookId: number
   bookUrl: string
-  new: boolean
 }
 
 const ButtonOutline = styled(Button).attrs((props) => ({
@@ -24,14 +25,18 @@ const ButtonOutline = styled(Button).attrs((props) => ({
 `
 
 export const BookActionButton = (props: Props) => {
+  const actionStatusState = useSelector(
+    (s: RootReducer) => s.BookShelfState.actionStatus
+  )
+  const status = actionStatusState[props.bookId]
   const fileAction = useFileAction(
     props.bookId,
     `${getHost()}${props.bookUrl}`,
-    props.new ? BookAction.DOWNLOAD : 'NA'
+    status
   )
 
   let btnView
-  switch (fileAction.status) {
+  switch (status) {
     case BookAction.DOWNLOADED:
       btnView = (
         <Button
