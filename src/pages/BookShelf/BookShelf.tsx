@@ -1,5 +1,6 @@
 import { Modal, SearchBar } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
+import { bookshelfSelector } from 'pages/BookShelf/+state/bookshelf.selector'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, FlatList, TouchableWithoutFeedback } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
@@ -87,9 +88,7 @@ export const BookShelf = () => {
   // Hook get book from api
   const book = useBook()
   // Using for change book item status
-  const bookActionStatus = useSelector(
-    (s: RootReducer) => s.BookShelfState.actionStatus
-  )
+  const bookActionStatus = useSelector(bookshelfSelector.getBookActionStatus)
   const renderBookItem = useCallback(
     ({ item, index }) => renderItem({ item, index, bookActionStatus }),
     [bookActionStatus]

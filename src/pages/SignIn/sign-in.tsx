@@ -1,3 +1,4 @@
+import { Modal } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
 import { Formik, FormikErrors } from 'formik'
 import React, { useCallback, useRef, useState } from 'react'
@@ -46,8 +47,22 @@ const SignInComponent = () => {
     dispatch(ShowLoading.get())
     dispatch(SignIn(values.email, values.password)).subscribe((result) => {
       if (SignInSuccess.is(result)) {
-        navigate('MainStack')
-        Storage.getInstance().setJwt(result.payload.result.access_token)
+        const signInResult = result.payload.result
+        if (signInResult.usergroup === 'CUSTOMER') {
+          navigate('MainStack')
+          Storage.getInstance().setJwt(signInResult.access_token)
+        } else {
+          Modal.alert(
+            Localize.t('SignIn.Failed'),
+            Localize.t('SignIn.UserNotAllow'),
+            [
+              {
+                text: Localize.t('Common.OK'),
+                style: 'cancel'
+              }
+            ]
+          )
+        }
       }
       if (SignInFailed.is(result)) {
         if (result.payload.error.error === 'invalid_token') {

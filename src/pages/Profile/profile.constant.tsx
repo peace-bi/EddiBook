@@ -4,9 +4,7 @@ import { Header } from 'react-navigation'
 import { EddiIcon } from 'shared/util'
 import styled from 'styled-components/native'
 
-export const PageContainer = styled.View`
-  flex: 1;
-`
+export const PageContainer = styled.View``
 export const PageWrapper = styled.View`
   height: ${Header.HEIGHT};
   border-bottom-width: 1;

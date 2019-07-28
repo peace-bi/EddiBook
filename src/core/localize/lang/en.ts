@@ -8,7 +8,8 @@ export default {
     Expired: 'Expired',
     Read: 'Read',
     Download: 'Download',
-    Update: 'Update'
+    Update: 'Update',
+    OK: 'OK'
   },
   SignIn: {
     Title: 'Sign In',
@@ -19,7 +20,9 @@ export default {
     ForgotPassword: 'Forgot password?',
     Button: 'Sign in',
     NoAccount: "Don't have account? ",
-    NavSignUp: 'Sign up'
+    NavSignUp: 'Sign up',
+    Failed: 'Sign in failed',
+    UserNotAllow: 'You are not belong to reader group'
   },
   SignUp: {
     Title: 'Sign Up',
