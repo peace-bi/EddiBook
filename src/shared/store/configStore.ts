@@ -1,13 +1,33 @@
-import { applyMiddleware, createStore, DeepPartial, Middleware } from 'redux'
+import {
+  checkInternetConnection,
+  createNetworkMiddleware,
+  offlineActionTypes
+} from 'react-native-offline'
+import {
+  AnyAction,
+  applyMiddleware,
+  createStore,
+  DeepPartial,
+  Middleware,
+  Store
+} from 'redux'
+import { persistStore } from 'redux-persist'
+import { PersistPartial } from 'redux-persist/es/persistReducer'
+import { Persistor } from 'redux-persist/es/types'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'remote-redux-devtools'
+import { getHost } from 'shared/api'
 import loggerMW from './middleware/logger'
 import rootReducer from './rootReducer'
 
 export default function configStore(
+  callback: () => void,
   preloadedState?: DeepPartial<unknown> | undefined
 ) {
-  const middlewares: Middleware[] = [thunk]
+  const networkMiddleware = createNetworkMiddleware({
+    queueReleaseThrottle: 200
+  })
+  const middlewares: Middleware[] = [networkMiddleware, thunk]
   if (process.env.NODE_ENV === 'development') {
     middlewares.push(loggerMW())
   }
@@ -22,5 +42,15 @@ export default function configStore(
     module.hot.accept('./rootReducer', () => store.replaceReducer(rootReducer))
   }
 
-  return store
+  const persist = persistStore(store, undefined, () => {
+    checkInternetConnection(getHost()).then((isConnected: any) => {
+      store.dispatch({
+        type: offlineActionTypes.CONNECTION_CHANGE,
+        payload: isConnected
+      })
+      callback() // Notify our root component we are good to go, so that we can render our app
+    })
+  })
+
+  return [store, persist] as [Store<PersistPartial, AnyAction>, Persistor]
 }

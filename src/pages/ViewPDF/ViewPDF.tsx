@@ -23,11 +23,13 @@ interface Props extends NavigationScreenProps<any> {}
 interface State {
   permissionGranted: boolean
 }
+const statusBarHeight = StatusBar.currentHeight
+
 export class ViewPDF extends Component<Props, State> {
   static navigationOptions = {
     header:
       Platform.OS === 'android' ? (
-        <View style={{ height: 20, backgroundColor: 'blue' }}></View>
+        <View style={{ height: statusBarHeight, backgroundColor: 'blue' }} />
       ) : null
   }
 
@@ -35,7 +37,7 @@ export class ViewPDF extends Component<Props, State> {
     super(props)
 
     this.state = {
-      permissionGranted: Platform.OS === 'ios' ? true : false
+      permissionGranted: Platform.OS === 'ios'
     }
 
     RNPdftron.initialize('')
@@ -95,7 +97,7 @@ export class ViewPDF extends Component<Props, State> {
     return (
       <>
         <StatusBar translucent={true} backgroundColor="blue" />
-        <SafeAreaView></SafeAreaView>
+        <SafeAreaView />
         <DocumentView
           document={path}
           showLeadingNavButton={true}
@@ -105,7 +107,6 @@ export class ViewPDF extends Component<Props, State> {
               : 'ic_arrow_back_white_24dp'
           }
           onLeadingNavButtonPressed={this.onLeadingNavButtonPressed}
-          customHeaders={{ Foo: '1234' }}
         />
       </>
     )

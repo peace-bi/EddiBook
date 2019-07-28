@@ -1,6 +1,6 @@
 import axios from 'axios'
 import * as t from 'io-ts'
-import { from, Observable, of } from 'rxjs'
+import { from, Observable, of, throwError } from 'rxjs'
 
 import { Either, Left, Right } from 'fp-ts/lib/Either'
 import { TypeOf } from 'io-ts'
@@ -49,7 +49,8 @@ export const requestApiEither: (
         return decodeResult.fold<
           Either<ApiError, ApiResponse<TypeOf<typeof codec>>>
         >(
-          () => {
+          (e) => {
+            console.info(e)
             return new Left({
               error: 'DECODE FAIL',
               errorDescription: 'DECODE FAIL'
@@ -79,7 +80,7 @@ export const requestApiEither: (
 
 export function getHost() {
   const env = !!__DEV__ ? 'DEV' : 'PROD'
-  return Config.HOST[env].API
+  return `${Config.HOST[env].API}/`
 }
 
 export const requestApi: (
@@ -121,7 +122,8 @@ export const requestApi: (
           const decodeResult = codec.decode(data)
 
           return decodeResult.fold<ApiResponse<TypeOf<typeof codec>>>(
-            () => {
+            (e) => {
+              console.info(e)
               throw {
                 response: {
                   data: {
@@ -140,6 +142,7 @@ export const requestApi: (
           )
         })
         .catch((e) => {
+          // Need refactor
           if (e.response) {
             throw {
               error: e.response.data
@@ -149,6 +152,9 @@ export const requestApi: (
           }
         })
     ),
+    catchError((err: any) => {
+      return throwError(err)
+    }),
     take(1),
     timeout(20000)
   )

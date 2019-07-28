@@ -37,17 +37,34 @@ const getActionView = (status?: string, progress?: number) => {
 
 export const BookShelfItem = ({ item }: Props) => {
   const fileAction = useFileAction(
-    item.bookVersionHistoryId,
+    item.bookId,
     `${getHost()}${item.pdf}`,
     item.new ? BookAction.DOWNLOAD : 'NA'
   )
   const { navigate } = useNavigation()
   const navigateDetail = useCallback(() => {
     navigate('BookDetail', {
-      id: item.bookVersionHistoryId,
+      id: item.bookId,
       item
     })
   }, [])
+
+  const renderLicenseTime = () => {
+    if (item.hasLicenseExpired) {
+      return Localize.t('Book.LicenseDate', {
+        p: Localize.t('Common.Expired')
+      })
+    }
+    if (item.licenseStatus === 'Perpetual') {
+      return null
+    }
+    if (item.licenseEndDate) {
+      return Localize.t('Book.LicenseDate', {
+        p: Localize.strftime(new Date(item.licenseEndDate), '%Y/%m/%d')
+      })
+    }
+    return null
+  }
 
   return (
     <TouchableWithoutFeedback onPress={navigateDetail}>
@@ -81,16 +98,7 @@ export const BookShelfItem = ({ item }: Props) => {
                   <Styled.TitleText numberOfLines={2} ellipsizeMode="tail">
                     {item.name}
                   </Styled.TitleText>
-                  <Styled.MutedText>
-                    {Localize.t('Book.LicenseDate', {
-                      p: item.hasLicenseExpired
-                        ? Localize.t('Common.Expired')
-                        : Localize.strftime(
-                            new Date(item.licenseEndDate),
-                            '%Y/%m/%d'
-                          )
-                    })}
-                  </Styled.MutedText>
+                  <Styled.MutedText>{renderLicenseTime()}</Styled.MutedText>
                   <View
                     style={{
                       marginTop: 8,

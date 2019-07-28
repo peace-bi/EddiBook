@@ -11,6 +11,7 @@ import {
   View
 } from 'react-native'
 import FastImage from 'react-native-fast-image'
+import { useScreens } from 'react-native-screens'
 import { Header, NavigationScreenProps, ScrollView } from 'react-navigation'
 import { getHost } from 'shared/api'
 import {
@@ -25,6 +26,9 @@ import styled, { DefaultTheme } from 'styled-components/native'
 import { styles } from './book-detail.constant'
 import { BookActionButton } from './BookAction'
 import { RelatedBook } from './RelatedBook'
+
+// tslint:disable-next-line:react-hooks-nesting
+useScreens(false)
 
 const HEADER_MAX_HEIGHT = 300
 const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 20
@@ -158,7 +162,7 @@ export default class BookDetail extends React.Component<Props, State> {
                 <WhiteSpace size="xs" />
                 <StyledDescText>Patricia Brennan Demuth</StyledDescText>
                 <BookActionButton
-                  bookId={book.bookVersionHistoryId}
+                  bookId={book.bookId}
                   bookUrl={book.pdf}
                   new={book.new}
                 />

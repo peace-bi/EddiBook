@@ -72,6 +72,19 @@ import com.android.build.OutputFile
  * ]
  */
 
+ def getPassword(String currentUser, String keyChain) {
+    def stdout = new ByteArrayOutputStream()
+    def stderr = new ByteArrayOutputStream()
+    exec {
+        commandLine 'security', '-q', 'find-generic-password', '-a', currentUser, '-s', keyChain, '-w'
+        standardOutput = stdout
+        errorOutput = stderr
+        ignoreExitValue true
+    }
+    //noinspection GroovyAssignabilityCheck
+       stdout.toString().trim()
+ }
+
 project.ext.react = [
         entryFile: "index.js"
 ]
@@ -91,12 +104,14 @@ apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
  * Upload all the APKs to the Play Store and people will download
  * the correct one based on the CPU architecture of their device.
  */
-def enableSeparateBuildPerCPUArchitecture = false
+def enableSeparateBuildPerCPUArchitecture = true
 
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
+
+def pass = getPassword("admin","edds_keystore")
 
 android {
     compileSdkVersion 28
@@ -111,7 +126,20 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        ndk {
+           abiFilters "armeabi-v7a", "x86"
+        }
     }
+    signingConfigs {
+            release {
+                if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                    storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                    storePassword pass
+                    keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                    keyPassword pass
+                }
+            }
+        }
     configurations.all {
         resolutionStrategy.force "com.android.support:appcompat-v7:28.0.0"
         resolutionStrategy.force "com.android.support:support-v4:28.0.0"
@@ -120,14 +148,15 @@ android {
         abi {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
-            universalApk false  // If true, also generate a universal APK
-            include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+            universalApk true  // If true, also generate a universal APK
+            include "armeabi-v7a", "x86"
         }
     }
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
@@ -135,7 +164,7 @@ android {
         variant.outputs.each { output ->
             // For each separate APK per architecture, set a unique version code as described here:
             // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
-            def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
+            def versionCodes = ["armeabi-v7a": 1, "x86": 2]
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
@@ -148,6 +177,8 @@ android {
 }
 
 dependencies {
+    implementation project(':bugsnag-react-native')
+    implementation project(':@react-native-community_netinfo')
     implementation project(':rn-fetch-blob')
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-vector-icons')

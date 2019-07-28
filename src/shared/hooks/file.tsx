@@ -35,7 +35,9 @@ export const useFileAction = (
     checkFileExist()
   }, [status])
 
-  const doAction = useCallback(() => {
+  const doAction = useCallback(async () => {
+    const jwt = await Storage.getInstance().getJwt()
+
     switch (status) {
       case BookAction.DOWNLOAD:
         setStatus(BookAction.DOWNLOADING)
@@ -43,7 +45,9 @@ export const useFileAction = (
           .config({
             path: `${savePath}/${bookId}.pdf`
           })
-          .fetch('GET', url)
+          .fetch('GET', url, {
+            Authorization: `bearer ${jwt}`
+          })
           .progress({ count: 50 }, (received, total) => {
             setProgress(received / total)
           })

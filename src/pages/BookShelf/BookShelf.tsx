@@ -3,28 +3,30 @@ import { Localize } from 'core/localize'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, FlatList, TouchableWithoutFeedback } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
-import { tap } from 'rxjs/operators'
+import { useSelector } from 'react-redux'
 import { TabType } from 'shared/model'
+import { RootReducer } from 'shared/store/rootReducer'
 import { useThunkDispatch } from 'shared/util'
 import { Book, BookRenderItem } from './+model'
-import { getBookShelf } from './+state/BookShelf.effect'
+import { getBookShelf } from './+state/bookshelf.effect'
 import * as Styled from './BookShelf.contant'
 import { BookShelfItem } from './BookShelfItem'
 
 const useBook = (bookId: string) => {
-  const [value, setValue] = useState<Book[]>([])
+  const books = useSelector((s: RootReducer) => s.BookShelfState.list)
   const [search, setSearch] = useState<string>('')
   const dispatch = useThunkDispatch()
 
   useEffect(() => {
-    dispatch(getBookShelf())
-      .pipe(tap(setValue))
-      .subscribe()
+    const bookshelfThunk = dispatch(getBookShelf())
+
+    return () => {
+      bookshelfThunk.unsubscribe()
+    }
   }, [bookId, search])
 
   return {
-    value,
-    setValue,
+    value: books,
     search: useCallback((text: string) => setSearch(text), [])
   }
 }
@@ -71,7 +73,7 @@ const Search = ({ search }: Search) => {
 }
 
 const keyExtractor = (item: Book) => {
-  return item.bookVersionHistoryId.toString()
+  return item.bookId.toString()
 }
 
 const renderItem = ({ item }: BookRenderItem<Book, string>) => (
