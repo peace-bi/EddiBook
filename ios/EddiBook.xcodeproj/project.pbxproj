@@ -67,7 +67,6 @@
 		E6300440A3024293B80FFF23 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83328F00FFDB42419BC00BAC /* FontAwesome5_Regular.ttf */; };
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
-		FA04EB6222B7F1F200CFF01A /* sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = FA04EB3122B7F00900CFF01A /* sample.pdf */; };
 		FA1CA0C922E413D000C66DCC /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA1CA0BE22E413C800C66DCC /* libRNCAsyncStorage.a */; };
 		FA322C9022E10113007BA196 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA322C8522E100FC007BA196 /* libRNFetchBlob.a */; };
 		FA4FDA2422ED482C001F5409 /* libBugsnagReactNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA4FD9EF22ED4825001F5409 /* libBugsnagReactNative.a */; };
@@ -544,7 +543,6 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F1CC6AD4F7C643AAAEB4AD33 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
-		FA04EB3122B7F00900CFF01A /* sample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample.pdf; sourceTree = "<group>"; };
 		FA1CA09022E413C700C66DCC /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCAsyncStorage.xcodeproj; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; };
 		FA322C5922E100FB007BA196 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFetchBlob.xcodeproj; path = "../node_modules/rn-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; };
 		FA4FD9E722ED4825001F5409 /* BugsnagReactNative.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = BugsnagReactNative.xcodeproj; path = "../node_modules/bugsnag-react-native/cocoa/BugsnagReactNative.xcodeproj"; sourceTree = "<group>"; };
@@ -826,7 +824,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				FA04EB3122B7F00900CFF01A /* sample.pdf */,
 				13B07FAE1A68108700A75B9A /* EddiBook */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* EddiBookTests */,
@@ -1637,7 +1634,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA04EB6222B7F1F200CFF01A /* sample.pdf in Resources */,
 				15BF528A22671A6A0072C212 /* main.jsbundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,

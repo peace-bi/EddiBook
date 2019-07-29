@@ -1,5 +1,14 @@
-import { Button, Icon, WhiteSpace, WingBlank } from '@ant-design/react-native'
+import {
+  ActivityIndicator,
+  Button,
+  Icon,
+  WhiteSpace,
+  WingBlank
+} from '@ant-design/react-native'
 import { Localize } from 'core/localize'
+import { getBookDetail } from './+state/book-detail.effect'
+import { Author, BookDetailResponse } from './+state/book-detail.model'
+import { bookDetailSelector } from './+state/book-detail.selector'
 
 import { Book } from 'pages/BookShelf/+model'
 import React from 'react'
@@ -13,6 +22,9 @@ import {
 import FastImage from 'react-native-fast-image'
 import { useScreens } from 'react-native-screens'
 import { Header, NavigationScreenProps, ScrollView } from 'react-navigation'
+import { connect } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
+import { PlainAction } from 'redux-typed-actions'
 import { getHost } from 'shared/api'
 import {
   StyledBodyText,
@@ -22,6 +34,7 @@ import {
   StyledTitleText,
   StyledTouchableText
 } from 'shared/components'
+import { RootReducer } from 'shared/store/rootReducer'
 import styled, { DefaultTheme } from 'styled-components/native'
 import { styles } from './book-detail.constant'
 import { BookActionButton } from './BookAction'
@@ -35,7 +48,10 @@ const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 20
 const HEADER_MIN_HEIGHT = Header.HEIGHT + STATUS_BAR_HEIGHT
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
 
-interface Props extends NavigationScreenProps<any> {}
+interface Props extends NavigationScreenProps<any> {
+  dispatch: ThunkDispatch<{}, {}, PlainAction>
+  book: BookDetailResponse
+}
 
 interface State {}
 
@@ -107,7 +123,7 @@ const StyledHeader = styled.View`
 const HeaderComponent = Animated.createAnimatedComponent(
   StyledAnimatedHeaderView
 )
-export default class BookDetail extends React.Component<Props, State> {
+class BookDetail extends React.Component<Props, State> {
   static navigationOptions = () => ({
     header: null
   })
@@ -117,12 +133,31 @@ export default class BookDetail extends React.Component<Props, State> {
     super(props)
   }
 
+  componentDidMount(): void {
+    this.props.dispatch(getBookDetail(this.props.navigation.getParam('bookId')))
+  }
+
   backPress = () => {
     this.props.navigation.pop()
   }
 
+  getAuthors = (authors: Author[]) => {
+    return authors.reduce((sum, curr, index) => {
+      const name = index === 0 ? curr.name : `, ${curr.name}`
+      return sum + name
+    }, '')
+  }
+
   render() {
-    const book: Book = this.props.navigation.getParam('item')
+    const book: BookDetailResponse = this.props.book
+
+    if (!book) {
+      return (
+        <View>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )
+    }
 
     const headerHeightExtended = this.scrollY.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE * 1.25],
@@ -160,7 +195,7 @@ export default class BookDetail extends React.Component<Props, State> {
                 <WhiteSpace />
                 <StyledBookName>{book.name}</StyledBookName>
                 <WhiteSpace size="xs" />
-                <StyledDescText>Patricia Brennan Demuth</StyledDescText>
+                <StyledDescText>{this.getAuthors(book.authors)}</StyledDescText>
                 <BookActionButton bookId={book.bookId} bookUrl={book.pdf} />
               </StyledView>
               <WhiteSpace />
@@ -170,7 +205,7 @@ export default class BookDetail extends React.Component<Props, State> {
                 <StyledTitleText>
                   {Localize.t('BookingDetail.Intro')}
                 </StyledTitleText>
-                <StyledCategoryCustom>{book.category}</StyledCategoryCustom>
+                <StyledCategoryCustom>{book.categoryName}</StyledCategoryCustom>
               </StyledHorizontalView>
               <WhiteSpace size="lg" />
               <WhiteSpace size="xs" />
@@ -191,13 +226,7 @@ export default class BookDetail extends React.Component<Props, State> {
                 })}
               </StyledDescMutedText>
               <WhiteSpace size="md" />
-              <StyledBodyText>
-                Bill Gates, born in Seattle, Washington, in 1955, is an American
-                business magnate, investor, philanthropist, and author. In this
-                Who Was...? biography, children will learn of Gates' childhood
-                passion for computer technology, which led him to revolutionize
-                personal computers
-              </StyledBodyText>
+              <StyledBodyText>{book.description}</StyledBodyText>
             </WingBlank>
             <StyledDivider />
             <WhiteSpace size="md" />
@@ -291,3 +320,10 @@ export default class BookDetail extends React.Component<Props, State> {
     )
   }
 }
+
+export default connect((state: RootReducer, props: any) => {
+  const bookId = props.navigation.getParam('bookId')
+  return {
+    book: bookDetailSelector.getBookDetail(bookId)(state)
+  }
+})(BookDetail)
