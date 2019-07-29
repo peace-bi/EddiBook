@@ -3,6 +3,16 @@ package com.eddibook;
 import android.support.multidex.MultiDexApplication;
 
 import com.facebook.react.ReactApplication;
+import com.bugsnag.BugsnagReactNative;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.dylanvann.fastimage.FastImageViewPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.reactlibrary.RNPdfTronUtilsPackage;
 import com.pdftron.reactnative.RNPdftronPackage;
 import com.reactcommunity.rnlocalize.RNLocalizePackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -27,6 +37,15 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            BugsnagReactNative.getPackage(),
+            new NetInfoPackage(),
+            new RNFetchBlobPackage(),
+            new AsyncStoragePackage(),
+            new VectorIconsPackage(),
+            new LinearGradientPackage(),
+            new FastImageViewPackage(),
+            new RNDeviceInfo(),
+            new RNPdfTronUtilsPackage(),
             new RNPdftronPackage(),
             new RNLocalizePackage(),
             new RNGestureHandlerPackage(),

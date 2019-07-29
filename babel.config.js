@@ -13,10 +13,11 @@ module.exports = {
       {
         alias: {
           "pages": "./src/pages",
-          "components": "./src/components",
-          "core": "./src/core"
+          "shared": "./src/shared",
+          "core": "./src/core",
+          "assets": "./src/assets"
         }
       }
-    ],
+    ]
   ]
 };

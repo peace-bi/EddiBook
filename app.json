@@ -1,4 +1,15 @@
 {
   "name": "EddiBook",
-  "displayName": "EddiBook"
+  "displayName": "EddiBook",
+  "config": {
+    "version": "0.0.1-dev",
+    "HOST": {
+      "PROD": {
+        "API": "http://edds.banvien.com.vn"
+      },
+      "DEV": {
+        "API": "http://edds.banvien.com.vn"
+      }
+    }
+  }
 }

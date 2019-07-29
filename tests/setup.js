@@ -1,12 +1,12 @@
-import { NativeModules } from 'react-native';
+import { NativeModules } from "react-native";
 
 NativeModules.ReactLocalization = {
-  language: 'en',
+  language: "en",
 };
 
 // TODO: remove these mocks!
-jest.mock('react-native-gesture-handler', () => {
-  const View = require('react-native/Libraries/Components/View/View');
+jest.mock("react-native-gesture-handler", () => {
+  const View = require("react-native/Libraries/Components/View/View");
   return {
     Swipeable: View,
     DrawerLayout: View,
@@ -39,11 +39,23 @@ jest.mock('react-native-gesture-handler', () => {
   };
 });
 
-jest.mock('react-native-gesture-handler/DrawerLayout', () => {
+jest.mock("react-native-gesture-handler/DrawerLayout", () => {
   return {
     Directions: null,
   };
 });
+
+jest.mock("@ant-design/react-native", () => {
+
+})
+
+jest.mock("@ant-design/react-native/es/locale-provider/en_US", () => {
+
+})
+
+jest.mock("react-native-localize", () => {
+  
+})
 
 // jest.mock('react-native-screens', () => {
 //   return {
