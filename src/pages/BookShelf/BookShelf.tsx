@@ -1,8 +1,8 @@
-import { Modal, SearchBar } from '@ant-design/react-native'
+import { SearchBar } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
 import { bookshelfSelector } from 'pages/BookShelf/+state/bookshelf.selector'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Alert, FlatList, TouchableWithoutFeedback } from 'react-native'
+import { FlatList, TouchableWithoutFeedback } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { useSelector } from 'react-redux'
 import { BookAction, TabType } from 'shared/model'
@@ -93,20 +93,20 @@ export const BookShelf = () => {
     ({ item, index }) => renderItem({ item, index, bookActionStatus }),
     [bookActionStatus]
   )
-  const handleActionKey = useCallback(() => {
-    Modal.prompt(
-      'Access Code',
-      'Please enter the access code to view your bookshelf.',
-      (password) => {
-        if (password) {
-          Alert.alert('Success')
-        }
-      },
-      'default',
-      undefined,
-      ['Access code']
-    )
-  }, [])
+  // const handleActionKey = useCallback(() => {
+  //   Modal.prompt(
+  //     'Access Code',
+  //     'Please enter the access code to view your bookshelf.',
+  //     (password) => {
+  //       if (password) {
+  //         Alert.alert('Success')
+  //       }
+  //     },
+  //     'default',
+  //     undefined,
+  //     ['Access code']å
+  //   )
+  // }, [])
 
   return (
     <Styled.HeaderSafeView>
@@ -117,9 +117,9 @@ export const BookShelf = () => {
           <TouchableWithoutFeedback>
             <Styled.HeaderActionIcon name="filter" size={28} />
           </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={handleActionKey}>
-            <Styled.HeaderActionIcon name="key" size={28} />
-          </TouchableWithoutFeedback>
+          {/*<TouchableWithoutFeedback onPress={handleActionKey}>*/}
+          {/*  <Styled.HeaderActionIcon name="key" size={28} />*/}
+          {/*</TouchableWithoutFeedback>*/}
         </Styled.HeaderActionContainer>
       </Styled.Header>
       <FlatList

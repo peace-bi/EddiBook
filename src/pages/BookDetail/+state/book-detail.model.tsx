@@ -8,7 +8,7 @@ export interface BookDetailResponse {
   hasLicenseExpired: boolean
   pdf: string
   cover: string
-  authors: Author[]
+  authors: Author[] | undefined
   bookCategoryId: number
   categoryName: string
   publisherId: string
@@ -19,6 +19,8 @@ export interface BookDetailResponse {
   producerUser: string
   publicationStatus: string
   new: boolean
+  bookSize: number
+  licenseEndDate: string | undefined
 }
 
 const Author: io.Type<Author> = io.type({
@@ -34,7 +36,7 @@ export const BookDetailResponse: io.Type<BookDetailResponse> = io.type({
   hasLicenseExpired: io.boolean,
   pdf: io.string,
   cover: io.string,
-  authors: io.array(Author),
+  authors: io.union([io.array(Author), io.undefined]),
   bookCategoryId: io.number,
   categoryName: io.string,
   publisherId: io.string,
@@ -44,10 +46,17 @@ export const BookDetailResponse: io.Type<BookDetailResponse> = io.type({
   description: io.string,
   producerUser: io.string,
   publicationStatus: io.string,
-  new: io.boolean
+  new: io.boolean,
+  bookSize: io.number,
+  licenseEndDate: io.union([io.string, io.undefined])
 })
 
 export interface Author {
   authorId: number
   name: string
+}
+
+export interface BookDetailInfo {
+  data: BookDetailResponse
+  related: any[]
 }

@@ -6,11 +6,11 @@ import {
   WingBlank
 } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
+import { formatBytes } from 'shared/util'
 import { getBookDetail } from './+state/book-detail.effect'
 import { Author, BookDetailResponse } from './+state/book-detail.model'
 import { bookDetailSelector } from './+state/book-detail.selector'
 
-import { Book } from 'pages/BookShelf/+model'
 import React from 'react'
 import {
   Animated,
@@ -50,7 +50,7 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
 
 interface Props extends NavigationScreenProps<any> {
   dispatch: ThunkDispatch<{}, {}, PlainAction>
-  book: BookDetailResponse
+  book: BookDetailResponse | null
 }
 
 interface State {}
@@ -141,15 +141,39 @@ class BookDetail extends React.Component<Props, State> {
     this.props.navigation.pop()
   }
 
-  getAuthors = (authors: Author[]) => {
-    return authors.reduce((sum, curr, index) => {
+  getAuthors = (authors: Author[] | undefined) => {
+    return authors ? authors.reduce((sum, curr, index) => {
       const name = index === 0 ? curr.name : `, ${curr.name}`
       return sum + name
-    }, '')
+    }, '') : ''
+  }
+
+  renderLicenseTime = (item: BookDetailResponse) => {
+    if (item.hasLicenseExpired) {
+      return Localize.t('Book.LicenseDate', {
+        p: Localize.t('Common.Expired')
+      })
+    }
+    if (item.licenseStatus === 'Perpetual') {
+      return null
+    }
+    if (item.licenseEndDate) {
+      return Localize.t('Book.LicenseDate', {
+        p: Localize.strftime(new Date(item.licenseEndDate), '%Y/%m/%d')
+      })
+    }
+    return null
+  }
+
+  /*
+  * size: number (bytes)
+  * */
+  getBookSize = (size: number) => {
+    return formatBytes(size)
   }
 
   render() {
-    const book: BookDetailResponse = this.props.book
+    const book = this.props.book
 
     if (!book) {
       return (
@@ -174,6 +198,9 @@ class BookDetail extends React.Component<Props, State> {
       outputRange: [4, 0],
       extrapolate: 'clamp'
     })
+
+    const { authors, name, bookId, categoryName, bookSize, pdf, description } = book
+
     return (
       <StyledContainer style={styles.container}>
         <StatusBar translucent={true} backgroundColor="transparent" />
@@ -193,10 +220,10 @@ class BookDetail extends React.Component<Props, State> {
               <StyledView alignItems={'center'}>
                 <WhiteSpace />
                 <WhiteSpace />
-                <StyledBookName>{book.name}</StyledBookName>
+                <StyledBookName>{name}</StyledBookName>
                 <WhiteSpace size="xs" />
-                <StyledDescText>{this.getAuthors(book.authors)}</StyledDescText>
-                <BookActionButton bookId={book.bookId} bookUrl={book.pdf} />
+                <StyledDescText>{this.getAuthors(authors)}</StyledDescText>
+                <BookActionButton bookId={bookId} bookUrl={pdf} />
               </StyledView>
               <WhiteSpace />
               <WhiteSpace />
@@ -205,18 +232,16 @@ class BookDetail extends React.Component<Props, State> {
                 <StyledTitleText>
                   {Localize.t('BookingDetail.Intro')}
                 </StyledTitleText>
-                <StyledCategoryCustom>{book.categoryName}</StyledCategoryCustom>
+                <StyledCategoryCustom>{categoryName}</StyledCategoryCustom>
               </StyledHorizontalView>
               <WhiteSpace size="lg" />
               <WhiteSpace size="xs" />
               <StyledHorizontalView alignItems="center" py-0={true}>
                 <StyledDescMutedText>
-                  {Localize.t('BookingDetail.ExpiryDate', {
-                    p: Localize.strftime(new Date(), '%m/%d/%Y')
-                  })}
+                  {this.renderLicenseTime(book)}
                 </StyledDescMutedText>
                 <StyledDescMutedText>
-                  {Localize.t('BookingDetail.Size', { p: '150mb' })}
+                  {Localize.t('BookingDetail.Size', { p: this.getBookSize(bookSize) })}
                 </StyledDescMutedText>
               </StyledHorizontalView>
               <WhiteSpace size="xs" />
@@ -226,7 +251,7 @@ class BookDetail extends React.Component<Props, State> {
                 })}
               </StyledDescMutedText>
               <WhiteSpace size="md" />
-              <StyledBodyText>{book.description}</StyledBodyText>
+              <StyledBodyText>{description}</StyledBodyText>
             </WingBlank>
             <StyledDivider />
             <WhiteSpace size="md" />

@@ -68,7 +68,7 @@ function bookShelfReducer(s = initialState, a: PlainAction): BookShelfState {
 const persistConfig: PersistConfig = {
   key: 'BookShelfState',
   storage: AsyncStorage,
-  version: 0
+  version: 1
   // migrate: createMigrate(migrations, { debug: true })
 }
 

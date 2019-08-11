@@ -19,7 +19,7 @@ export default {
     PasswordPlaceholder: 'Enter Password',
     ForgotPassword: 'Forgot password?',
     Button: 'Sign in',
-    NoAccount: "Don't have account? ",
+    NoAccount: 'Don\'t have account? ',
     NavSignUp: 'Sign up',
     Failed: 'Sign in failed',
     UserNotAllow: 'You are not belong to reader group'

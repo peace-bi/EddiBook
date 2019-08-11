@@ -6,7 +6,7 @@ const bookDetailState = (state: RootReducer) => state.BookShelfState.bookDetail
 const getBookDetail = (bookId: number) =>
   createSelector(
     bookDetailState,
-    (state) => state.detail[bookId]
+    (state) => state.detail[bookId] ? state.detail[bookId].data : null
   )
 
 export const bookDetailSelector = {
