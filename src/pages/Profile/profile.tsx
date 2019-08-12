@@ -1,10 +1,12 @@
 import { List } from '@ant-design/react-native'
 import Item from '@ant-design/react-native/lib/list/ListItem'
 import { Localize } from 'core/localize'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, View } from 'react-native'
 import { useNavigation } from 'react-navigation-hooks'
 
+import { useThunkDispatch } from 'shared/util'
+import { GetProfile } from './+state/profile.effect'
 import * as Styled from './profile.constant'
 
 // tslint:disable-next-line: max-line-length
@@ -13,6 +15,16 @@ const mockAvatar =
 
 function Profile() {
   const { navigate, goBack } = useNavigation()
+  const [profile, setProfile] = useState(null as Profile | null)
+  const dispatch = useThunkDispatch()
+  useEffect(() => {
+    console.info('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    dispatch(GetProfile()).subscribe(({ payload }) => {
+      console.info(payload)
+      setProfile(payload)
+    })
+  }, [])
+
   return (
     <SafeAreaView>
       <Styled.PageContainer>

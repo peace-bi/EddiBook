@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import { bookShelfReducer } from 'pages/BookShelf/+state/bookshelf.reducer'
+import { profileReducer } from 'pages/Profile/+state/profile.reducer'
 import { signInReducer } from 'pages/SignIn/+state/sign-in.reducer'
 import { signUpReducer } from 'pages/SignUp/+state/sign-up.reducer'
 import { reducer as network } from 'react-native-offline'
@@ -44,6 +45,7 @@ export function userReducer(state = initialState, action: PlainAction) {
 const combinedReducer = {
   SignInState: signInReducer,
   SignUpState: signUpReducer,
+  ProfileState: profileReducer,
   AppState: appReducer,
   UserState: userReducer,
   BookShelfState: bookShelfReducer,
@@ -59,6 +61,7 @@ const persistConfig = {
 export interface RootReducer {
   SignInState: ReturnType<typeof signInReducer>
   SignUpState: ReturnType<typeof signUpReducer>
+  ProfileState: ReturnType<typeof profileReducer>
   AppState: ReturnType<typeof appReducer>
   UserState: ReturnType<typeof userReducer>
   BookShelfState: ReturnType<typeof bookShelfReducer>

@@ -105,6 +105,7 @@ export const requestApi: (
     map((jwt) => {
       if (jwt) {
         headers.Authorization = `bearer ${jwt}`
+        console.log(jwt)
       } else {
         headers.Authorization = `Basic YnJvd3Nlcjo=`
       }
