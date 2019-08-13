@@ -17,6 +17,7 @@ type ThunkAction = <T>(
 export function useThunkDispatch() {
   return useDispatch() as ThunkAction & Dispatch<any>
 }
+
 export function getLocation(): Observable<GeolocationReturnType> {
   return Observable.create((observer: Observer<GeolocationReturnType>) =>
     navigator.geolocation.getCurrentPosition(

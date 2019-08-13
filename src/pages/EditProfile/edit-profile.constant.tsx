@@ -120,7 +120,7 @@ export const styles = StyleSheet.create({
     borderRadius: 9,
     position: 'relative'
   },
-  countryPickerIcon: {
+  pickerIcon: {
     width: 50,
     justifyContent: 'flex-end',
     textAlign: 'center',
