@@ -52,7 +52,7 @@ export default function More() {
       >
         <List style={{ marginTop: 54 }}>
           <Item
-            onPress={() => navigate('EditProfile')}
+            onPress={() => navigate('ChangePassword')}
             thumb={<Styled.ListIcon name="change-password" />}
             arrow={'horizontal'}
           >
