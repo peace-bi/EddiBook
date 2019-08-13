@@ -17,12 +17,13 @@ export function ChangePasswordRequest(
     dispatch: ThunkDispatch<{}, {}, PlainAction>
   ): Observable<PlainAction> =>
     requestApi({
-      url: 'users/passwords',
+      url: 'account/users/passwords',
       method: 'POST',
       param: {
         newPassword,
         oldPassword
-      }
+      },
+      type: 'json'
     })(io.any).pipe(
       first(),
       map((data) => dispatch(ChangePasswordSuccess.get(data))),
