@@ -88,6 +88,7 @@ const navigation = createStackNavigator(
     ViewPDF
   },
   {
+    headerLayoutPreset: 'center',
     initialRouteName: 'Tab'
   }
 )
