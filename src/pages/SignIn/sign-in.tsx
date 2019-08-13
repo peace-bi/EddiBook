@@ -82,8 +82,8 @@ const SignInComponent = () => {
         <Formik
           validate={validate}
           initialValues={{
-            email: '', // dat.nguyen-huu@banvien.com.vn
-            password: '' // 2EF^ttHR
+            email: 'dat.nguyen-huu@banvien.com.vn', // dat.nguyen-huu@banvien.com.vn
+            password: '2EF^ttHR' // 2EF^ttHR
           }}
           onSubmit={submit}
         >

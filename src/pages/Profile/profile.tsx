@@ -1,31 +1,19 @@
-import { List } from '@ant-design/react-native'
+import { ActivityIndicator, List } from '@ant-design/react-native'
 import Item from '@ant-design/react-native/lib/list/ListItem'
 import { Localize } from 'core/localize'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { SafeAreaView, View } from 'react-native'
 import { useNavigation } from 'react-navigation-hooks'
+import { useSelector } from 'react-redux'
+import { RootReducer } from 'shared/store/rootReducer'
 
-import { useThunkDispatch } from 'shared/util'
-import { GetProfile } from './+state/profile.effect'
 import * as Styled from './profile.constant'
 
-// tslint:disable-next-line: max-line-length
-const mockAvatar =
-  'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
-
-function Profile() {
+function ProfileComponent() {
   const { navigate, goBack } = useNavigation()
-  const [profile, setProfile] = useState(null as Profile | null)
-  const dispatch = useThunkDispatch()
-  useEffect(() => {
-    console.info('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-    dispatch(GetProfile()).subscribe(({ payload }) => {
-      console.info(payload)
-      setProfile(payload)
-    })
-  }, [])
+  const profile = useSelector((s: RootReducer) => s.ProfileState.profile)
 
-  return (
+  return profile ? (
     <SafeAreaView>
       <Styled.PageContainer>
         <Styled.PageWrapper>
@@ -47,28 +35,36 @@ function Profile() {
           <Styled.AvatarViewContainer>
             <Styled.UserAvatar
               source={{
-                uri: mockAvatar
+                uri: profile.userProfile.avatar
               }}
             />
           </Styled.AvatarViewContainer>
           <Styled.UserInfoContainer>
-            <Styled.UserName>User</Styled.UserName>
-            <Styled.UserEmail>user@gmail.com</Styled.UserEmail>
+            <Styled.UserName>{`${profile.userProfile.firstName} ${profile.userProfile.lastName}`}</Styled.UserName>
+            <Styled.UserEmail>{profile.username}</Styled.UserEmail>
           </Styled.UserInfoContainer>
           <List style={{ marginTop: 54 }}>
-            <Item thumb={<Styled.Icon name="mobile" />}>(+84) x xxx xxxx</Item>
+            <Item
+              thumb={<Styled.Icon name="mobile" />}
+            >{`(${profile.userProfile.address.country.phoneCode}) ${profile.userProfile.phone}`}</Item>
             <Item thumb={<Styled.Icon name="location" />}>
-              12, Ton Dan Street, Ward 13, District 4, HCM
+              {profile.userProfile.address.streetOne}
             </Item>
-            <Item thumb={<Styled.Icon name="flag" />}>N/A</Item>
+            <Item thumb={<Styled.Icon name="flag" />}>
+              {profile.userProfile.address.country.name}
+            </Item>
           </List>
         </View>
       </Styled.PageContainer>
     </SafeAreaView>
+  ) : (
+    <View style={{ flex: 1, justifyContent: 'center' }}>
+      <ActivityIndicator></ActivityIndicator>
+    </View>
   )
 }
 
-Profile.navigationOptions = {
+ProfileComponent.navigationOptions = {
   header: null
 }
-export default Profile
+export default ProfileComponent

@@ -6,20 +6,17 @@ import { ScrollView, Text, View } from 'react-native'
 import { countryPickerStyles as styles } from '../edit-profile.constant'
 
 interface Props {
+  headerTitle: string
   data: Array<{
     value: string
     label: string
   }>
-  selectedValue: string
+  selectedValue: string | number
   closeModal: () => void
-  handleChange<T = unknown | React.ChangeEvent<any>>(
-    field: T
-  ): T extends React.ChangeEvent<any>
-    ? void
-    : ((e: unknown | React.ChangeEvent<any>) => void)
+  handleChange: (e: unknown | React.ChangeEvent<any>) => void
 }
 
-export function CountryPickerModal(props: Props) {
+export function PickerModal(props: Props) {
   const [selectedValue, setSelectedValue] = useState(props.selectedValue)
   const [activeList, setActiveList] = useState(props.data)
   const [searchKeyword, setSearchKeyword] = useState('')
@@ -45,22 +42,18 @@ export function CountryPickerModal(props: Props) {
     <View style={{ height: '100%' }}>
       <View style={styles.viewWrapper}>
         <View style={styles.backButtonWrapper}>
-          <Button style={styles.backButton}>
-            <Icon
-              name="left"
-              style={styles.backButtonIcon}
-              onPress={props.closeModal}
-            />
+          <Button style={styles.backButton} onPress={props.closeModal}>
+            <Icon name="left" style={styles.backButtonIcon} />
           </Button>
         </View>
         <View style={styles.titleWrapper}>
-          <Text style={styles.title}>Country</Text>
+          <Text style={styles.title}>{props.headerTitle}</Text>
         </View>
         <View style={styles.doneWrapper}>
           <Button
             style={styles.doneButton}
             onPress={() => {
-              props.handleChange('country')(selectedValue)
+              props.handleChange(selectedValue)
               props.closeModal()
             }}
           >

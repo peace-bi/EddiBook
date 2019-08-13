@@ -5,18 +5,24 @@ import { Observable, of } from 'rxjs'
 import { catchError, first, map } from 'rxjs/operators'
 import { requestApi } from 'shared/api'
 
-import { GetProfileFailed, GetProfileSuccess, UpdateProfileFailed, UpdateProfileSuccess } from './profile.actions'
+import { Profile } from '../profile.model'
+import {
+  GetProfileFailed,
+  GetProfileSuccess,
+  UpdateProfileFailed,
+  UpdateProfileSuccess
+} from './profile.actions'
 
 export function GetProfile() {
   return (
     dispatch: ThunkDispatch<{}, {}, PlainAction>
   ): Observable<PlainAction> =>
     requestApi({
-      url: 'profiles/user',
+      url: 'account/profiles/user',
       method: 'GET'
     })(io.any).pipe(
       first(),
-      map((res) => dispatch(GetProfileSuccess.get(res as any))),
+      map((res) => dispatch(GetProfileSuccess.get(res.result as Profile))),
       catchError((err) => of(dispatch(GetProfileFailed.get(err))))
     )
 }
