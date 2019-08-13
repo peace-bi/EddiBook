@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
+import org.apache.tools.ant.taskdefs.condition.Os
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -75,12 +76,21 @@ import com.android.build.OutputFile
  def getPassword(String currentUser, String keyChain) {
     def stdout = new ByteArrayOutputStream()
     def stderr = new ByteArrayOutputStream()
-    exec {
-        commandLine 'security', '-q', 'find-generic-password', '-a', currentUser, '-s', keyChain, '-w'
-        standardOutput = stdout
-        errorOutput = stderr
-        ignoreExitValue true
-    }
+     task checkWin {
+         doLast {
+             if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+
+             } else {
+                 exec {
+                     commandLine 'security', '-q', 'find-generic-password', '-a', currentUser, '-s', keyChain, '-w'
+                     standardOutput = stdout
+                     errorOutput = stderr
+                     ignoreExitValue true
+                 }
+             }
+         }
+     }
+
     //noinspection GroovyAssignabilityCheck
        stdout.toString().trim()
  }
@@ -115,10 +125,6 @@ def pass = getPassword("admin","edds_keystore")
 
 android {
     compileSdkVersion 28
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
     defaultConfig {
         applicationId "com.eddibook"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -191,7 +197,6 @@ dependencies {
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-screens')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation 'com.facebook.react:react-native:0.59.4'
     // From node_modules
     implementation 'com.android.support:multidex:1.0.3'
