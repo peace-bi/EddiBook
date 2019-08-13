@@ -2,11 +2,13 @@ import { Button } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
 import { Formik } from 'formik'
 import React, { useCallback, useRef } from 'react'
-import { Text, View } from 'react-native'
+import { Alert, Text, View } from 'react-native'
 import { CustomInput } from 'shared/components/CustomInput'
 import { useThunkDispatch } from 'shared/util'
 
+import { useNavigation } from 'react-navigation-hooks'
 import { HideLoading, ShowLoading } from 'shared/store/action'
+import { ChangePasswordSuccess, ChangePasswordFailed } from './+state/change-password.actions'
 import { ChangePasswordRequest } from './+state/change-password.effect'
 import { styles } from './change-password.constant'
 
@@ -17,6 +19,7 @@ interface FormProps {
 }
 
 const ChangePasswordComponent = () => {
+  const { goBack } = useNavigation()
   const newPasswordInput = useRef<CustomInput>(null)
   const confirmPasswordInput = useRef<CustomInput>(null)
   const dispatch = useThunkDispatch()
@@ -25,8 +28,15 @@ const ChangePasswordComponent = () => {
     dispatch(
       ChangePasswordRequest(values.currentPassword, values.newPassword)
     ).subscribe((result) => {
-      dispatch(HideLoading.get())
-      console.info(result)
+      if (ChangePasswordSuccess.is(result)) {
+        dispatch(HideLoading.get())
+        Alert.alert('Success!')
+        goBack(null)
+      }
+      if (ChangePasswordFailed.is(result)) {
+        dispatch(HideLoading.get())
+        Alert.alert('Failed, please try again!')
+      }
     })
   }, [])
 
@@ -105,7 +115,7 @@ const ChangePasswordComponent = () => {
 }
 
 ChangePasswordComponent.navigationOptions = {
-  headerTitle: 'Change Password'
+  headerTitle: Localize.t('ChangePassword.Title')
 }
 
 export const ChangePassword = ChangePasswordComponent

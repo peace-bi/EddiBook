@@ -95,6 +95,7 @@ export default {
     BookInfo: 'Book Info'
   },
   ChangePassword: {
+    Title: 'Change Password',
     CurrentPassword: 'Current Password',
     NewPassword: 'New Password',
     ConfirmPassword: 'Confirm New Password',
