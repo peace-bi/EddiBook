@@ -30,10 +30,10 @@ export function PickerModal(props: Props) {
               (country) =>
                 country.label
                   .toLocaleLowerCase()
-                  .indexOf(criteria.toLocaleLowerCase()) > -1
+                  .indexOf(criteria.toLocaleLowerCase()) === 0
             )
       setActiveList(result)
-    }, 3000)
+    }, 300)
   )
   useEffect(() => {
     debouncer.current(searchKeyword)
