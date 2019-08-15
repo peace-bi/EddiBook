@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 import { Header } from 'react-navigation'
+import { listCountry as countries } from 'shared/util'
 
 export const styles = StyleSheet.create({
   wrapper: {
@@ -120,6 +121,9 @@ export const styles = StyleSheet.create({
     borderRadius: 9,
     position: 'relative'
   },
+  countryPickerContainerDisabled: {
+    backgroundColor: '#ccc'
+  },
   pickerIcon: {
     width: 50,
     justifyContent: 'flex-end',
@@ -187,65 +191,8 @@ export const countryPickerStyles = StyleSheet.create({
   }
 })
 
-export const mockCountry = [
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'USA',
-    value: 'us'
-  },
-  {
-    label: 'Laos',
-    value: 'la'
-  },
-  {
-    label: 'China',
-    value: 'cn'
-  },
-  {
-    label: 'Japan',
-    value: 'jp'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  }
-]
+export const listCountry = countries.map((c) => ({
+  label: c.name,
+  value: c.countryId.toString(),
+  phoneCode: c.phoneCode || 'N/A'
+}))

@@ -3,6 +3,7 @@ package com.eddibook;
 import android.support.multidex.MultiDexApplication;
 
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 import com.bugsnag.BugsnagReactNative;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
@@ -37,6 +38,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ImagePickerPackage(),
             BugsnagReactNative.getPackage(),
             new NetInfoPackage(),
             new RNFetchBlobPackage(),

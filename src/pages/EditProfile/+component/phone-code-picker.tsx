@@ -1,20 +1,17 @@
 import { Icon } from '@ant-design/react-native'
 import React from 'react'
-import { Image, Picker, Text, View, ViewStyle } from 'react-native'
+import { Picker, Text, View, ViewStyle } from 'react-native'
 
 import { phoneCodePickerStyles as styles } from '../edit-profile.constant'
 
 interface MCountry {
-  countryId: number
-  name: string
-  code: string
-  postCode: string
-  flag: string
+  value: string
+  phoneCode: string
 }
 
 interface Props {
   listCountry: MCountry[]
-  selectedValue: any
+  selectedValue: number
   onValueChange?: (e: any) => void
   onBlur?: (e: any) => void
   style?: ViewStyle
@@ -23,7 +20,7 @@ interface Props {
 
 export function PhoneCodePicker(props: Props) {
   const selectedCountry = props.listCountry.find(
-    (country) => country.postCode === props.selectedValue
+    (country) => country.value === props.selectedValue.toString()
   )
   return (
     <View
@@ -38,27 +35,26 @@ export function PhoneCodePicker(props: Props) {
       }}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-        <View style={{ flex: 0.4, justifyContent: 'flex-start' }}>
-          <Image
-            style={{ ...styles.logoPostCode }}
-            source={{
-              uri:
-                selectedCountry && selectedCountry.flag
-                  ? selectedCountry.flag
-                  : 'https://cdn3.iconfinder.com/data/icons/action-states-vol-3-flat/48/Action___States_-_Vol._3-29-512.png'
-            }}
-          />
-        </View>
-
+        {/* <View style={{ flex: 0.4 }}></View> */}
         <Text
-          style={{ flex: 0.4, textAlign: 'left', paddingLeft: 5, fontSize: 15 }}
+          style={{
+            flex: 0.6,
+            textAlign: 'right',
+            paddingLeft: 5,
+            fontSize: 15
+          }}
         >
-          {selectedCountry && selectedCountry.postCode}
+          {selectedCountry && selectedCountry.phoneCode}
         </Text>
-        <Icon
-          style={{ flex: 0.2, justifyContent: 'flex-end', paddingRight: 8 }}
-          name="caret-down"
-        />
+        <View
+          style={{
+            flex: 0.4,
+            justifyContent: 'flex-end',
+            paddingRight: 8
+          }}
+        >
+          <Icon name="caret-down" style={{ textAlign: 'right' }} />
+        </View>
       </View>
       <View style={styles.picker}>
         <Picker
@@ -68,11 +64,7 @@ export function PhoneCodePicker(props: Props) {
           onValueChange={props.onValueChange}
         >
           {props.listCountry.map((item, key) => (
-            <Picker.Item
-              label={item.postCode}
-              value={item.postCode}
-              key={key}
-            />
+            <Picker.Item label={item.phoneCode} value={item.value} key={key} />
           ))}
         </Picker>
       </View>
