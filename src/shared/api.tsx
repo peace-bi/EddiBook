@@ -88,7 +88,7 @@ export const requestApi: (
 ) => <T>(codec: t.Type<T>) => Observable<ApiResponse<T>> = (param) => (
   codec
 ) => {
-  const url = `${getHost()}/${param.url}`
+  const url = `${getHost()}${param.url}`
   if (param.type === 'json') {
     headers['Content-Type'] = 'application/json'
   }

@@ -8843,9 +8843,6 @@ react-native-offline@^5.0.0:
     redux "4.x"
     redux-saga "^1.0.2"
 
-"react-native-pdftron-utils@file:libs/PdfTronUtils":
-  version "1.0.0"
-
 "react-native-pdftron@git+https://github.com/PDFTron/pdftron-react-native.git":
   version "1.0.0"
   resolved "git+https://github.com/PDFTron/pdftron-react-native.git#115e58eef0984837878213713e3c4350c8eaa18a"

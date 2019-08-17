@@ -60,3 +60,37 @@ export interface BookDetailInfo {
   data: BookDetailResponse
   related: any[]
 }
+
+export interface RelatedBook {
+  bookId: number
+  bookVersionHistoryId: number
+  category: string
+  categoryId: number
+  cover: string
+  hasLicenseExpired: boolean
+  licenseStatus: string
+  name: string
+  new: boolean
+  pdf: string
+}
+
+export const RelatedBook: io.Type<RelatedBook> = io.type({
+  bookId: io.number,
+  bookVersionHistoryId: io.number,
+  category: io.string,
+  categoryId: io.number,
+  cover: io.string,
+  hasLicenseExpired: io.boolean,
+  licenseStatus: io.string,
+  name: io.string,
+  new: io.boolean,
+  pdf: io.string
+})
+
+export interface RelatedBookResponse {
+  content: RelatedBook[]
+}
+
+export const RelatedBookResponse: io.Type<RelatedBookResponse> = io.type({
+  content: io.array(RelatedBook)
+})

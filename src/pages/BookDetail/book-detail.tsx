@@ -7,7 +7,7 @@ import {
 } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
 import { formatBytes } from 'shared/util'
-import { getBookDetail } from './+state/book-detail.effect'
+import { getBookDetail, getRelatedBook } from './+state/book-detail.effect'
 import { Author, BookDetailResponse } from './+state/book-detail.model'
 import { bookDetailSelector } from './+state/book-detail.selector'
 
@@ -134,7 +134,9 @@ class BookDetail extends React.Component<Props, State> {
   }
 
   componentDidMount(): void {
-    this.props.dispatch(getBookDetail(this.props.navigation.getParam('bookId')))
+    const bookId = this.props.navigation.getParam('bookId')
+    this.props.dispatch(getBookDetail(bookId))
+    this.props.dispatch(getRelatedBook(bookId))
   }
 
   backPress = () => {
@@ -177,7 +179,7 @@ class BookDetail extends React.Component<Props, State> {
 
     if (!book) {
       return (
-        <View>
+        <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )
