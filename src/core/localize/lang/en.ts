@@ -94,6 +94,13 @@ export default {
     RelatedBook: 'Related Book',
     BookInfo: 'Book Info'
   },
+  ChangePassword: {
+    Title: 'Change Password',
+    CurrentPassword: 'Current Password',
+    NewPassword: 'New Password',
+    ConfirmPassword: 'Confirm New Password',
+    SaveButton: 'Save Change'
+  },
   More: {
     ChangePassword: 'Change Password',
     Settings: 'Settings',

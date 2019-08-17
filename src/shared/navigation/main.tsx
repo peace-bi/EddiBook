@@ -1,5 +1,6 @@
 import BookDetail from 'pages/BookDetail/book-detail'
 import { BookShelf } from 'pages/BookShelf'
+import { ChangePassword } from 'pages/ChangePassword/change-password'
 import { Downloaded } from 'pages/Downloaded'
 import EditProfile from 'pages/EditProfile/edit-profile'
 import More from 'pages/More/more'
@@ -78,12 +79,16 @@ const navigation = createStackNavigator(
     EditProfile: {
       screen: EditProfile
     },
+    ChangePassword: {
+      screen: ChangePassword
+    },
     Profile: {
       screen: Profile
     },
     ViewPDF
   },
   {
+    headerLayoutPreset: 'center',
     initialRouteName: 'Tab'
   }
 )
