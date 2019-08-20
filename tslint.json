@@ -1,8 +1,5 @@
 {
-  "extends": [
-    "tslint:recommended",
-    "tslint-react-hooks"
-  ],
+  "extends": ["tslint:recommended", "tslint-react-hooks"],
   "rules": {
     "callable-types": true,
     "class-name": true,

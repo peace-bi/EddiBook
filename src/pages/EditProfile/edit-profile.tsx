@@ -1,33 +1,18 @@
-import { Button, Icon, Modal } from '@ant-design/react-native'
+import { Modal } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
 import { Formik } from 'formik'
-import { UpdateProfileFailed, UpdateProfileSuccess } from 'pages/Profile/+state/profile.actions'
+import { GetProfile, UpdateProfileFailed, UpdateProfileSuccess } from 'pages/Profile'
 import React, { useCallback, useEffect, useState } from 'react'
-import {
-  Alert,
-  Image,
-  PermissionsAndroid,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native'
+import { Alert, PermissionsAndroid, SafeAreaView, ScrollView, TouchableWithoutFeedback } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
-import LinearGradient from 'react-native-linear-gradient'
 import { useNavigation } from 'react-navigation-hooks'
 import { useSelector } from 'react-redux'
-import { CustomInput } from 'shared/components/CustomInput'
-import { RootReducer } from 'shared/store/rootReducer'
-import { useThunkDispatch } from 'shared/util'
+import { CustomInput, RootReducer, useThunkDispatch } from 'shared/shared-index'
 
-import { PhoneCodePicker } from './+component/phone-code-picker'
-import { PickerModal } from './+component/pickerModal'
-import { GetCitiesSuccess, GetRegionSuccess } from './+state/edit-profile.action'
-import { getCities, getRegions, updateProfile } from './+state/edit-propfile.effect'
-import { listCountry, styles } from './edit-profile.constant'
+import { PickerModal } from './+component'
+import { getCities, GetCitiesSuccess, getRegions, GetRegionSuccess, updateProfile } from './+state'
+import { listCountry, Styled } from './edit-profile.constant'
 import { SubmitForm } from './edit-profile.model'
-import { GetProfile } from 'pages/Profile/+state/profile.effect';
 
 interface FormProps {
   avatar: string
@@ -46,7 +31,7 @@ interface FormProps {
 
 const RenderPicker = (props: {
   label: string
-  data: Array<{ value: string; label: string }>
+  data: SelectItem[]
   disabled?: boolean
   handleChange: (e: unknown) => void
   selectedValue: number
@@ -56,27 +41,18 @@ const RenderPicker = (props: {
     ({ value }) => props.selectedValue.toString() == value
   )
   return (
-    <View style={styles.fieldWrapper}>
-      <Text style={styles.label}>{props.label} *</Text>
-      <View
-        style={{
-          ...styles.countryPickerContainer,
-          ...(props.disabled ? styles.countryPickerContainerDisabled : {})
-        }}
-      >
+    <Styled.Field>
+      <Styled.Label>{props.label} *</Styled.Label>
+      <Styled.PickerContainer {...{ disabled: true }}>
         <TouchableWithoutFeedback
-          onPress={(_) => {
-            if (!props.disabled) {
-              setOpenModal(!openModal)
-            }
-          }}
+          onPress={() => (!props.disabled ? setOpenModal(!openModal) : null)}
         >
-          <View style={styles.countryField}>
-            <Text style={styles.countryLabel}>{result && result.label}</Text>
-            <Icon style={styles.pickerIcon} name="caret-down" />
-          </View>
+          <Styled.PickerField>
+            <Styled.PickerText>{result && result.label}</Styled.PickerText>
+            <Styled.PickerIcon />
+          </Styled.PickerField>
         </TouchableWithoutFeedback>
-      </View>
+      </Styled.PickerContainer>
       <Modal
         transparent={false}
         visible={openModal}
@@ -91,7 +67,7 @@ const RenderPicker = (props: {
           selectedValue={props.selectedValue}
         />
       </Modal>
-    </View>
+    </Styled.Field>
   )
 }
 
@@ -99,14 +75,8 @@ const EditProfileComponent = () => {
   const { goBack } = useNavigation()
   const dispatch = useThunkDispatch()
   const profile = useSelector((s: RootReducer) => s.ProfileState.profile)
-  const [regions, setRegions] = useState([] as Array<{
-    value: string
-    label: string
-  }>)
-  const [cities, setCities] = useState([] as Array<{
-    value: string
-    label: string
-  }>)
+  const [regions, setRegions] = useState([] as SelectItem[])
+  const [cities, setCities] = useState([] as SelectItem[])
   const submit = useCallback((values: FormProps) => {
     if (!profile) {
       return
@@ -140,14 +110,9 @@ const EditProfileComponent = () => {
     })
   }, [])
   const updateAvatar = useCallback(async (handleChange) => {
-    PermissionsAndroid.request('android.permission.CAMERA').then((value) => {
-      console.log('test result', value)
-    })
     await PermissionsAndroid.check('android.permission.CAMERA').then(
       (granted) => {
-        console.log('grant result', granted)
         if (!granted) {
-          console.log('granting')
           PermissionsAndroid.request('android.permission.CAMERA')
         }
       }
@@ -161,11 +126,8 @@ const EditProfileComponent = () => {
       },
       (response) => {
         if (response.didCancel) {
-          console.log('User cancelled image picker')
         } else if (response.error) {
-          console.log('ImagePicker Error: ', response.error)
-        } else if (response.customButton) {
-          console.log('User tapped custom button: ', response.customButton)
+          return
         } else {
           handleChange(response.uri)
         }
@@ -207,192 +169,149 @@ const EditProfileComponent = () => {
       }
     }
   }, [])
-
+  const formInitValue = {
+    avatar: profile
+      ? profile.userProfile.avatar
+      : 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1',
+    email: profile ? profile.username : '',
+    firstname: profile ? profile.userProfile.firstName : '',
+    lastname: profile ? profile.userProfile.lastName : '',
+    phonePrefix: profile ? profile.userProfile.address.country.phoneCode : '',
+    phoneSuffix: profile ? profile.userProfile.phone : '',
+    country: profile ? profile.userProfile.address.country.countryId : -1,
+    region: profile ? profile.userProfile.address.region.regionId : -1,
+    city: profile ? profile.userProfile.address.city.cityId : -1,
+    zipcode: '',
+    address1: profile ? profile.userProfile.address.streetOne : '',
+    address2: profile ? profile.userProfile.address.streetTwo : ''
+  }
+  const { t } = Localize
   return (
     <SafeAreaView>
-      <View style={styles.viewWrapper}>
-        <View style={styles.backButtonWrapper}>
-          <Button
-            activeStyle={{ backgroundColor: 'transparent' }}
-            style={styles.backButton}
-            onPress={() => goBack(null)}
-          >
-            <Icon name="close" style={styles.backButtonIcon} />
-          </Button>
-        </View>
-        <View style={styles.titleWrapper}>
-          <Text style={styles.title}>{Localize.t('Profile.Title')}</Text>
-        </View>
-      </View>
+      <Styled.HeaderWrapper>
+        <Styled.BackButtonWrapper>
+          <Styled.BackButton onPress={() => goBack(null)}></Styled.BackButton>
+          <Styled.BackButtonIcon />
+        </Styled.BackButtonWrapper>
+        <Styled.TitleWrapper>
+          <Styled.Title>{t('Profile.Title')}</Styled.Title>
+        </Styled.TitleWrapper>
+      </Styled.HeaderWrapper>
       <ScrollView showsHorizontalScrollIndicator={false}>
-        <View style={styles.wrapper}>
-          <Formik
-            initialValues={{
-              avatar: profile
-                ? profile.userProfile.avatar
-                : 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1',
-              email: profile ? profile.username : '',
-              firstname: profile ? profile.userProfile.firstName : '',
-              lastname: profile ? profile.userProfile.lastName : '',
-              phonePrefix: profile
-                ? profile.userProfile.address.country.phoneCode
-                : '',
-              phoneSuffix: profile ? profile.userProfile.phone : '',
-              country: profile
-                ? profile.userProfile.address.country.countryId
-                : -1,
-              region: profile
-                ? profile.userProfile.address.region.regionId
-                : -1,
-              city: profile ? profile.userProfile.address.city.cityId : -1,
-              zipcode: '',
-              address1: profile ? profile.userProfile.address.streetOne : '',
-              address2: profile ? profile.userProfile.address.streetTwo : ''
-            }}
-            onSubmit={submit}
-          >
-            {({ handleChange, handleSubmit, values }) => (
-              <View>
-                <View style={styles.avatarViewContainer}>
-                  <Image
-                    style={styles.avatar}
-                    source={{
-                      uri: values.avatar
-                    }}
-                  />
-                  <TouchableWithoutFeedback
-                    onPress={() => updateAvatar(handleChange('avatar'))}
-                  >
-                    <View style={styles.avatarContainerInteract}>
-                      <LinearGradient
-                        colors={['rgba(0,0,0,0)', 'rgba(0,0,0,.8)']}
-                        start={{ x: 0.5, y: 0 }}
-                        end={{ x: 0.5, y: 1 }}
-                        style={styles.avatarWrapper}
-                      >
-                        <View style={styles.avatarContainer}>
-                          <Text style={styles.avatarEditText}>
-                            {Localize.t('EditProfile.Edit')}
-                          </Text>
-                        </View>
-                      </LinearGradient>
-                    </View>
-                  </TouchableWithoutFeedback>
-                </View>
-                <View style={styles.fieldWrapper}>
-                  <Text style={styles.label}>
-                    {Localize.t('EditProfile.Email')}
-                  </Text>
-                  <CustomInput
-                    value={values.email}
-                    onChangeText={handleChange('email')}
-                  />
-                </View>
-                <View style={styles.fieldWrapper}>
-                  <Text style={styles.label}>
-                    {Localize.t('EditProfile.FirstName')}*
-                  </Text>
-                  <CustomInput
-                    value={values.firstname}
-                    onChangeText={handleChange('firstname')}
-                  />
-                </View>
-                <View style={styles.fieldWrapper}>
-                  <Text style={styles.label}>
-                    {Localize.t('EditProfile.LastName')} *
-                  </Text>
-                  <CustomInput
-                    value={values.lastname}
-                    onChangeText={handleChange('lastname')}
-                  />
-                </View>
-                <View style={styles.fieldWrapper}>
-                  <Text style={styles.label}>
-                    {Localize.t('EditProfile.PhoneNumber')} *
-                  </Text>
-                  <View style={styles.phoneNumberWrapper}>
-                    <PhoneCodePicker
-                      selectedValue={values.country}
-                      listCountry={listCountry}
-                      style={{ flex: 0.35 }}
-                      disabled={true}
-                      onValueChange={handleChange('phonePrefix')}
-                    />
-                    <CustomInput
-                      value={values.phoneSuffix}
-                      style={{ flex: 0.6 }}
-                      onChangeText={handleChange('phoneSuffix')}
-                    />
-                  </View>
-                </View>
-                <RenderPicker
-                  label={Localize.t('EditProfile.Country')}
-                  handleChange={(e) => {
-                    getListRegions(e as string)
-                    handleChange('region')('')
-                    handleChange('city')('')
-                    return handleChange('country')(e)
-                  }}
-                  data={listCountry}
-                  selectedValue={values.country}
+        <Formik initialValues={formInitValue} onSubmit={submit}>
+          {({ handleChange, handleSubmit, values }) => (
+            <Styled.ContentWrapper>
+              <Styled.AvatarContainer>
+                <Styled.Avatar source={{ uri: values.avatar }} />
+                <TouchableWithoutFeedback
+                  onPress={() => updateAvatar(handleChange('avatar'))}
+                >
+                  <Styled.AvatarOverlayContainer>
+                    <Styled.AvatarOverlay>
+                      <Styled.AvatarEditContainer>
+                        <Styled.AvatarEditText>
+                          {t('EditProfile.Edit')}
+                        </Styled.AvatarEditText>
+                      </Styled.AvatarEditContainer>
+                    </Styled.AvatarOverlay>
+                  </Styled.AvatarOverlayContainer>
+                </TouchableWithoutFeedback>
+              </Styled.AvatarContainer>
+              <Styled.Field>
+                <Styled.Label>{t('EditProfile.Email')}</Styled.Label>
+                <CustomInput
+                  value={values.email}
+                  onChangeText={handleChange('email')}
                 />
-                <RenderPicker
-                  data={regions}
-                  label={Localize.t('EditProfile.State')}
-                  handleChange={(e) => {
-                    getListCities(values.country.toString(), e as string)
-                    handleChange('city')('')
-                    return handleChange('region')(e)
-                  }}
-                  selectedValue={values.region}
-                  disabled={!values.country}
+              </Styled.Field>
+              <Styled.Field>
+                <Styled.Label>{t('EditProfile.FirstName')}*</Styled.Label>
+                <CustomInput
+                  value={values.firstname}
+                  onChangeText={handleChange('firstname')}
                 />
-                <RenderPicker
-                  data={cities}
-                  label={Localize.t('EditProfile.City')}
-                  handleChange={handleChange('city')}
-                  selectedValue={values.city}
-                  disabled={!values.region}
+              </Styled.Field>
+              <Styled.Field>
+                <Styled.Label>{t('EditProfile.LastName')} *</Styled.Label>
+                <CustomInput
+                  value={values.lastname}
+                  onChangeText={handleChange('lastname')}
                 />
-                <View style={styles.fieldWrapper}>
-                  <Text style={styles.label}>
-                    {Localize.t('EditProfile.ZipCode')}
-                  </Text>
-                  <CustomInput
-                    value={values.zipcode}
-                    onChangeText={handleChange('zipcode')}
+              </Styled.Field>
+              <Styled.Field>
+                <Styled.Label>{t('EditProfile.PhoneNumber')} *</Styled.Label>
+                <Styled.PhoneNumberWrapper>
+                  <Styled.RegionCodePicker
+                    selectedValue={values.country}
+                    listCountry={listCountry}
+                    onValueChange={handleChange('phonePrefix')}
                   />
-                </View>
-                <View style={styles.fieldWrapper}>
-                  <Text style={styles.label}>
-                    {Localize.t('EditProfile.Address1')} *
-                  </Text>
-                  <CustomInput
-                    value={values.address1}
-                    onChangeText={handleChange('address1')}
+                  <Styled.PhoneNumberInput
+                    value={values.phoneSuffix}
+                    onChangeText={handleChange('phoneSuffix')}
                   />
-                </View>
-                <View style={styles.fieldWrapper}>
-                  <Text style={styles.label}>
-                    {Localize.t('EditProfile.Address2')}
-                  </Text>
-                  <CustomInput
-                    value={values.address2}
-                    onChangeText={handleChange('address2')}
-                  />
-                </View>
-
-                <View style={styles.saveButtonWrapper}>
-                  <Button style={styles.saveButton} onPress={handleSubmit}>
-                    <Text style={styles.saveButtonText}>
-                      {Localize.t('EditProfile.SaveButton')}
-                    </Text>
-                  </Button>
-                </View>
-              </View>
-            )}
-          </Formik>
-        </View>
+                </Styled.PhoneNumberWrapper>
+              </Styled.Field>
+              <RenderPicker
+                label={t('EditProfile.Country')}
+                handleChange={(e) => {
+                  getListRegions(e as string)
+                  handleChange('region')('')
+                  handleChange('city')('')
+                  return handleChange('country')(e)
+                }}
+                data={listCountry}
+                selectedValue={values.country}
+              />
+              <RenderPicker
+                data={regions}
+                label={t('EditProfile.State')}
+                handleChange={(e) => {
+                  getListCities(values.country.toString(), e as string)
+                  handleChange('city')('')
+                  return handleChange('region')(e)
+                }}
+                selectedValue={values.region}
+                disabled={!values.country}
+              />
+              <RenderPicker
+                data={cities}
+                label={t('EditProfile.City')}
+                handleChange={handleChange('city')}
+                selectedValue={values.city}
+                disabled={!values.region}
+              />
+              <Styled.Field>
+                <Styled.Label>{t('EditProfile.ZipCode')}</Styled.Label>
+                <CustomInput
+                  value={values.zipcode}
+                  onChangeText={handleChange('zipcode')}
+                />
+              </Styled.Field>
+              <Styled.Field>
+                <Styled.Label>{t('EditProfile.Address1')} *</Styled.Label>
+                <CustomInput
+                  value={values.address1}
+                  onChangeText={handleChange('address1')}
+                />
+              </Styled.Field>
+              <Styled.Field>
+                <Styled.Label>{t('EditProfile.Address2')}</Styled.Label>
+                <CustomInput
+                  value={values.address2}
+                  onChangeText={handleChange('address2')}
+                />
+              </Styled.Field>
+              <Styled.SaveButtonWrapper>
+                <Styled.SaveButton onPress={handleSubmit}>
+                  <Styled.SaveButtonText>
+                    {t('EditProfile.SaveButton')}
+                  </Styled.SaveButtonText>
+                </Styled.SaveButton>
+              </Styled.SaveButtonWrapper>
+            </Styled.ContentWrapper>
+          )}
+        </Formik>
       </ScrollView>
     </SafeAreaView>
   )
