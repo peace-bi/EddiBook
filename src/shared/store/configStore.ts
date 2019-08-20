@@ -38,7 +38,7 @@ export default function configStore(
 
   const store = createStore(rootReducer, preloadedState, composedEnhancers)
 
-  if (process.env.NODE_ENV !== 'production' && module.hot) {
+  if (module.hot) {
     module.hot.accept('./rootReducer', () => store.replaceReducer(rootReducer))
   }
 

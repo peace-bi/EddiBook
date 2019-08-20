@@ -1,5 +1,5 @@
-import { GetBookDetailSuccess } from 'pages/BookDetail/+state/book-detail.actions'
 import { PlainAction } from 'redux-typed-actions'
+import { GetBookDetail, GetRelatedBook } from './book-detail.actions'
 import { BookDetailInfo } from './book-detail.model'
 
 export interface BookDetailState {
@@ -11,7 +11,7 @@ export const bookDetailInitialState: BookDetailState = {
 }
 
 export function bookDetailReducer(s: BookDetailState, a: PlainAction): BookDetailState {
-  if (GetBookDetailSuccess.is(a)) {
+  if (GetBookDetail.success.is(a)) {
     return {
       ...s,
       detail: {
@@ -21,6 +21,9 @@ export function bookDetailReducer(s: BookDetailState, a: PlainAction): BookDetai
         }
       }
     }
+  }
+  if (GetRelatedBook.is(a)) {
+    return s
   }
 
   return s

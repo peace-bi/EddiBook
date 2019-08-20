@@ -58,7 +58,7 @@ export interface Author {
 
 export interface BookDetailInfo {
   data: BookDetailResponse
-  related: any[]
+  related: RelatedBook[]
 }
 
 export interface RelatedBook {

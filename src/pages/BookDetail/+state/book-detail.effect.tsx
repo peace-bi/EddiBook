@@ -1,11 +1,8 @@
-import {
-  GetBookDetailFail,
-  GetBookDetailSuccess
-} from 'pages/BookDetail/+state/book-detail.actions'
+import * as actions from 'pages/BookDetail/+state/book-detail.actions'
 import { ThunkDispatch } from 'redux-thunk'
 import { PlainAction } from 'redux-typed-actions'
 import { of } from 'rxjs'
-import { catchError, map, tap } from 'rxjs/operators'
+import { catchError, map } from 'rxjs/operators'
 import { requestApi } from 'shared/api'
 import { BookDetailResponse, RelatedBookResponse } from './book-detail.model'
 
@@ -16,9 +13,9 @@ export function getBookDetail(bookId: number) {
       method: 'GET'
     })(BookDetailResponse)
       .pipe(
-        map((book) => dispatch(GetBookDetailSuccess.get(book.result))),
+        map((book) => dispatch(actions.GetBookDetail.success.get(book.result))),
         catchError(() => {
-          return of(dispatch(GetBookDetailFail.get()))
+          return of(dispatch(actions.GetBookDetail.failure.get()))
         })
       )
       .subscribe()
@@ -29,8 +26,8 @@ export function getBookDetail(bookId: number) {
 }
 
 export function getRelatedBook(bookId: number) {
-  console.log('Get related book')
-  function thunk() {
+  function thunk(dispatch: ThunkDispatch<{}, {}, PlainAction>) {
+    dispatch(actions.GetRelatedBook.get())
     return requestApi({
       url: 'library/book/dashboard/related-book/?page=0&size=3',
       method: 'POST',
@@ -39,9 +36,14 @@ export function getRelatedBook(bookId: number) {
       },
       type: 'json'
     })(RelatedBookResponse).pipe(
-      tap((res) => console.log(res.result.content))
+      map((book) => dispatch(actions.GetRelatedBook.success.get(book.result))),
+      catchError(() => {
+        return of(dispatch(actions.GetRelatedBook.failure.get()))
+      })
     ).subscribe()
   }
+
+  thunk.interceptInOffline = true
 
   return thunk
 }

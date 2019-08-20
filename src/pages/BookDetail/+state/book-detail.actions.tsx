@@ -1,9 +1,8 @@
-import { defineAction } from 'redux-typed-actions'
-import { BookDetailResponse } from './book-detail.model'
+import { defineScenarioAction } from 'redux-typed-actions'
+import { BookDetailResponse, RelatedBookResponse } from './book-detail.model'
 
-export const GetBookDetailSuccess = defineAction<BookDetailResponse>(
-  'GetBookDetailSuccess'
+export const GetBookDetail = defineScenarioAction<undefined, BookDetailResponse>(
+  'GetBookDetail'
 )
-export const GetBookDetailFail = defineAction<BookDetailResponse>(
-  'GetBookDetailFail'
-)
+
+export const GetRelatedBook = defineScenarioAction<undefined, RelatedBookResponse>('GetRelatedBook')
