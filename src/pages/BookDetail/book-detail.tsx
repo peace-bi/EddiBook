@@ -5,6 +5,7 @@ import {
   WhiteSpace,
   WingBlank
 } from '@ant-design/react-native'
+import { EddiIcon } from 'shared/util'
 import { Localize } from 'core/localize'
 import { formatBytes } from 'shared/util'
 import { getBookDetail, getRelatedBook } from './+state/book-detail.effect'
@@ -306,6 +307,16 @@ class BookDetail extends React.Component<Props, State> {
                 <Text style={styles.title}>
                   {Localize.t('BookingDetail.BookInfo')}
                 </Text>
+              </View>
+              // Not test
+              <View style={styles.backButtonWrapper}>
+                <Button
+                  activeStyle={{ backgroundColor: 'transparent' }}
+                  style={styles.backButton}
+                  onPress={this.backPress}
+                >
+                  <EddiIcon name="eraser" style={styles.backButtonIcon} />
+                </Button>
               </View>
             </View>
           </View>

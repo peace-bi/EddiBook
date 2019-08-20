@@ -65,7 +65,7 @@ const SignInComponent = () => {
         }
       }
       if (SignInFailed.is(result)) {
-        if (result.payload.error.error === 'invalid_token') {
+        if (result.payload.error.error === 'invalid_grant') {
           setAsyncErrorMessage('Invalid user info') // no-i18n
         }
       }
