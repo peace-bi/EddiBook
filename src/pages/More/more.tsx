@@ -22,14 +22,6 @@ export default function More() {
   useEffect(() => {
     dispatch(GetProfile()).subscribe()
   }, [])
-  useEffect(() => {
-    if (profile) {
-      const {
-        userProfile: { avatar, ...rest }
-      } = profile
-      console.info('+++++++++++++++++++++++++++++++', rest)
-    }
-  })
 
   const signOut = useCallback(() => {
     Storage.getInstance().setJwt('')
@@ -51,7 +43,7 @@ export default function More() {
           <Styled.AvatarContainer>
             <Styled.Avatar
               source={{
-                uri: profile
+                uri: profile && profile.userProfile
                   ? profile.userProfile.avatar
                   : 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
               }}
@@ -59,7 +51,7 @@ export default function More() {
           </Styled.AvatarContainer>
           <Styled.InfoContact>
             <Styled.UserName>
-              {profile
+              {profile && profile.userProfile
                 ? `${profile.userProfile.firstName} ${profile.userProfile.lastName}`
                 : ''}
             </Styled.UserName>

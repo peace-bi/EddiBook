@@ -13,13 +13,13 @@ function ProfileComponent() {
   const { navigate, goBack } = useNavigation()
   const profile = useSelector((s: RootReducer) => s.ProfileState.profile)
 
-  return profile ? (
+  return profile && profile.userProfile ? (
     <SafeAreaView>
       <Styled.PageContainer>
         <Styled.PageWrapper>
           <Styled.BackButtonWrapper>
             <Styled.BackButton onPressIn={() => goBack(null)}>
-              <Styled.BackIcon />
+              <Styled.BackIcon /> 
             </Styled.BackButton>
           </Styled.BackButtonWrapper>
           <Styled.TitleWrapper>
