@@ -9,7 +9,8 @@ export default {
     Read: 'Read',
     Download: 'Download',
     Update: 'Update',
-    OK: 'OK'
+    OK: 'OK',
+    Success: 'Success'
   },
   SignIn: {
     Title: 'Sign In',

@@ -8,7 +8,7 @@ import { useThunkDispatch } from 'shared/util'
 
 import { useNavigation } from 'react-navigation-hooks'
 import { HideLoading, ShowLoading } from 'shared/store/action'
-import { ChangePasswordSuccess, ChangePasswordFailed } from './+state/change-password.actions'
+import { ChangePasswordFailed, ChangePasswordSuccess } from './+state/change-password.actions'
 import { ChangePasswordRequest } from './+state/change-password.effect'
 import { styles } from './change-password.constant'
 

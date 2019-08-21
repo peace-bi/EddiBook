@@ -1,25 +1,8 @@
-import {
-  ActivityIndicator,
-  Button,
-  Icon,
-  WhiteSpace,
-  WingBlank
-} from '@ant-design/react-native'
-import { EddiIcon } from 'shared/util'
+import { ActivityIndicator, Button, Icon, WhiteSpace, WingBlank } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
-import { formatBytes } from 'shared/util'
-import { getBookDetail, getRelatedBook } from './+state/book-detail.effect'
-import { Author, BookDetailResponse } from './+state/book-detail.model'
-import { bookDetailSelector } from './+state/book-detail.selector'
 
 import React from 'react'
-import {
-  Animated,
-  StatusBar,
-  Text,
-  TouchableWithoutFeedback,
-  View
-} from 'react-native'
+import { Animated, StatusBar, Text, TouchableWithoutFeedback, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { useScreens } from 'react-native-screens'
 import { Header, NavigationScreenProps, ScrollView } from 'react-navigation'
@@ -27,16 +10,14 @@ import { connect } from 'react-redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { PlainAction } from 'redux-typed-actions'
 import { getHost } from 'shared/api'
-import {
-  StyledBodyText,
-  StyledCategory,
-  StyledDescMutedText,
-  StyledDescText,
-  StyledTitleText,
-  StyledTouchableText
-} from 'shared/components'
+import { StyledBodyText, StyledCategory, StyledDescMutedText, StyledDescText, StyledTitleText, StyledTouchableText } from 'shared/components'
+import { BookAction } from 'shared/model'
 import { RootReducer } from 'shared/store/rootReducer'
+import { EddiIcon, formatBytes } from 'shared/util'
 import styled, { DefaultTheme } from 'styled-components/native'
+import { getBookDetail, getRelatedBook } from './+state/book-detail.effect'
+import { Author, BookDetailResponse } from './+state/book-detail.model'
+import { bookDetailSelector } from './+state/book-detail.selector'
 import { styles } from './book-detail.constant'
 import { BookActionButton } from './BookAction'
 import { RelatedBook } from './RelatedBook'
@@ -52,9 +33,11 @@ const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
 interface Props extends NavigationScreenProps<any> {
   dispatch: ThunkDispatch<{}, {}, PlainAction>
   book: BookDetailResponse | null
+  bookStatus: BookAction
 }
 
-interface State {}
+interface State {
+}
 
 interface StyledView {
   alignItems?: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline'
@@ -69,7 +52,7 @@ const StyledBookName = styled.Text`
 
 const StyledView = styled.View<StyledView>`
   align-items: ${(props) =>
-    props.alignItems ? props.alignItems : 'flex-start'};
+  props.alignItems ? props.alignItems : 'flex-start'};
   /* padding: 16px; */
 `
 
@@ -124,14 +107,18 @@ const StyledHeader = styled.View`
 const HeaderComponent = Animated.createAnimatedComponent(
   StyledAnimatedHeaderView
 )
+
 class BookDetail extends React.Component<Props, State> {
   static navigationOptions = () => ({
     header: null
   })
   scrollY = new Animated.Value(0)
+  private inputRef: React.RefObject<any>
 
   constructor(props: Props) {
     super(props)
+
+    this.inputRef = React.createRef()
   }
 
   componentDidMount(): void {
@@ -175,13 +162,19 @@ class BookDetail extends React.Component<Props, State> {
     return formatBytes(size)
   }
 
+  deleteBook = () => {
+    if (this.inputRef.current) {
+      this.inputRef.current.deleteBook()
+    }
+  }
+
   render() {
-    const book = this.props.book
+    const { book, bookStatus } = this.props
 
     if (!book) {
       return (
         <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color="#0000ff"/>
         </View>
       )
     }
@@ -206,7 +199,7 @@ class BookDetail extends React.Component<Props, State> {
 
     return (
       <StyledContainer style={styles.container}>
-        <StatusBar translucent={true} backgroundColor="transparent" />
+        <StatusBar translucent={true} backgroundColor="transparent"/>
         <View style={styles.contentWrapper}>
           <ScrollView
             snapToOffsets={[HEADER_MAX_HEIGHT]}
@@ -218,27 +211,27 @@ class BookDetail extends React.Component<Props, State> {
               { nativeEvent: { contentOffset: { y: this.scrollY } } }
             ])}
           >
-            <View style={{ height: 300 + Header.HEIGHT + 52 }} />
+            <View style={{ height: 300 + Header.HEIGHT + 52 }}/>
             <WingBlank>
               <StyledView alignItems={'center'}>
-                <WhiteSpace />
-                <WhiteSpace />
+                <WhiteSpace/>
+                <WhiteSpace/>
                 <StyledBookName>{name}</StyledBookName>
-                <WhiteSpace size="xs" />
+                <WhiteSpace size="xs"/>
                 <StyledDescText>{this.getAuthors(authors)}</StyledDescText>
-                <BookActionButton bookId={bookId} bookUrl={pdf} />
+                <BookActionButton ref={this.inputRef} bookId={bookId} bookUrl={pdf}/>
               </StyledView>
-              <WhiteSpace />
-              <WhiteSpace />
-              <WhiteSpace />
+              <WhiteSpace/>
+              <WhiteSpace/>
+              <WhiteSpace/>
               <StyledHorizontalView alignItems="center">
                 <StyledTitleText>
                   {Localize.t('BookingDetail.Intro')}
                 </StyledTitleText>
                 <StyledCategoryCustom>{categoryName}</StyledCategoryCustom>
               </StyledHorizontalView>
-              <WhiteSpace size="lg" />
-              <WhiteSpace size="xs" />
+              <WhiteSpace size="lg"/>
+              <WhiteSpace size="xs"/>
               <StyledHorizontalView alignItems="center" py-0={true}>
                 <StyledDescMutedText>
                   {this.renderLicenseTime(book)}
@@ -247,17 +240,17 @@ class BookDetail extends React.Component<Props, State> {
                   {Localize.t('BookingDetail.Size', { p: this.getBookSize(bookSize) })}
                 </StyledDescMutedText>
               </StyledHorizontalView>
-              <WhiteSpace size="xs" />
+              <WhiteSpace size="xs"/>
               <StyledDescMutedText>
                 {Localize.t('BookingDetail.Publisher', {
                   p: 'Nhan Van Bookstore'
                 })}
               </StyledDescMutedText>
-              <WhiteSpace size="md" />
+              <WhiteSpace size="md"/>
               <StyledBodyText>{description}</StyledBodyText>
             </WingBlank>
-            <StyledDivider />
-            <WhiteSpace size="md" />
+            <StyledDivider/>
+            <WhiteSpace size="md"/>
             <WingBlank>
               <StyledHorizontalView alignItems="center">
                 <StyledTitleText>
@@ -276,15 +269,15 @@ class BookDetail extends React.Component<Props, State> {
                 </TouchableWithoutFeedback>
               </StyledHorizontalView>
             </WingBlank>
-            <WhiteSpace />
-            <WhiteSpace />
-            <RelatedBook />
-            <WhiteSpace />
-            <WhiteSpace />
+            <WhiteSpace/>
+            <WhiteSpace/>
+            <RelatedBook/>
+            <WhiteSpace/>
+            <WhiteSpace/>
           </ScrollView>
         </View>
         <StyledHeader>
-          <View style={{ height: STATUS_BAR_HEIGHT }} />
+          <View style={{ height: STATUS_BAR_HEIGHT }}/>
           <View
             style={{
               flex: 1,
@@ -300,7 +293,7 @@ class BookDetail extends React.Component<Props, State> {
                   style={styles.backButton}
                   onPress={this.backPress}
                 >
-                  <Icon name="left" style={styles.backButtonIcon} />
+                  <Icon name="left" style={styles.backButtonIcon}/>
                 </Button>
               </View>
               <View style={styles.titleWrapper}>
@@ -308,16 +301,16 @@ class BookDetail extends React.Component<Props, State> {
                   {Localize.t('BookingDetail.BookInfo')}
                 </Text>
               </View>
-              // Not test
-              <View style={styles.backButtonWrapper}>
-                <Button
-                  activeStyle={{ backgroundColor: 'transparent' }}
-                  style={styles.backButton}
-                  onPress={this.backPress}
-                >
-                  <EddiIcon name="eraser" style={styles.backButtonIcon} />
-                </Button>
-              </View>
+              {bookStatus === BookAction.DOWNLOADED || bookStatus === BookAction.UPDATE ?
+                <View style={[styles.backButtonWrapper]}>
+                  <Button
+                    activeStyle={{ backgroundColor: 'transparent' }}
+                    style={[styles.backButton, { alignSelf: 'flex-end' }]}
+                    onPress={this.deleteBook}
+                  >
+                    <EddiIcon name="eraser" style={styles.backButtonIcon} size={16}/>
+                  </Button>
+                </View> : null}
             </View>
           </View>
           <Animated.View style={{ opacity, top: headerHeightInverted }}>
@@ -337,7 +330,7 @@ class BookDetail extends React.Component<Props, State> {
             height: headerHeightExtended
           }}
         >
-          <StyledAnimatedHeader />
+          <StyledAnimatedHeader/>
           <Animated.View style={{ opacity, flex: 1 }}>
             <FastImage
               style={{
@@ -362,6 +355,7 @@ class BookDetail extends React.Component<Props, State> {
 export default connect((state: RootReducer, props: any) => {
   const bookId = props.navigation.getParam('bookId')
   return {
-    book: bookDetailSelector.getBookDetail(bookId)(state)
+    book: bookDetailSelector.getBookDetail(bookId)(state),
+    bookStatus: state.BookShelfState.actionStatus[bookId.toString()]
   }
 })(BookDetail)

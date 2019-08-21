@@ -1,4 +1,4 @@
-import { Region, City } from 'pages/Profile/profile.model'
+import { City, Region } from 'pages/Profile/profile.model'
 import { defineAction } from 'redux-typed-actions'
 
 export const UpdateProfileSuccess = defineAction<any>('UPDATE_PROFILE_SUCCESS')

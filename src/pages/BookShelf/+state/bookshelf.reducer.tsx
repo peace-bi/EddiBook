@@ -6,7 +6,7 @@ import {
 } from 'pages/BookDetail/+state/book-detail.reducer'
 import { Book } from 'pages/BookShelf/+model'
 import {
-  ChangeDownActionStatus,
+  ChangeActionStatus,
   GenerateBookActionStatus,
   GetBookShelfSuccess
 } from 'pages/BookShelf/+state/bookshelf.actions'
@@ -40,7 +40,7 @@ function bookShelfReducer(s = initialState, a: PlainAction): BookShelfState {
       actionStatus: a.payload
     }
   }
-  if (ChangeDownActionStatus.is(a)) {
+  if (ChangeActionStatus.is(a)) {
     return {
       ...s,
       actionStatus: {

@@ -83,7 +83,7 @@ const SignInComponent = () => {
           validate={validate}
           initialValues={{
             email: 'dat.nguyen-huu@banvien.com.vn', // dat.nguyen-huu@banvien.com.vn
-            password: '2EF^ttHR' // 2EF^ttHR
+            password: '12345678@Xx' // 2EF^ttHR
           }}
           onSubmit={submit}
         >

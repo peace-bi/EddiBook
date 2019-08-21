@@ -8,7 +8,7 @@ export const GetBookShelfFail = defineAction<void>('GetBookShelfFail')
 export const GenerateBookActionStatus = defineAction<Dictionary<BookAction>>(
   'GenerateBookActionStatus'
 )
-export const ChangeDownActionStatus = defineAction<{
+export const ChangeActionStatus = defineAction<{
   bookId: number
   status: BookAction
-}>('ChangeDownActionStatus')
+}>('ChangeActionStatus')

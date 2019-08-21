@@ -3,7 +3,7 @@ import { profileReducer } from 'pages/Profile/+state/profile.reducer'
 import { signInReducer } from 'pages/SignIn/+state/sign-in.reducer'
 import { signUpReducer } from 'pages/SignUp/+state/sign-up.reducer'
 import { reducer as network } from 'react-native-offline'
-import { combineReducers } from 'redux'
+import { combineReducers, Reducer } from 'redux'
 import { PlainAction } from 'redux-typed-actions'
 
 import { HideLoading, ShowLoading } from './action'
@@ -40,16 +40,25 @@ export function userReducer(state = initialState, action: PlainAction) {
   return state
 }
 
+export interface RootReducer {
+  SignInState: ReturnType<typeof signInReducer>
+  SignUpState: ReturnType<typeof signUpReducer>
+  AppState: ReturnType<typeof appReducer>
+  UserState: ReturnType<typeof userReducer>
+  BookShelfState: ReturnType<typeof bookShelfReducer>
+  network: ReturnType<typeof network>,
+  ProfileState: ReturnType<typeof profileReducer>
+}
+
 const combinedReducer = {
   SignInState: signInReducer,
   SignUpState: signUpReducer,
-  ProfileState: profileReducer,
   AppState: appReducer,
   UserState: userReducer,
   BookShelfState: bookShelfReducer,
-  network
+  network,
+  ProfileState: profileReducer,
 }
 
-const rootReducer = combineReducers(combinedReducer)
-export type RootReducer = ReturnType<typeof rootReducer>
+const rootReducer: Reducer<RootReducer> = combineReducers(combinedReducer)
 export default rootReducer
