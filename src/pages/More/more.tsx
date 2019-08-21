@@ -74,7 +74,7 @@ export default function More() {
             {Localize.t('More.ChangePassword')}
           </Item>
           <Item
-            onPress={() => navigate('EditProfile')}
+            onPress={() => navigate('Settings')}
             thumb={<Styled.ListIcon name="settings" />}
             arrow={'horizontal'}
           >
