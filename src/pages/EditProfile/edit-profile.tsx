@@ -1,16 +1,36 @@
 import { Modal } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
 import { Formik } from 'formik'
-import { GetProfile, UpdateProfileFailed, UpdateProfileSuccess } from 'pages/Profile'
+import {
+  GetProfile,
+  UpdateProfileFailed,
+  UpdateProfileSuccess
+} from 'pages/Profile'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Alert, PermissionsAndroid, SafeAreaView, ScrollView, TouchableWithoutFeedback } from 'react-native'
+import {
+  Alert,
+  PermissionsAndroid,
+  SafeAreaView,
+  ScrollView,
+  TouchableWithoutFeedback
+} from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 import { useNavigation } from 'react-navigation-hooks'
 import { useSelector } from 'react-redux'
-import { CustomInput, RootReducer, useThunkDispatch } from 'shared/shared-index'
+import {
+  CustomInput,
+  PickerModal,
+  RootReducer,
+  useThunkDispatch
+} from 'shared/shared-index'
 
-import { PickerModal } from './+component'
-import { getCities, GetCitiesSuccess, getRegions, GetRegionSuccess, updateProfile } from './+state'
+import {
+  getCities,
+  GetCitiesSuccess,
+  getRegions,
+  GetRegionSuccess,
+  updateProfile
+} from './+state'
 import { listCountry, Styled } from './edit-profile.constant'
 import { SubmitForm } from './edit-profile.model'
 
