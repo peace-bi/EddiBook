@@ -2,8 +2,6 @@ import { Icon } from '@ant-design/react-native'
 import React from 'react'
 import { Picker, Text, View, ViewStyle } from 'react-native'
 
-import { phoneCodePickerStyles as styles } from '../edit-profile.constant'
-
 interface MCountry {
   value: string
   phoneCode: string
@@ -35,7 +33,6 @@ export function PhoneCodePicker(props: Props) {
       }}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-        {/* <View style={{ flex: 0.4 }}></View> */}
         <Text
           style={{
             flex: 0.6,
@@ -56,7 +53,16 @@ export function PhoneCodePicker(props: Props) {
           <Icon name="caret-down" style={{ textAlign: 'right' }} />
         </View>
       </View>
-      <View style={styles.picker}>
+      <View
+        style={{
+          top: 0,
+          left: 0,
+          right: 0,
+          position: 'absolute',
+          backgroundColor: 'white',
+          opacity: 0
+        }}
+      >
         <Picker
           enabled={!props.disabled}
           mode="dialog"
