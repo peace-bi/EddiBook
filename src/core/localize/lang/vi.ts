@@ -95,5 +95,11 @@ export default {
     AboutUs: 'About Us',
     TermsConditions: 'Terms & Conditions',
     Logout: 'Logout'
+  },
+  Setting: {
+    Language: 'Language',
+    PageTransition: 'Page transition',
+    DarkMode: 'Dark mode',
+    Notification: 'Notification'
   }
 }

@@ -5,6 +5,7 @@ import { Downloaded } from 'pages/Downloaded'
 import EditProfile from 'pages/EditProfile/edit-profile'
 import More from 'pages/More/more'
 import Profile from 'pages/Profile/profile'
+import Settings from 'pages/Setting/setting'
 import { ViewPDF } from 'pages/ViewPDF'
 import React from 'react'
 import {
@@ -84,6 +85,9 @@ const navigation = createStackNavigator(
     },
     Profile: {
       screen: Profile
+    },
+    Settings: {
+      screen: Settings
     },
     ViewPDF
   },
