@@ -1,3 +1,5 @@
+import * as io from 'io-ts'
+import { BookShelfFilter, BookShelfFilterResponse, Filter } from 'pages/BookShelf/+model/filter'
 import {
   GenerateBookActionStatus,
   GetBookShelfFail,
@@ -5,25 +7,31 @@ import {
 } from 'pages/BookShelf/+state/bookshelf.actions'
 import { ThunkDispatch } from 'redux-thunk'
 import { PlainAction } from 'redux-typed-actions'
-import { of } from 'rxjs'
+import { forkJoin, Observable, of } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 import { requestApi } from 'shared/api'
 import { BookAction } from 'shared/model'
 import { Storage } from 'shared/storage'
-import { BookResponse } from '../+model'
+import { BookResponse, FilterParams } from '../+model'
 
-export function getBookShelf() {
+export function getBookShelf(searchParams?: FilterParams) {
   function thunk(dispatch: ThunkDispatch<{}, {}, PlainAction>) {
-    // return of(mock.content)
+    const filters = searchParams ? {
+      filter: {
+        contains: searchParams.search
+      }
+    } : undefined
+
     return requestApi({
       url: 'library/book/dashboard',
       method: 'POST',
       param: {
+        ...filters,
         // organizationIds: [1, 2, 3],
         // categoryIds: [1, 2, 3],
         // authorIds: [10, 11, 12, 13, 14, 15, 16, 17, 18],
         deviceId: 'ab12cd667fee4e',
-        downloadedOnly: false
+        downloadedOnly: false,
       },
       type: 'json'
     })(BookResponse)
@@ -61,6 +69,39 @@ export function getBookShelf() {
   }
 
   thunk.interceptInOffline = true
+  return thunk
+}
+
+export function getBookShelfFilter() {
+  function thunk(): Observable<Filter | null> {
+    return forkJoin([
+      requestApi({
+        url: 'library/bookshelfmanagement/bookshelvenames',
+        method: 'GET',
+        type: 'json'
+      })(BookShelfFilterResponse),
+      requestApi({
+        url: 'library/category/all',
+        method: 'GET',
+        type: 'json'
+      })(io.any),
+    ]).pipe(
+      map(([bookShelf]) => {
+        const bookFilter = bookShelf.result.content.reduce((sum, curr) => {
+          sum[curr.bookshelfId] = curr
+          return sum
+        }, {} as Record<string, BookShelfFilter>)
+
+        return {
+          bookShelf: bookFilter
+        }
+      }),
+      catchError(() => {
+        return of(null)
+      })
+    )
+  }
+
   return thunk
 }
 

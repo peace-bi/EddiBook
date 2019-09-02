@@ -19,7 +19,7 @@ function ProfileComponent() {
         <Styled.PageWrapper>
           <Styled.BackButtonWrapper>
             <Styled.BackButton onPressIn={() => goBack(null)}>
-              <Styled.BackIcon /> 
+              <Styled.BackIcon />
             </Styled.BackButton>
           </Styled.BackButtonWrapper>
           <Styled.TitleWrapper>

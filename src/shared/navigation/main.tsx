@@ -1,5 +1,6 @@
 import BookDetail from 'pages/BookDetail/book-detail'
 import { BookShelf } from 'pages/BookShelf'
+import { BookShelfFilter } from 'pages/BookShelf/BookShelfFilter'
 import { ChangePassword } from 'pages/ChangePassword/change-password'
 import { Downloaded } from 'pages/Downloaded'
 import EditProfile from 'pages/EditProfile/edit-profile'
@@ -89,7 +90,8 @@ const navigation = createStackNavigator(
     Settings: {
       screen: Settings
     },
-    ViewPDF
+    ViewPDF,
+    BookShelfFilter
   },
   {
     headerLayoutPreset: 'center',

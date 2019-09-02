@@ -40,7 +40,7 @@ export const useFileAction = (
           .config({
             path: `${savePath}/${bookId}.pdf`
           })
-          .fetch('GET', url, {
+          .fetch('GET', encodeURI(url), {
             Authorization: `bearer ${jwt}`
           })
           .progress({ count: 50 }, (received, total) => {
@@ -58,7 +58,7 @@ export const useFileAction = (
             )
             storage.setFileId(bookId.toString())
           })
-          .catch(() => {
+          .catch((err) => {
             dispatch(
               ChangeActionStatus.get({
                 bookId,

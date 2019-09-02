@@ -4,6 +4,7 @@ import { bookshelfSelector } from 'pages/BookShelf/+state/bookshelf.selector'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { FlatList, TouchableWithoutFeedback } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
+import { useNavigation } from 'react-navigation-hooks'
 import { useSelector } from 'react-redux'
 import { BookAction, TabType } from 'shared/model'
 import { RootReducer } from 'shared/store/rootReducer'
@@ -19,7 +20,9 @@ const useBook = () => {
   const dispatch = useThunkDispatch()
 
   useEffect(() => {
-    const bookshelfThunk = dispatch(getBookShelf())
+    const bookshelfThunk = dispatch(getBookShelf({
+      search
+    }))
 
     return () => {
       bookshelfThunk.unsubscribe()
@@ -93,6 +96,7 @@ export const BookShelf = () => {
     ({ item, index }) => renderItem({ item, index, bookActionStatus }),
     [bookActionStatus]
   )
+  const { navigate } = useNavigation()
   // const handleActionKey = useCallback(() => {
   //   Modal.prompt(
   //     'Access Code',
@@ -114,7 +118,9 @@ export const BookShelf = () => {
       <Styled.Header>
         <Search search={book.search} />
         <Styled.HeaderActionContainer>
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPressIn={() => {
+            navigate('BookShelfFilter')
+          }}>
             <Styled.HeaderActionIcon name="filter" size={28} />
           </TouchableWithoutFeedback>
           {/*<TouchableWithoutFeedback onPress={handleActionKey}>*/}

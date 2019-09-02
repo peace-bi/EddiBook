@@ -35,3 +35,7 @@ export const Book: io.Type<Book> = io.type({
 export const BookResponse = io.type({
   content: io.array(Book)
 })
+
+export interface FilterParams {
+  search: string
+}

@@ -10,6 +10,7 @@
 import { NoticeBar, Provider as AntProvider } from '@ant-design/react-native/'
 import enUS from '@ant-design/react-native/es/locale-provider/en_US'
 import React from 'react'
+import { Platform, UIManager } from 'react-native'
 import * as RNLocalize from 'react-native-localize'
 import { ReduxNetworkProvider } from 'react-native-offline'
 import { useScreens } from 'react-native-screens'
@@ -58,6 +59,10 @@ export default class App extends React.Component<{}, State> {
       theme: Theme.getTheme()
     }
     RNLocalize.addEventListener('change', this.handleLocalizationChange)
+
+    if (Platform.OS === 'android' &&  UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true)
+    }
   }
 
   handleLocalizationChange = () => {
