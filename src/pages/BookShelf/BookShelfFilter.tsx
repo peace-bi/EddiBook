@@ -1,5 +1,6 @@
-import { List } from '@ant-design/react-native'
-import { BookShelfFilter as BookFilter, Filter } from 'pages/BookShelf/+model'
+import { Button, List } from '@ant-design/react-native'
+import { Localize } from 'core/localize'
+import { BookShelfFilter as BookFilter, CategoryFilter, Filter } from 'pages/BookShelf/+model'
 import { getBookShelfFilter } from 'pages/BookShelf/+state/bookshelf.effect'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView, ScrollView, Text, View } from 'react-native'
@@ -14,13 +15,13 @@ const CategoryContainer = styled.View`
 
 const renderBookShelf = (bookFilter: Record<string, BookFilter>, setFilter: React.Dispatch<React.SetStateAction<Filter | null>>) => {
   const isCheckedAll = Object.keys(bookFilter).every((key) => {
-    return bookFilter[key].isChecked
+    return !!bookFilter[key].isChecked
   })
 
   return <List style={{ marginTop: 2 }}>
-    <Text style={{ marginLeft: 16, marginTop: 12, marginBottom: 8, fontWeight: 'bold' }}>BookShelf</Text>
-    {
-      Object.keys(bookFilter).map((key) => {
+    <Text style={{ marginLeft: 16, marginTop: 12, marginBottom: 8, fontWeight: 'bold' }}>{Localize.t('Common.BookShelf')}</Text>
+    {(() => {
+      return Object.keys(bookFilter).map((key) => {
         const book = bookFilter[key]
         return <CheckBoxItem key={book.bookshelfId} checked={book.isChecked} onToggle={(isChecked) => {
           setFilter((prevState) => prevState ? ({
@@ -34,11 +35,11 @@ const renderBookShelf = (bookFilter: Record<string, BookFilter>, setFilter: Reac
 
             }
           }) : null)
-        } }>
+        }}>
           <Text style={{ marginLeft: 8 }}>{book.name}</Text>
         </CheckBoxItem>
-      })
-    }
+      }) as any
+    })()}
     <CheckBoxItem checked={isCheckedAll} onToggle={(isChecked) => {
       setFilter((prevState) => {
         if (!prevState) {
@@ -65,25 +66,36 @@ const renderBookShelf = (bookFilter: Record<string, BookFilter>, setFilter: Reac
   </List>
 }
 
-const renderCategory = () => {
-  return <CategoryContainer style={{ marginTop: 12, paddingVertical: 16, paddingHorizontal: 12}}>
-    <Text style={{ marginLeft: 4, marginBottom: 12, fontWeight: 'bold',  backgroundColor: 'white' }}>BookShelf</Text>
+const renderCategory = (categoryFilter: Record<string, CategoryFilter>, setFilter: React.Dispatch<React.SetStateAction<Filter | null>>) => {
+  return <CategoryContainer style={{ marginTop: 12, paddingVertical: 16, paddingHorizontal: 12 }}>
+    <Text style={{ marginLeft: 4, marginBottom: 12, fontWeight: 'bold', backgroundColor: 'white' }}>{Localize.t('Common.Category')}</Text>
     <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-      <SelectableTag>Art & Music</SelectableTag>
-      <SelectableTag>Business</SelectableTag>
-      <SelectableTag>Kids</SelectableTag>
-      <SelectableTag>History</SelectableTag>
-      <SelectableTag>Literature</SelectableTag>
-      <SelectableTag>Example</SelectableTag>
-      <SelectableTag>Example</SelectableTag>
-      <SelectableTag>Example</SelectableTag>
+      {
+        Object.keys(categoryFilter).map((key) => {
+          const item = categoryFilter[key]
+
+          return <SelectableTag key={item.bookCategoryId}  checked={item.isChecked} onChange={(isChecked) => {
+            setFilter((prevState) => prevState ? ({
+              ...prevState,
+              category: {
+                ...prevState.category,
+                [key]: {
+                  ...prevState.category[key],
+                  isChecked
+                }
+
+              }
+            }) : null)
+          }}>{item.name}</SelectableTag>
+        })
+      }
     </View>
   </CategoryContainer>
 }
 
 const renderAuthor = () => {
   return <List style={{ marginTop: 12 }}>
-    <Text style={{ marginLeft: 16, marginTop: 12, marginBottom: 8, fontWeight: 'bold' }}>Author</Text>
+    <Text style={{ marginLeft: 16, marginTop: 12, marginBottom: 8, fontWeight: 'bold' }}>{Localize.t('Common.Author')}</Text>
     <CheckBoxItem>
       <Text style={{ marginLeft: 8 }}>The secret of success</Text>
     </CheckBoxItem>
@@ -92,7 +104,7 @@ const renderAuthor = () => {
 
 const renderPublisher = () => {
   return <List style={{ marginTop: 12 }}>
-    <Text style={{ marginLeft: 16, marginTop: 12, marginBottom: 8, fontWeight: 'bold' }}>Publisher</Text>
+    <Text style={{ marginLeft: 16, marginTop: 12, marginBottom: 8, fontWeight: 'bold' }}>{Localize.t('Common.Publisher')}</Text>
     <CheckBoxItem>
       <Text style={{ marginLeft: 8 }}>The secret of success</Text>
     </CheckBoxItem>
@@ -102,19 +114,28 @@ const renderPublisher = () => {
   </List>
 }
 
-// interface Filter {
-//   [key: string]: string
-// }
-
 export const BookShelfFilter = () => {
+  const [backUpData, setBackUpData] = useState<Filter | null>(null)
   const [filter, setFilter] = useState<Filter | null>(null)
   const dispatch = useThunkDispatch()
 
   useEffect(() => {
     const filterSubs = dispatch(getBookShelfFilter()).pipe(
-      tap((result) => {
+      tap((result: Filter | null) => {
         if (result) {
-          setFilter(result)
+          const { bookShelf, category, author, publisher } = result
+          setBackUpData({
+            category: {...category},
+            bookShelf: {...bookShelf},
+            author: {...author},
+            publisher: {...publisher}
+          })
+          setFilter({
+            category: {...category},
+            bookShelf: {...bookShelf},
+            author: {...author},
+            publisher: {...publisher}
+          })
         }
       })
     ).subscribe()
@@ -130,11 +151,15 @@ export const BookShelfFilter = () => {
 
   return <SafeAreaView>
     <ScrollView>
-      <View style={{ flex: 1, backgroundColor: '#F2F3F5'}}>
+      <View style={{ flex: 1, backgroundColor: '#F2F3F5' }}>
         {renderBookShelf(filter.bookShelf, setFilter)}
-        {renderCategory()}
+        {renderCategory(filter.category, setFilter)}
         {renderAuthor()}
         {renderPublisher()}
+        <Button onPress={() => {
+          setFilter(backUpData)
+        }
+        }>Reset all</Button>
       </View>
     </ScrollView>
   </SafeAreaView>

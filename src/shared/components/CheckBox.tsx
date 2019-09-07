@@ -32,9 +32,9 @@ export const CheckBox = forwardRef((props: Props, ref: any) => {
   }, [checked])
 
   useEffect(() => {
-    if (initialChecked !== undefined && initialChecked !== checked) {
+    if (initialChecked !== checked) {
       LayoutAnimation.easeInEaseOut()
-      setChecked(initialChecked)
+      setChecked(initialChecked || false)
     }
   }, [initialChecked])
 

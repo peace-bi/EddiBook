@@ -17,7 +17,6 @@ import { useScreens } from 'react-native-screens'
 import { SafeAreaView } from 'react-navigation'
 import { Provider, useSelector } from 'react-redux'
 import { AnyAction, Store } from 'redux'
-import { PersistPartial } from 'redux-persist/es/persistReducer'
 import { Persistor } from 'redux-persist/es/types'
 import { PersistGate } from 'redux-persist/integration/react'
 import { LoadingComponent } from 'shared/components/GlobalLoading'
@@ -35,7 +34,7 @@ useScreens(false)
 interface State {
   theme: Theme
   isLoadingPersist: boolean
-  storePersist: [Store<PersistPartial, AnyAction>, Persistor]
+  storePersist: [Store<unknown, AnyAction>, Persistor]
 }
 
 const NetworkNotice = () => {

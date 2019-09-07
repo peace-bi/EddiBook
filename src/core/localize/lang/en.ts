@@ -10,7 +10,11 @@ export default {
     Download: 'Download',
     Update: 'Update',
     OK: 'OK',
-    Success: 'Success'
+    Success: 'Success',
+    BookShelf: 'BookShelf',
+    Category: 'Category',
+    Author: 'Author',
+    Publisher: 'Publisher'
   },
   SignIn: {
     Title: 'Sign In',

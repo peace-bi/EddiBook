@@ -39,7 +39,7 @@ const SignInComponent = () => {
   const passwordInput = useRef<CustomInput>(null)
   const dispatch = useThunkDispatch()
   const { navigate } = useNavigation()
-  Storage.getInstance().setJwt('')
+  Storage.getInstance().removeToken()
   const navigateSignUp = useCallback(() => {
     navigate('SignUp')
   }, [])
@@ -50,7 +50,10 @@ const SignInComponent = () => {
         const signInResult = result.payload.result
         if (signInResult.usergroup === 'CUSTOMER') {
           navigate('MainStack')
-          Storage.getInstance().setJwt(signInResult.access_token)
+          Storage.getInstance().setToken({
+            jwt: signInResult.access_token,
+            refresh: signInResult.refresh_token
+          })
         } else {
           Modal.alert(
             Localize.t('SignIn.Failed'),

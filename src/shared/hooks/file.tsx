@@ -29,7 +29,7 @@ export const useFileAction = (
   const dispatch = useThunkDispatch()
 
   const doAction = useCallback(async () => {
-    const jwt = await storage.getJwt()
+    const { jwt } = await storage.getToken()
 
     switch (status) {
       case BookAction.DOWNLOAD:
@@ -58,7 +58,7 @@ export const useFileAction = (
             )
             storage.setFileId(bookId.toString())
           })
-          .catch((err) => {
+          .catch(() => {
             dispatch(
               ChangeActionStatus.get({
                 bookId,

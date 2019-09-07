@@ -1,5 +1,14 @@
-import * as io from 'io-ts'
-import { BookShelfFilter, BookShelfFilterResponse, Filter } from 'pages/BookShelf/+model/filter'
+import {
+  AuthorFilter,
+  AuthorFilterResponse,
+  BookShelfFilter,
+  BookShelfFilterResponse,
+  CategoryFilter,
+  CategoryFilterResponse,
+  Filter,
+  PublisherFilter,
+  PublisherFilterResponse
+} from 'pages/BookShelf/+model/filter'
 import {
   GenerateBookActionStatus,
   GetBookShelfFail,
@@ -31,7 +40,7 @@ export function getBookShelf(searchParams?: FilterParams) {
         // categoryIds: [1, 2, 3],
         // authorIds: [10, 11, 12, 13, 14, 15, 16, 17, 18],
         deviceId: 'ab12cd667fee4e',
-        downloadedOnly: false,
+        downloadedOnly: false
       },
       type: 'json'
     })(BookResponse)
@@ -84,16 +93,44 @@ export function getBookShelfFilter() {
         url: 'library/category/all',
         method: 'GET',
         type: 'json'
-      })(io.any),
+      })(CategoryFilterResponse),
+      requestApi({
+        url: 'library/author/all',
+        method: 'GET',
+        type: 'json'
+      })(AuthorFilterResponse),
+      requestApi({
+        url: 'account/clients/all',
+        method: 'GET',
+        type: 'json'
+      })(PublisherFilterResponse)
     ]).pipe(
-      map(([bookShelf]) => {
+      map(([bookShelf, category, author, publisher]) => {
         const bookFilter = bookShelf.result.content.reduce((sum, curr) => {
           sum[curr.bookshelfId] = curr
           return sum
         }, {} as Record<string, BookShelfFilter>)
 
+        const categoryFilter = category.result.content.reduce((sum, curr) => {
+          sum[curr.bookCategoryId] = curr
+          return sum
+        }, {} as Record<string, CategoryFilter>)
+
+        const authorFilter = author.result.content.reduce((sum, curr) => {
+          sum[curr.authorId] = curr
+          return sum
+        }, {} as Record<string, AuthorFilter>)
+
+        const publisherFilter = publisher.result.content.reduce((sum, curr) => {
+          sum[curr.organizationId] = curr
+          return sum
+        }, {} as Record<string, PublisherFilter>)
+
         return {
-          bookShelf: bookFilter
+          bookShelf: bookFilter,
+          category: categoryFilter,
+          author: authorFilter,
+          publisher: publisherFilter
         }
       }),
       catchError(() => {

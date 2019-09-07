@@ -7,8 +7,9 @@ export const AuthLoading = () => {
 
   useEffect(() => {
     Storage.getInstance()
-      .getJwt()
-      .then((jwt) => {
+      .getToken()
+      .then((token) => {
+        const {jwt} = token
         if (jwt) {
           navigation.navigate('MainStack')
         } else {

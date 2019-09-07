@@ -24,7 +24,7 @@ export default function More() {
   }, [])
 
   const signOut = useCallback(() => {
-    Storage.getInstance().setJwt('')
+    Storage.getInstance().removeToken()
     navigate('AuthStack')
   }, [])
 

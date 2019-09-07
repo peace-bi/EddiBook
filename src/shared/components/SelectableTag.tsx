@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { TouchableWithoutFeedback } from 'react-native'
 import { useNavigation } from 'react-navigation-hooks'
 import styled from 'styled-components/native'
@@ -16,11 +16,12 @@ const ViewStyle = styled.View`
 interface Props {
   children: string
   onChange?: (isSelected: boolean) => void
+  checked?: boolean
 }
 
 export const SelectableTag = (props: Props) => {
-  const { children, onChange } = props
-  const [checked, setChecked] = useState(false)
+  const { children, onChange, checked: initialChecked } = props
+  const [checked, setChecked] = useState(initialChecked || false)
   const { getScreenProps } = useNavigation()
   const theme = getScreenProps().theme
   const handleClick = useCallback(() => {
@@ -32,6 +33,12 @@ export const SelectableTag = (props: Props) => {
     }
 
   }, [checked])
+
+  useEffect(() => {
+    if (initialChecked !== checked) {
+      setChecked(initialChecked || false)
+    }
+  }, [initialChecked])
 
   return <TouchableWithoutFeedback onPress={handleClick}>
     <ViewStyle style={checked ? { backgroundColor: theme.tag_container_selected_color } : { backgroundColor: theme.tag_container_color }}>
