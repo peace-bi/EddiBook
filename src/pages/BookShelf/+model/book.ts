@@ -1,4 +1,5 @@
 import * as io from 'io-ts'
+import { FilterRequest } from 'pages/BookShelf/+model/filter'
 
 export interface Book {
   bookId: number
@@ -38,4 +39,5 @@ export const BookResponse = io.type({
 
 export interface FilterParams {
   search: string
+  filter: FilterRequest
 }

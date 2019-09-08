@@ -13,4 +13,6 @@ export const ChangeActionStatus = defineAction<{
   status: BookAction
 }>('ChangeActionStatus')
 
-export const GetBookShelfFilter = defineScenarioAction<undefined, Filter>('BookShelfFilterArray')
+export const GetBookShelfFilter = defineScenarioAction<undefined, Filter>(
+  'BookShelfFilterArray'
+)

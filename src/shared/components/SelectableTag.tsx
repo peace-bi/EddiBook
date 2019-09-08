@@ -31,7 +31,6 @@ export const SelectableTag = (props: Props) => {
     if (onChange) {
       onChange(afterCheck)
     }
-
   }, [checked])
 
   useEffect(() => {
@@ -40,9 +39,25 @@ export const SelectableTag = (props: Props) => {
     }
   }, [initialChecked])
 
-  return <TouchableWithoutFeedback onPress={handleClick}>
-    <ViewStyle style={checked ? { backgroundColor: theme.tag_container_selected_color } : { backgroundColor: theme.tag_container_color }}>
-      <TextStyle style={checked ? { color: theme.tag_text_selected_color } : {color: theme.tag_text_color}}>{children}</TextStyle>
-    </ViewStyle>
-  </TouchableWithoutFeedback>
+  return (
+    <TouchableWithoutFeedback onPress={handleClick}>
+      <ViewStyle
+        style={
+          checked
+            ? { backgroundColor: theme.tag_container_selected_color }
+            : { backgroundColor: theme.tag_container_color }
+        }
+      >
+        <TextStyle
+          style={
+            checked
+              ? { color: theme.tag_text_selected_color }
+              : { color: theme.tag_text_color }
+          }
+        >
+          {children}
+        </TextStyle>
+      </ViewStyle>
+    </TouchableWithoutFeedback>
+  )
 }

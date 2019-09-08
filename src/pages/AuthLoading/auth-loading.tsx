@@ -9,7 +9,7 @@ export const AuthLoading = () => {
     Storage.getInstance()
       .getToken()
       .then((token) => {
-        const {jwt} = token
+        const { jwt } = token
         if (jwt) {
           navigation.navigate('MainStack')
         } else {

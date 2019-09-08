@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import { BookAction, TabType } from 'shared/model'
 import { RootReducer } from 'shared/store/rootReducer'
 import { useThunkDispatch } from 'shared/util'
-import { Book, BookRenderItem } from './+model'
+import { Book, BookRenderItem, Filter, FilterRequest } from './+model'
 import { getBookShelf } from './+state/bookshelf.effect'
 import * as Styled from './BookShelf.contant'
 import { BookShelfItem } from './BookShelfItem'
@@ -17,21 +17,30 @@ import { BookShelfItem } from './BookShelfItem'
 const useBook = () => {
   const books = useSelector((s: RootReducer) => s.BookShelfState.list)
   const [search, setSearch] = useState<string>('')
+  const [filter, setFilter] = useState<FilterRequest>({
+    authorIds: [],
+    categoryIds: [],
+    organizationIds: []
+  })
   const dispatch = useThunkDispatch()
 
   useEffect(() => {
-    const bookshelfThunk = dispatch(getBookShelf({
-      search
-    }))
+    const bookshelfThunk = dispatch(
+      getBookShelf({
+        search,
+        filter
+      })
+    )
 
     return () => {
       bookshelfThunk.unsubscribe()
     }
-  }, [search])
+  }, [search, filter])
 
   return {
     value: books,
-    search: useCallback((text: string) => setSearch(text), [])
+    search: useCallback((text: string) => setSearch(text), []),
+    applyFilter: useCallback((data: FilterRequest) => setFilter(data), [filter])
   }
 }
 
@@ -88,8 +97,10 @@ const renderItem = ({
 )
 
 export const BookShelf = () => {
-  // Hook get book from api
-  const book = useBook()
+  // const
+  const book = useBook() // Hook get book from api
+  const [filterData, setFilterData] = useState<Filter | null>(null)
+
   // Using for change book item status
   const bookActionStatus = useSelector(bookshelfSelector.getBookActionStatus)
   const renderBookItem = useCallback(
@@ -112,15 +123,43 @@ export const BookShelf = () => {
   //   )
   // }, [])
 
+  const onFilterApply = (data: Filter | null) => {
+    const filterData: FilterRequest = {
+      organizationIds: [],
+      categoryIds: [],
+      authorIds: []
+    }
+
+    if (data) {
+      const { category, author } = data
+
+      filterData.categoryIds = Object.keys(category)
+        .filter((key) => category[key].isChecked)
+        .map((key) => category[key].bookCategoryId)
+
+      filterData.authorIds = Object.keys(author)
+        .filter((key) => author[key].isChecked)
+        .map((key) => author[key].authorId)
+    }
+
+    book.applyFilter(filterData)
+    setFilterData(data)
+  }
+
   return (
     <Styled.HeaderSafeView>
       <Styled.StatusBar />
       <Styled.Header>
         <Search search={book.search} />
         <Styled.HeaderActionContainer>
-          <TouchableWithoutFeedback onPressIn={() => {
-            navigate('BookShelfFilter')
-          }}>
+          <TouchableWithoutFeedback
+            onPressIn={() => {
+              navigate('BookShelfFilter', {
+                onApply: onFilterApply,
+                initialCheck: JSON.stringify(filterData)
+              })
+            }}
+          >
             <Styled.HeaderActionIcon name="filter" size={28} />
           </TouchableWithoutFeedback>
           {/*<TouchableWithoutFeedback onPress={handleActionKey}>*/}

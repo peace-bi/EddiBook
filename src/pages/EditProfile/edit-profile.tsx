@@ -58,7 +58,7 @@ const RenderPicker = (props: {
 }) => {
   const [openModal, setOpenModal] = useState(false)
   const result = props.data.find(
-    ({ value }) => props.selectedValue.toString() == value
+    ({ value }) => props.selectedValue.toString() === value
   )
   return (
     <Styled.Field>

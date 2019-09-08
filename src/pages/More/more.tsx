@@ -43,9 +43,10 @@ export default function More() {
           <Styled.AvatarContainer>
             <Styled.Avatar
               source={{
-                uri: profile && profile.userProfile
-                  ? profile.userProfile.avatar
-                  : 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
+                uri:
+                  profile && profile.userProfile
+                    ? profile.userProfile.avatar
+                    : 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
               }}
             />
           </Styled.AvatarContainer>

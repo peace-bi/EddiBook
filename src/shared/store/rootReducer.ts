@@ -46,7 +46,7 @@ export interface RootReducer {
   AppState: ReturnType<typeof appReducer>
   UserState: ReturnType<typeof userReducer>
   BookShelfState: ReturnType<typeof bookShelfReducer>
-  network: ReturnType<typeof network>,
+  network: ReturnType<typeof network>
   ProfileState: ReturnType<typeof profileReducer>
 }
 
@@ -57,7 +57,7 @@ const combinedReducer = {
   UserState: userReducer,
   BookShelfState: bookShelfReducer,
   network,
-  ProfileState: profileReducer,
+  ProfileState: profileReducer
 }
 
 const rootReducer: Reducer<RootReducer> = combineReducers(combinedReducer)

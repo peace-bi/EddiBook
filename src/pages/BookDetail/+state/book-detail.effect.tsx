@@ -35,12 +35,16 @@ export function getRelatedBook(bookId: number) {
         bookId
       },
       type: 'json'
-    })(RelatedBookResponse).pipe(
-      map((book) => dispatch(actions.GetRelatedBook.success.get(book.result))),
-      catchError(() => {
-        return of(dispatch(actions.GetRelatedBook.failure.get()))
-      })
-    ).subscribe()
+    })(RelatedBookResponse)
+      .pipe(
+        map((book) =>
+          dispatch(actions.GetRelatedBook.success.get(book.result))
+        ),
+        catchError(() => {
+          return of(dispatch(actions.GetRelatedBook.failure.get()))
+        })
+      )
+      .subscribe()
   }
 
   thunk.interceptInOffline = true

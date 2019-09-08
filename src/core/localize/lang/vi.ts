@@ -15,7 +15,7 @@ export default {
     PasswordPlaceholder: 'Enter Password',
     ForgotPassword: 'Forgot password?',
     Button: 'Sign in',
-    NoAccount: 'Don\'t have account? ',
+    NoAccount: "Don't have account? ",
     NavSignUp: 'Sign up'
   },
   SignUp: {

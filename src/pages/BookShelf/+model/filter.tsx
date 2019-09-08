@@ -1,8 +1,8 @@
 import * as io from 'io-ts'
 
 export interface BookShelfFilter {
-  bookshelfId: number,
-  name: string,
+  bookshelfId: number
+  name: string
   isChecked?: boolean
 }
 
@@ -16,9 +16,9 @@ export const BookShelfFilterResponse = io.interface({
 })
 
 export interface CategoryFilter {
-  bookCategoryId: number,
-  description: string,
-  name: string,
+  bookCategoryId: number
+  description: string
+  name: string
   isChecked?: boolean
 }
 
@@ -33,14 +33,14 @@ export const CategoryFilterResponse = io.interface({
 })
 
 export interface AuthorFilter {
-  authorId: number,
-  name: string,
+  authorId: number
+  name: string
   isChecked?: boolean
 }
 
 export const AuthorFilter: io.Type<AuthorFilter> = io.type({
   authorId: io.number,
-  name: io.string,
+  name: io.string
 })
 
 export const AuthorFilterResponse = io.interface({
@@ -48,14 +48,14 @@ export const AuthorFilterResponse = io.interface({
 })
 
 export interface PublisherFilter {
-  organizationId: number,
-  name: string,
+  organizationId: number
+  name: string
   isChecked?: boolean
 }
 
 export const PublisherFilter: io.Type<PublisherFilter> = io.type({
   organizationId: io.number,
-  name: io.string,
+  name: io.string
 })
 
 export const PublisherFilterResponse = io.interface({
@@ -65,14 +65,20 @@ export const PublisherFilterResponse = io.interface({
 export interface Filter {
   bookShelf: {
     [key: string]: BookShelfFilter
-  },
+  }
   category: {
     [key: string]: CategoryFilter
-  },
+  }
   author: {
     [key: string]: AuthorFilter
-  },
+  }
   publisher: {
     [key: string]: PublisherFilter
   }
+}
+
+export interface FilterRequest {
+  organizationIds: number[]
+  categoryIds: number[]
+  authorIds: number[]
 }

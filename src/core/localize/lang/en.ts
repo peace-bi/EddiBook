@@ -14,7 +14,9 @@ export default {
     BookShelf: 'BookShelf',
     Category: 'Category',
     Author: 'Author',
-    Publisher: 'Publisher'
+    Publisher: 'Publisher',
+    Apply: 'Apply',
+    All: 'All'
   },
   SignIn: {
     Title: 'Sign In',
@@ -24,7 +26,7 @@ export default {
     PasswordPlaceholder: 'Enter Password',
     ForgotPassword: 'Forgot password?',
     Button: 'Sign in',
-    NoAccount: 'Don\'t have account? ',
+    NoAccount: "Don't have account? ",
     NavSignUp: 'Sign up',
     Failed: 'Sign in failed',
     UserNotAllow: 'You are not belong to reader group'

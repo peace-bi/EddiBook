@@ -10,7 +10,10 @@ export const bookDetailInitialState: BookDetailState = {
   detail: {}
 }
 
-export function bookDetailReducer(s: BookDetailState, a: PlainAction): BookDetailState {
+export function bookDetailReducer(
+  s: BookDetailState,
+  a: PlainAction
+): BookDetailState {
   if (GetBookDetail.success.is(a)) {
     return {
       ...s,

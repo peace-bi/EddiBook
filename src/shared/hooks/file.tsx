@@ -91,9 +91,7 @@ export const useFileAction = (
 
     if (!fileExist) {
       storage.removeFileId(bookId.toString())
-      dispatch(
-        ChangeActionStatus.get({ bookId, status: BookAction.DOWNLOAD })
-      )
+      dispatch(ChangeActionStatus.get({ bookId, status: BookAction.DOWNLOAD }))
       // setStatus(BookAction.DOWNLOAD)
     } else {
       navigation.navigate('ViewPDF', {
@@ -113,16 +111,12 @@ export const useFileAction = (
         dispatch(
           ChangeActionStatus.get({ bookId, status: BookAction.DOWNLOAD })
         )
-        Modal.alert(
-          '',
-          Localize.t('Common.Success'),
-          [
-            {
-              text: Localize.t('Common.OK'),
-              style: 'cancel'
-            }
-          ]
-        )
+        Modal.alert('', Localize.t('Common.Success'), [
+          {
+            text: Localize.t('Common.OK'),
+            style: 'cancel'
+          }
+        ])
       })
     }
   }, [url])

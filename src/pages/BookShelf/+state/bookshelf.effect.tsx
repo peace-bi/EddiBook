@@ -25,11 +25,14 @@ import { BookResponse, FilterParams } from '../+model'
 
 export function getBookShelf(searchParams?: FilterParams) {
   function thunk(dispatch: ThunkDispatch<{}, {}, PlainAction>) {
-    const filters = searchParams ? {
-      filter: {
-        contains: searchParams.search
-      }
-    } : undefined
+    const filters = searchParams
+      ? {
+          filter: {
+            contains: searchParams.search
+          },
+          ...searchParams.filter
+        }
+      : undefined
 
     return requestApi({
       url: 'library/book/dashboard',
@@ -106,25 +109,37 @@ export function getBookShelfFilter() {
       })(PublisherFilterResponse)
     ]).pipe(
       map(([bookShelf, category, author, publisher]) => {
-        const bookFilter = bookShelf.result.content.reduce((sum, curr) => {
-          sum[curr.bookshelfId] = curr
-          return sum
-        }, {} as Record<string, BookShelfFilter>)
+        const bookFilter = bookShelf.result.content.reduce(
+          (sum, curr) => {
+            sum[curr.bookshelfId] = curr
+            return sum
+          },
+          {} as Record<string, BookShelfFilter>
+        )
 
-        const categoryFilter = category.result.content.reduce((sum, curr) => {
-          sum[curr.bookCategoryId] = curr
-          return sum
-        }, {} as Record<string, CategoryFilter>)
+        const categoryFilter = category.result.content.reduce(
+          (sum, curr) => {
+            sum[curr.bookCategoryId] = curr
+            return sum
+          },
+          {} as Record<string, CategoryFilter>
+        )
 
-        const authorFilter = author.result.content.reduce((sum, curr) => {
-          sum[curr.authorId] = curr
-          return sum
-        }, {} as Record<string, AuthorFilter>)
+        const authorFilter = author.result.content.reduce(
+          (sum, curr) => {
+            sum[curr.authorId] = curr
+            return sum
+          },
+          {} as Record<string, AuthorFilter>
+        )
 
-        const publisherFilter = publisher.result.content.reduce((sum, curr) => {
-          sum[curr.organizationId] = curr
-          return sum
-        }, {} as Record<string, PublisherFilter>)
+        const publisherFilter = publisher.result.content.reduce(
+          (sum, curr) => {
+            sum[curr.organizationId] = curr
+            return sum
+          },
+          {} as Record<string, PublisherFilter>
+        )
 
         return {
           bookShelf: bookFilter,

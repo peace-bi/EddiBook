@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
   saveButtonWrapper: {
     marginBottom: 20,
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   saveButton: {
     backgroundColor: '#F23F3C'

@@ -46,7 +46,9 @@ export const requestApiEither: (
       .then(({ data, status }) => {
         const decodeResult = codec.decode(data)
 
-        return decodeResult.fold<Either<ApiError, ApiResponse<TypeOf<typeof codec>>>>(
+        return decodeResult.fold<
+          Either<ApiError, ApiResponse<TypeOf<typeof codec>>>
+        >(
           (e) => {
             console.info(e)
             return new Left({
@@ -81,14 +83,18 @@ export function getHost() {
   return `${Config.HOST[env].API}/`
 }
 
-const requestHttp = (url: string, method: string, headers: any, parameters: any) => {
-  return axios
-    .request({
-      url,
-      method,
-      headers,
-      ...parameters
-    })
+const requestHttp = (
+  url: string,
+  method: string,
+  headers: any,
+  parameters: any
+) => {
+  return axios.request({
+    url,
+    method,
+    headers,
+    ...parameters
+  })
 }
 
 export const requestApi: (
@@ -104,11 +110,11 @@ export const requestApi: (
   const parameters =
     param.type && param.type === 'json'
       ? {
-        data: param.param
-      }
+          data: param.param
+        }
       : {
-        params: param.param
-      }
+          params: param.param
+        }
   return from(Storage.getInstance().getToken()).pipe(
     map((token) => {
       const { jwt, refresh } = token
@@ -120,30 +126,33 @@ export const requestApi: (
       return [headers, refresh] as [any, string]
     }),
     flatMap(([_headers, refresh_token]: [any, string]) =>
-      from(requestHttp(url, param.method, _headers, parameters)
-        .then(({ data, status }) => {
-          const decodeResult = codec.decode(data)
+      from(
+        requestHttp(url, param.method, _headers, parameters).then(
+          ({ data, status }) => {
+            const decodeResult = codec.decode(data)
 
-          return decodeResult.fold<ApiResponse<TypeOf<typeof codec>>>(
-            (e) => {
-              console.info(e)
-              throw {
-                response: {
-                  data: {
-                    error: 'JSON Decode Fail',
-                    error_description: 'JSON Decode Fail'
+            return decodeResult.fold<ApiResponse<TypeOf<typeof codec>>>(
+              (e) => {
+                console.info(e)
+                throw {
+                  response: {
+                    data: {
+                      error: 'JSON Decode Fail',
+                      error_description: 'JSON Decode Fail'
+                    }
                   }
                 }
+              },
+              (result) => {
+                return {
+                  result,
+                  status
+                }
               }
-            },
-            (result) => {
-              return {
-                result,
-                status
-              }
-            }
-          )
-        })).pipe(
+            )
+          }
+        )
+      ).pipe(
         catchError((err: any, source) => {
           if (err.response) {
             if (err.response.data.error === 'invalid_token') {
@@ -160,17 +169,26 @@ export const requestApi: (
   )
 }
 
-function refreshToken(refresh_token: string, source: Observable<unknown>): Observable<any> {
-  return from(requestHttp(
-    `${getHost()}uaa/oauth/token`,
-    'POST',
-    { 'Authorization': 'Basic YnJvd3Nlcjo=', 'Content-Type': 'application/json' },
-    {
-      data: {
-        refresh_token,
-        grant_type: 'refresh_token'
+function refreshToken(
+  refresh_token: string,
+  source: Observable<unknown>
+): Observable<any> {
+  return from(
+    requestHttp(
+      `${getHost()}uaa/oauth/token`,
+      'POST',
+      {
+        Authorization: 'Basic YnJvd3Nlcjo=',
+        'Content-Type': 'application/json'
+      },
+      {
+        data: {
+          refresh_token,
+          grant_type: 'refresh_token'
+        }
       }
-    })).pipe(
+    )
+  ).pipe(
     tap((res: any) => {
       Storage.getInstance().setToken({
         jwt: res.access_token,
@@ -178,13 +196,15 @@ function refreshToken(refresh_token: string, source: Observable<unknown>): Obser
       })
     }),
     flatMap(() => source),
-    catchError(() => throwError({
-      response: {
-        data: {
-          error: 'Refresh Token Fail',
-          error_description: 'Can not refresh token'
+    catchError(() =>
+      throwError({
+        response: {
+          data: {
+            error: 'Refresh Token Fail',
+            error_description: 'Can not refresh token'
+          }
         }
-      }
-    }))
+      })
+    )
   )
 }

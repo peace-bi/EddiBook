@@ -37,11 +37,9 @@ export const BookActionButton = forwardRef((props: Props, ref: any) => {
   )
 
   useImperativeHandle(ref, () => ({
-
     deleteBook() {
       fileAction.deleteFile()
     }
-
   }))
 
   let btnView

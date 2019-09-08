@@ -3,8 +3,19 @@ import { Icon } from '@ant-design/react-native'
 import { OnChangeParams } from '@ant-design/react-native/lib/checkbox/PropsType'
 import CheckboxStyles from '@ant-design/react-native/lib/checkbox/style'
 import { WithTheme } from '@ant-design/react-native/lib/style'
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react'
-import { LayoutAnimation, Text, TouchableWithoutFeedback, View } from 'react-native'
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useState
+} from 'react'
+import {
+  LayoutAnimation,
+  Text,
+  TouchableWithoutFeedback,
+  View
+} from 'react-native'
 
 interface Props {
   disabled?: boolean
@@ -44,46 +55,56 @@ export const CheckBox = forwardRef((props: Props, ref: any) => {
     }
   }))
 
-  return <WithTheme themeStyles={CheckboxStyles}>
-    {(styles, theme) => {
-      const iconSize = 22
-      let icon
-      if (checked) {
-        icon = disabled ? (
-          <IconFill name="check-square" style={[styles.icon]} size={iconSize}/>
-        ) : (
-          <IconFill
-            name="check-square"
-            color={theme.brand_primary}
-            style={[styles.icon]}
-            size={iconSize}
-          />
-        )
-      } else {
-        icon = disabled ? (
-          <Icon name="border" color={theme.dividerColor} style={[styles.icon]}/>
-        ) : (
-          <Icon
-            name="border"
-            color={theme.dividerColor}
-            style={[styles.icon]}
-          />
-        )
-      }
+  return (
+    <WithTheme themeStyles={CheckboxStyles}>
+      {(styles, theme) => {
+        const iconSize = 22
+        let icon
+        if (checked) {
+          icon = disabled ? (
+            <IconFill
+              name="check-square"
+              style={[styles.icon]}
+              size={iconSize}
+            />
+          ) : (
+            <IconFill
+              name="check-square"
+              color={theme.brand_primary}
+              style={[styles.icon]}
+              size={iconSize}
+            />
+          )
+        } else {
+          icon = disabled ? (
+            <Icon
+              name="border"
+              color={theme.dividerColor}
+              style={[styles.icon]}
+            />
+          ) : (
+            <Icon
+              name="border"
+              color={theme.dividerColor}
+              style={[styles.icon]}
+            />
+          )
+        }
 
-      return (
-        <TouchableWithoutFeedback onPress={handleClick}>
-          <View style={[styles.wrapper]}>
-            {icon}
-            {typeof children === 'string' ? (
-              // tslint:disable-next-line:jsx-no-multiline-js
-              <Text style={styles.iconRight}>{children}</Text>
-            ) : (
-              children
-            )}
-          </View>
-        </TouchableWithoutFeedback>
-      )
-    }}
-  </WithTheme>
+        return (
+          <TouchableWithoutFeedback onPress={handleClick}>
+            <View style={[styles.wrapper]}>
+              {icon}
+              {typeof children === 'string' ? (
+                // tslint:disable-next-line:jsx-no-multiline-js
+                <Text style={styles.iconRight}>{children}</Text>
+              ) : (
+                children
+              )}
+            </View>
+          </TouchableWithoutFeedback>
+        )
+      }}
+    </WithTheme>
+  )
 })

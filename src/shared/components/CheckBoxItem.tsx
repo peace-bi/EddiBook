@@ -18,16 +18,22 @@ export const CheckBoxItem = (props: Props) => {
     }
   }
 
-  return <List.Item
-    onPress={toggleCheckBox}
-    thumb={<CheckBox
-      checked={checked}
-      ref={checkBoxRef}
-      onChange={(event) => {
-        if (onToggle) {
-          onToggle(event.target.checked)
-        }
-      }}/>}>
-    {children}
-  </List.Item>
+  return (
+    <List.Item
+      onPress={toggleCheckBox}
+      thumb={
+        <CheckBox
+          checked={checked}
+          ref={checkBoxRef}
+          onChange={(event) => {
+            if (onToggle) {
+              onToggle(event.target.checked)
+            }
+          }}
+        />
+      }
+    >
+      {children}
+    </List.Item>
+  )
 }
