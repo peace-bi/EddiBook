@@ -46,8 +46,7 @@ export const BookShelfItem = ({ item, status }: Props) => {
   const { navigate } = useNavigation()
   const navigateDetail = useCallback(() => {
     navigate('BookDetail', {
-      id: item.bookId,
-      item
+      bookId: item.bookId
     })
   }, [])
 

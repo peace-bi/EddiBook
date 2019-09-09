@@ -13,7 +13,6 @@ import {
 } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { persistStore } from 'redux-persist'
-import { PersistPartial } from 'redux-persist/es/persistReducer'
 import { Persistor } from 'redux-persist/es/types'
 import thunk from 'redux-thunk'
 import { getHost } from 'shared/api'
@@ -38,7 +37,7 @@ export default function configStore(
 
   const store = createStore(rootReducer, preloadedState, composedEnhancers)
 
-  if (process.env.NODE_ENV !== 'production' && module.hot) {
+  if (module.hot) {
     module.hot.accept('./rootReducer', () => store.replaceReducer(rootReducer))
   }
 
@@ -52,5 +51,5 @@ export default function configStore(
     })
   })
 
-  return [store, persist] as [Store<PersistPartial, AnyAction>, Persistor]
+  return [store, persist] as [Store<unknown, AnyAction>, Persistor]
 }

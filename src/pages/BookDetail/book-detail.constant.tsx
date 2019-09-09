@@ -43,6 +43,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   backButtonWrapper: {
+    paddingTop: 16,
     justifyContent: 'center',
     flex: 0.3
   },
@@ -53,6 +54,7 @@ export const styles = StyleSheet.create({
   },
   backButtonIcon: { color: '#fff' },
   titleWrapper: {
+    paddingTop: 16,
     justifyContent: 'center',
     flex: 0.4
   },

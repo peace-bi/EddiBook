@@ -39,7 +39,7 @@ const SignInComponent = () => {
   const passwordInput = useRef<CustomInput>(null)
   const dispatch = useThunkDispatch()
   const { navigate } = useNavigation()
-  Storage.getInstance().setJwt('')
+  Storage.getInstance().removeToken()
   const navigateSignUp = useCallback(() => {
     navigate('SignUp')
   }, [])
@@ -50,7 +50,10 @@ const SignInComponent = () => {
         const signInResult = result.payload.result
         if (signInResult.usergroup === 'CUSTOMER') {
           navigate('MainStack')
-          Storage.getInstance().setJwt(signInResult.access_token)
+          Storage.getInstance().setToken({
+            jwt: signInResult.access_token,
+            refresh: signInResult.refresh_token
+          })
         } else {
           Modal.alert(
             Localize.t('SignIn.Failed'),
@@ -65,7 +68,7 @@ const SignInComponent = () => {
         }
       }
       if (SignInFailed.is(result)) {
-        if (result.payload.error.error === 'invalid_token') {
+        if (result.payload.error.error === 'invalid_grant') {
           setAsyncErrorMessage('Invalid user info') // no-i18n
         }
       }
@@ -82,8 +85,8 @@ const SignInComponent = () => {
         <Formik
           validate={validate}
           initialValues={{
-            email: '',
-            password: ''
+            email: 'dat.nguyen-huu@banvien.com.vn', // dat.nguyen-huu@banvien.com.vn
+            password: '12345678@Xx' // 12345678@Xx
           }}
           onSubmit={submit}
         >

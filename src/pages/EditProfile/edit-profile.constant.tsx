@@ -1,251 +1,188 @@
-import { StyleSheet } from 'react-native'
+import { Button, Icon } from '@ant-design/react-native'
+import LinearGradient from 'react-native-linear-gradient'
 import { Header } from 'react-navigation'
+import { CustomInput } from 'shared/components'
+import { listCountry as countries } from 'shared/util'
+import styled from 'styled-components/native'
 
-export const styles = StyleSheet.create({
-  wrapper: {
-    maxWidth: 350,
-    width: '100%',
-    paddingBottom: 50,
-    alignSelf: 'center'
-  },
-  viewWrapper: {
-    height: Header.HEIGHT,
-    borderBottomWidth: 1,
-    borderBottomColor: '#bdbdbd',
-    flexDirection: 'row'
-  },
-  backButtonWrapper: {
-    justifyContent: 'center',
-    flex: 0.3
-  },
-  backButton: {
-    borderWidth: 0,
-    alignSelf: 'flex-start',
-    backgroundColor: 'transparent'
-  },
-  backButtonIcon: { color: '#888' },
-  titleWrapper: {
-    justifyContent: 'center',
-    flex: 0.4
-  },
-  title: {
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: '600'
-  },
-  doneWrapper: {
-    justifyContent: 'center',
-    flex: 0.3
-  },
-  doneButton: {
-    borderWidth: 0,
-    alignSelf: 'flex-end',
-    backgroundColor: 'transparent'
-  },
-  doneButtonText: {
-    alignSelf: 'flex-end'
-  },
-  avatarViewContainer: {
-    alignSelf: 'center',
-    marginTop: 16,
-    position: 'relative'
-  },
-  avatarContainerInteract: {
-    width: 120,
-    height: 120,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    overflow: 'hidden'
-  },
-  avatarContainer: {
-    justifyContent: 'center',
-    flex: 1
-  },
-  avatarWrapper: {
-    width: 120,
-    height: 60,
-    position: 'absolute',
-    top: 60,
-    left: 0,
-    borderBottomLeftRadius: 60,
-    borderBottomRightRadius: 60
-  },
-  avatarEditText: {
-    color: '#fff',
-    textAlign: 'center'
-  },
-  avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 120
-  },
-  label: {
-    color: '#43484B',
-    fontSize: 13,
-    marginBottom: 4
-  },
-  fieldWrapper: {
-    marginTop: 20,
-    justifyContent: 'space-between'
-  },
-  phoneNumberWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  saveButtonWrapper: {
-    marginTop: 38,
-    marginBottom: 10
-  },
-  saveButton: {
-    backgroundColor: '#F23F3C'
-  },
-  saveButtonText: {
-    color: '#fff'
-  },
-  countryField: {
-    flex: 1,
-    flexDirection: 'row'
-  },
-  countryLabel: {
-    flex: 1,
-    alignSelf: 'center',
-    fontSize: 15,
-    paddingLeft: 16
-  },
-  countryPickerContainer: {
-    borderWidth: 1,
-    height: 48,
-    borderColor: '#D3DCE6',
-    borderRadius: 9,
-    position: 'relative'
-  },
-  countryPickerIcon: {
-    width: 50,
-    justifyContent: 'flex-end',
-    textAlign: 'center',
-    alignSelf: 'center'
-  }
-})
+import { PhoneCodePicker } from './+component/phone-code-picker'
 
-export const phoneCodePickerStyles = StyleSheet.create({
-  logoPostCode: {
-    width: 24,
-    alignSelf: 'center',
-    marginLeft: 10,
-    height: 16
-  },
-  picker: {
-    top: 0,
-    left: 0,
-    right: 0,
-    position: 'absolute',
-    backgroundColor: 'white',
-    opacity: 0
-  }
-})
+export const listCountry = countries.map((c) => ({
+  label: c.name,
+  value: c.countryId.toString(),
+  phoneCode: c.phoneCode || 'N/A'
+}))
 
-export const countryPickerStyles = StyleSheet.create({
-  // container: { flex: 1 },
-  viewWrapper: {
-    height: Header.HEIGHT,
-    flexDirection: 'row'
-  },
-  backButtonWrapper: {
-    justifyContent: 'center',
-    flex: 0.3
-  },
-  backButton: {
-    borderWidth: 0,
-    alignSelf: 'flex-start',
-    backgroundColor: 'transparent'
-  },
-  backButtonIcon: { color: '#888' },
-  titleWrapper: {
-    justifyContent: 'center',
-    flex: 0.4
-  },
-  title: {
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight: '600'
-  },
-  doneWrapper: {
-    justifyContent: 'center',
-    flex: 0.3
-  },
-  doneButton: {
-    borderWidth: 0,
-    alignSelf: 'flex-end',
-    backgroundColor: 'transparent'
-  },
-  doneButtonText: {
-    color: '#F23F3C'
-  },
-  checkMark: {
-    color: '#F23F3C'
-  }
-})
+const HeaderWrapper = styled.View`
+  height: ${Header.HEIGHT};
+  border-bottom-width: 1;
+  border-bottom-color: #bdbdbd;
+  flex-direction: row;
+`
+const BackButtonWrapper = styled.View`
+  justify-content: center;
+  flex: 0.3;
+`
 
-export const mockCountry = [
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'USA',
-    value: 'us'
-  },
-  {
-    label: 'Laos',
-    value: 'la'
-  },
-  {
-    label: 'China',
-    value: 'cn'
-  },
-  {
-    label: 'Japan',
-    value: 'jp'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  },
-  {
-    label: 'Vietnam',
-    value: 'vi'
-  }
-]
+const BackButton = styled(Button).attrs(() => ({
+  activeStyle: { backgroundColor: 'transparent' }
+}))`
+  border-width: 0;
+  align-self: flex-start;
+  background-color: transparent;
+`
+
+const BackButtonIcon = styled(Icon).attrs(() => ({
+  name: 'close'
+}))`
+  color: #888;
+`
+
+const TitleWrapper = styled.View`
+  justify-content: center;
+  flex: 0.4;
+`
+const Title = styled.View`
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+`
+const ContentWrapper = styled.View`
+  max-width: 350px;
+  width: 100%;
+  padding-bottom: 50px;
+  align-self: center;
+`
+
+const AvatarContainer = styled.View`
+  align-self: center;
+  margin-top: 16px;
+  position: relative;
+`
+const Avatar = styled.Image`
+  width: 120px;
+  height: 120px;
+  border-radius: 120px;
+`
+const AvatarOverlayContainer = styled.View`
+  width: 120px;
+  height: 120px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+`
+
+const AvatarOverlay = styled(LinearGradient).attrs(() => ({
+  colors: ['rgba(0,0,0,0)', 'rgba(0,0,0,.8)'],
+  start: { x: 0.5, y: 0 },
+  end: { x: 0.5, y: 1 }
+}))`
+  width: 120px;
+  height: 60px;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  border-bottom-left-radius: 60px;
+  border-bottom-right-radius: 60px;
+`
+const AvatarEditContainer = styled.View`
+  justify-content: center;
+  flex: 1;
+`
+const AvatarEditText = styled.Text`
+  color: #fff;
+  text-align: center;
+`
+const Field = styled.View`
+  margin-top: 20px;
+  justify-content: space-between;
+`
+const Label = styled.Text`
+  color: #43484b;
+  font-size: 13;
+  margin-bottom: 4px;
+`
+
+const PhoneNumberWrapper = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`
+
+const RegionCodePicker = styled(PhoneCodePicker).attrs(() => ({
+  disabled: true
+}))`
+  flex: 0.35;
+`
+
+const PhoneNumberInput = styled(CustomInput)`
+  flex: 0.6;
+`
+
+const SaveButtonWrapper = styled.View`
+  margin-top: 38px;
+  margin-bottom: 10px;
+`
+
+const SaveButton = styled(Button)`
+  background-color: #f23f3c;
+`
+
+const SaveButtonText = styled.Text`
+  color: #fff;
+`
+
+const PickerContainer = styled.View`
+  border-width: 1;
+  height: 48px;
+  border-color: #d3dce6;
+  border-radius: 9px;
+  position: relative;
+  background-color: ${(props: any) => (props.disabled ? '#ccc' : '#fff')};
+`
+
+const PickerField = styled.View`
+  flex: 1;
+  flex-direction: row;
+`
+const PickerText = styled.Text`
+  flex: 1;
+  align-self: center;
+  font-size: 15;
+  padding-left: 16;
+`
+const PickerIcon = styled(Icon).attrs(() => ({
+  name: 'caret-down'
+}))`
+  width: 50;
+  justify-content: flex-end;
+  text-align: center;
+  align-self: center;
+`
+export const Styled = {
+  HeaderWrapper,
+  BackButtonWrapper,
+  BackButton,
+  BackButtonIcon,
+  TitleWrapper,
+  Title,
+  ContentWrapper,
+  Avatar,
+  AvatarContainer,
+  AvatarOverlay,
+  AvatarOverlayContainer,
+  AvatarEditContainer,
+  AvatarEditText,
+  Field,
+  Label,
+  PhoneNumberWrapper,
+  RegionCodePicker,
+  PhoneNumberInput,
+  SaveButtonWrapper,
+  SaveButton,
+  SaveButtonText,
+  PickerContainer,
+  PickerField,
+  PickerText,
+  PickerIcon
+}

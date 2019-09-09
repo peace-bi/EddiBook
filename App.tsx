@@ -10,13 +10,13 @@
 import { NoticeBar, Provider as AntProvider } from '@ant-design/react-native/'
 import enUS from '@ant-design/react-native/es/locale-provider/en_US'
 import React from 'react'
+import { Platform, UIManager } from 'react-native'
 import * as RNLocalize from 'react-native-localize'
 import { ReduxNetworkProvider } from 'react-native-offline'
 import { useScreens } from 'react-native-screens'
 import { SafeAreaView } from 'react-navigation'
 import { Provider, useSelector } from 'react-redux'
 import { AnyAction, Store } from 'redux'
-import { PersistPartial } from 'redux-persist/es/persistReducer'
 import { Persistor } from 'redux-persist/es/types'
 import { PersistGate } from 'redux-persist/integration/react'
 import { LoadingComponent } from 'shared/components/GlobalLoading'
@@ -34,7 +34,7 @@ useScreens(false)
 interface State {
   theme: Theme
   isLoadingPersist: boolean
-  storePersist: [Store<PersistPartial, AnyAction>, Persistor]
+  storePersist: [Store<unknown, AnyAction>, Persistor]
 }
 
 const NetworkNotice = () => {
@@ -58,6 +58,10 @@ export default class App extends React.Component<{}, State> {
       theme: Theme.getTheme()
     }
     RNLocalize.addEventListener('change', this.handleLocalizationChange)
+
+    if (Platform.OS === 'android' &&  UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true)
+    }
   }
 
   handleLocalizationChange = () => {

@@ -1,6 +1,6 @@
 import { Button } from '@ant-design/react-native'
 import { Localize } from 'core/localize'
-import React, { Fragment } from 'react'
+import React, { forwardRef, Fragment, useImperativeHandle } from 'react'
 import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 import { getHost } from 'shared/api'
@@ -12,6 +12,7 @@ import styled from 'styled-components/native'
 interface Props {
   bookId: number
   bookUrl: string
+  ref: any
 }
 
 const ButtonOutline = styled(Button).attrs((props) => ({
@@ -24,7 +25,7 @@ const ButtonOutline = styled(Button).attrs((props) => ({
   border-color: ${(props) => props.theme.primary_color};
 `
 
-export const BookActionButton = (props: Props) => {
+export const BookActionButton = forwardRef((props: Props, ref: any) => {
   const actionStatusState = useSelector(
     (s: RootReducer) => s.BookShelfState.actionStatus
   )
@@ -34,6 +35,12 @@ export const BookActionButton = (props: Props) => {
     `${getHost()}${props.bookUrl}`,
     status
   )
+
+  useImperativeHandle(ref, () => ({
+    deleteBook() {
+      fileAction.deleteFile()
+    }
+  }))
 
   let btnView
   switch (status) {
@@ -96,4 +103,4 @@ export const BookActionButton = (props: Props) => {
   }
 
   return btnView
-}
+})

@@ -1,10 +1,9 @@
-import AsyncStorage from '@react-native-community/async-storage'
-import { bookShelfReducer } from 'pages/BookShelf/+state/bookshelf.reducer'
+import bookShelfReducer from 'pages/BookShelf/+state/bookshelf.reducer'
+import { profileReducer } from 'pages/Profile/+state/profile.reducer'
 import { signInReducer } from 'pages/SignIn/+state/sign-in.reducer'
 import { signUpReducer } from 'pages/SignUp/+state/sign-up.reducer'
 import { reducer as network } from 'react-native-offline'
 import { combineReducers, Reducer } from 'redux'
-import { persistReducer } from 'redux-persist'
 import { PlainAction } from 'redux-typed-actions'
 
 import { HideLoading, ShowLoading } from './action'
@@ -41,21 +40,6 @@ export function userReducer(state = initialState, action: PlainAction) {
   return state
 }
 
-const combinedReducer = {
-  SignInState: signInReducer,
-  SignUpState: signUpReducer,
-  AppState: appReducer,
-  UserState: userReducer,
-  BookShelfState: bookShelfReducer,
-  network
-}
-
-const persistConfig = {
-  key: 'root',
-  storage: AsyncStorage,
-  whitelist: ['BookShelfState']
-}
-
 export interface RootReducer {
   SignInState: ReturnType<typeof signInReducer>
   SignUpState: ReturnType<typeof signUpReducer>
@@ -63,7 +47,18 @@ export interface RootReducer {
   UserState: ReturnType<typeof userReducer>
   BookShelfState: ReturnType<typeof bookShelfReducer>
   network: ReturnType<typeof network>
+  ProfileState: ReturnType<typeof profileReducer>
+}
+
+const combinedReducer = {
+  SignInState: signInReducer,
+  SignUpState: signUpReducer,
+  AppState: appReducer,
+  UserState: userReducer,
+  BookShelfState: bookShelfReducer,
+  network,
+  ProfileState: profileReducer
 }
 
 const rootReducer: Reducer<RootReducer> = combineReducers(combinedReducer)
-export default persistReducer(persistConfig, rootReducer)
+export default rootReducer

@@ -10,6 +10,10 @@ export interface Theme extends AntTheme {
   color_text_muted: string
   active_tint_color: string
   inactive_tint_color: string
+  tag_container_color: string
+  tag_text_color: string
+  tag_container_selected_color: string
+  tag_text_selected_color: string
 }
 
 export const Theme = {
@@ -209,7 +213,11 @@ export const Theme = {
       divider_color: theme.dividerColor,
       container_background_color: theme.containerBackgroundColor,
       active_tint_color: theme.primaryColor,
-      inactive_tint_color: theme.colorTextMuted
+      inactive_tint_color: theme.colorTextMuted,
+      tag_container_color: theme.dividerColor,
+      tag_text_color: theme.colorTextBase,
+      tag_container_selected_color: theme.primaryColor,
+      tag_text_selected_color: theme.colorTextBaseInverse
     }
   }
 }

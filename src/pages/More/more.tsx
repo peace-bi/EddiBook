@@ -1,20 +1,30 @@
 import { List } from '@ant-design/react-native'
 import Item from '@ant-design/react-native/lib/list/ListItem'
 import { Localize } from 'core/localize'
-import React, { useCallback } from 'react'
+import { GetProfile } from 'pages/Profile/+state/profile.effect'
+import React, { useCallback, useEffect } from 'react'
 import { ScrollView } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useNavigation } from 'react-navigation-hooks'
+import { useSelector } from 'react-redux'
 import { TabType } from 'shared/model'
 import { Storage } from 'shared/storage'
+import { RootReducer } from 'shared/store/rootReducer'
+import { useThunkDispatch } from 'shared/util'
 
 import * as Styled from './more.constant'
 
 export default function More() {
   const { navigate } = useNavigation()
 
+  const profile = useSelector((s: RootReducer) => s.ProfileState.profile)
+  const dispatch = useThunkDispatch()
+  useEffect(() => {
+    dispatch(GetProfile()).subscribe()
+  }, [])
+
   const signOut = useCallback(() => {
-    Storage.getInstance().setJwt('')
+    Storage.getInstance().removeToken()
     navigate('AuthStack')
   }, [])
 
@@ -34,13 +44,19 @@ export default function More() {
             <Styled.Avatar
               source={{
                 uri:
-                  'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
+                  profile && profile.userProfile
+                    ? profile.userProfile.avatar
+                    : 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
               }}
             />
           </Styled.AvatarContainer>
           <Styled.InfoContact>
-            <Styled.UserName>User</Styled.UserName>
-            <Styled.UserEmail>user@gmail.com</Styled.UserEmail>
+            <Styled.UserName>
+              {profile && profile.userProfile
+                ? `${profile.userProfile.firstName} ${profile.userProfile.lastName}`
+                : ''}
+            </Styled.UserName>
+            <Styled.UserEmail>{profile && profile.username}</Styled.UserEmail>
           </Styled.InfoContact>
         </TouchableWithoutFeedback>
       </Styled.UserInfo>
@@ -52,14 +68,14 @@ export default function More() {
       >
         <List style={{ marginTop: 54 }}>
           <Item
-            onPress={() => navigate('EditProfile')}
+            onPress={() => navigate('ChangePassword')}
             thumb={<Styled.ListIcon name="change-password" />}
             arrow={'horizontal'}
           >
             {Localize.t('More.ChangePassword')}
           </Item>
           <Item
-            onPress={() => navigate('EditProfile')}
+            onPress={() => navigate('Settings')}
             thumb={<Styled.ListIcon name="settings" />}
             arrow={'horizontal'}
           >

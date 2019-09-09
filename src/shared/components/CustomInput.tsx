@@ -32,7 +32,6 @@ const CustomInputComponent: RefForwardingComponent<OutputHandler, Props> = (
 ) => {
   const inputRef = useRef<TextInput>(null)
   const [inputValue, setInputValue] = useState(props.value || '')
-  const [canShowPassword, setCanShowPassword] = useState(false)
   useImperativeHandle(ref, () => ({
     focus() {
       if (inputRef.current) {
@@ -57,6 +56,7 @@ const CustomInputComponent: RefForwardingComponent<OutputHandler, Props> = (
       ? undefined
       : false
     : undefined
+  const [canShowPassword, setCanShowPassword] = useState(secureTextEntry)
   return (
     <View style={[styles.container, style]}>
       <TextInput
@@ -103,8 +103,8 @@ const CustomInputComponent: RefForwardingComponent<OutputHandler, Props> = (
                   style={{ width: 24, height: 24 }}
                   source={
                     canShowPassword
-                      ? require('../assets/password-hide.png')
-                      : require('../assets/password-show.png')
+                      ? require('../assets/password-show.png')
+                      : require('../assets/password-hide.png')
                   }
                 />
               </TouchableWithoutFeedback>

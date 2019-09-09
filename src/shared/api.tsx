@@ -1,10 +1,20 @@
 import axios from 'axios'
 import * as t from 'io-ts'
-import { from, Observable, of, throwError } from 'rxjs'
+import { EMPTY, from, Observable, of, throwError } from 'rxjs'
 
 import { Either, Left, Right } from 'fp-ts/lib/Either'
 import { TypeOf } from 'io-ts'
-import { catchError, flatMap, map, take, timeout } from 'rxjs/operators'
+import {
+  catchError,
+  flatMap,
+  map,
+  retryWhen,
+  scan,
+  switchMap,
+  take,
+  takeWhile,
+  timeout
+} from 'rxjs/operators'
 import { Storage } from './storage'
 import { Config } from './util'
 
@@ -83,12 +93,26 @@ export function getHost() {
   return `${Config.HOST[env].API}/`
 }
 
+const requestHttp = (
+  url: string,
+  method: string,
+  headers: any,
+  parameters: any
+) => {
+  return axios.request({
+    url,
+    method,
+    headers,
+    ...parameters
+  })
+}
+
 export const requestApi: (
   param: RequestParam
 ) => <T>(codec: t.Type<T>) => Observable<ApiResponse<T>> = (param) => (
   codec
 ) => {
-  const url = `${getHost()}/${param.url}`
+  const url = `${getHost()}${param.url}`
   if (param.type === 'json') {
     headers['Content-Type'] = 'application/json'
   }
@@ -101,61 +125,124 @@ export const requestApi: (
       : {
           params: param.param
         }
-  return from(Storage.getInstance().getJwt()).pipe(
-    map((jwt) => {
+  return from(Storage.getInstance().getToken()).pipe(
+    map((token) => {
+      const { jwt, refresh } = token
       if (jwt) {
         headers.Authorization = `bearer ${jwt}`
       } else {
         headers.Authorization = `Basic YnJvd3Nlcjo=`
       }
-      return headers
+      return [headers, refresh] as [any, string]
     }),
-    flatMap((_headers) =>
-      axios
-        .request({
-          url,
-          method: param.method,
-          headers: _headers,
-          ...parameters
-        })
-        .then(({ data, status }) => {
-          const decodeResult = codec.decode(data)
+    flatMap(([_headers, refresh_token]: [any, string]) =>
+      from(
+        requestHttp(url, param.method, _headers, parameters).then(
+          ({ data, status }) => {
+            const decodeResult = codec.decode(data)
 
-          return decodeResult.fold<ApiResponse<TypeOf<typeof codec>>>(
-            (e) => {
-              console.info(e)
-              throw {
-                response: {
-                  data: {
-                    error: 'JSON Decode Fail',
-                    error_description: 'JSON Decode Fail'
+            return decodeResult.fold<ApiResponse<TypeOf<typeof codec>>>(
+              (e) => {
+                console.info(e)
+                throw {
+                  response: {
+                    data: {
+                      error: 'JSON Decode Fail',
+                      error_description: 'JSON Decode Fail'
+                    }
                   }
                 }
+              },
+              (result) => {
+                return {
+                  result,
+                  status
+                }
               }
-            },
-            (result) => {
-              return {
-                result,
-                status
-              }
-            }
-          )
-        })
-        .catch((e) => {
-          // Need refactor
-          if (e.response) {
-            throw {
-              error: e.response.data
-            } as ApiError
-          } else {
-            throw e
+            )
           }
+        )
+      ).pipe(
+        retryWhen((errors) => {
+          return refresh(errors, refresh_token)
         })
+        // catchError((err: any, source) => {
+        //   if (err.response) {
+        //     if (err.response.data.error === 'invalid_token') {
+        //       refreshToken(refresh_token, source).pipe(
+        //         first()
+        //       ).subscribe()
+        //       return throwError({
+        //         response: {
+        //           data: {
+        //             error: 'Refresh Token Fail',
+        //             error_description: 'Can not refresh token'
+        //           }
+        //         }
+        //       })
+        //     }
+        //     return throwError(err.response.data)
+        //   }
+        //   return throwError(err)
+        // })
+      )
     ),
-    catchError((err: any) => {
-      return throwError(err)
-    }),
     take(1),
     timeout(20000)
+  )
+}
+
+function refresh(obs: Observable<any>, refreshToken: string): Observable<any> {
+  return obs.pipe(
+    switchMap((err) => {
+      if (err.response) {
+        if (err.response.data.error === 'invalid_token') {
+          return of(err)
+        }
+        return throwError(err.response.data)
+      }
+      return throwError(err)
+    }),
+    scan((acc) => {
+      return acc + 1
+    }, 0),
+    takeWhile((acc) => acc < 3),
+    flatMap(() => {
+      return fetchNewToken(refreshToken)
+    })
+  )
+}
+
+function fetchNewToken(refresh_token: string): Observable<any> {
+  return from(
+    requestHttp(
+      `${getHost()}uaa/oauth/token`,
+      'POST',
+      {
+        Authorization: 'Basic YnJvd3Nlcjo=',
+        'Content-Type': 'application/json'
+      },
+      {
+        data: {
+          refresh_token,
+          grant_type: 'refresh_token'
+        }
+      }
+    )
+  ).pipe(
+    flatMap((res: any) => {
+      const data = res.data
+      Storage.getInstance().setToken({
+        jwt: data.access_token,
+        refresh: data.refresh_token
+      })
+
+      // Stop retry fetch token
+      return EMPTY
+    }),
+    catchError((err) => {
+      // Retry fetch token
+      return of(err)
+    })
   )
 }

@@ -9,7 +9,14 @@ export default {
     Read: 'Read',
     Download: 'Download',
     Update: 'Update',
-    OK: 'OK'
+    OK: 'OK',
+    Success: 'Success',
+    BookShelf: 'BookShelf',
+    Category: 'Category',
+    Author: 'Author',
+    Publisher: 'Publisher',
+    Apply: 'Apply',
+    All: 'All'
   },
   SignIn: {
     Title: 'Sign In',
@@ -94,6 +101,13 @@ export default {
     RelatedBook: 'Related Book',
     BookInfo: 'Book Info'
   },
+  ChangePassword: {
+    Title: 'Change Password',
+    CurrentPassword: 'Current Password',
+    NewPassword: 'New Password',
+    ConfirmPassword: 'Confirm New Password',
+    SaveButton: 'Save Change'
+  },
   More: {
     ChangePassword: 'Change Password',
     Settings: 'Settings',
@@ -101,5 +115,11 @@ export default {
     AboutUs: 'About Us',
     TermsConditions: 'Terms & Conditions',
     Logout: 'Logout'
+  },
+  Setting: {
+    Language: 'Language',
+    PageTransition: 'Page transition',
+    DarkMode: 'Dark mode',
+    Notification: 'Notification'
   }
 }

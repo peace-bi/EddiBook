@@ -1,8 +1,16 @@
 import AsyncStorage from '@react-native-community/async-storage'
 
+interface Token {
+  jwt: string
+  refresh: string
+}
+
 export interface StorageKey {
   fileIds: string[]
-  jwt: string
+  token: Token
+  language: string
+  pageTransition: string
+  darkMode: string
 }
 
 export class Storage {
@@ -59,13 +67,17 @@ export class Storage {
     return item || []
   }
 
-  async getJwt(): Promise<string> {
-    const item = (await this.getItem('jwt')) as string
-    return item || ''
+  async getToken(): Promise<Token> {
+    const item = (await this.getItem('token')) as Token
+    return item || {}
   }
 
-  async setJwt(value: string) {
-    this.setItem('jwt', value)
+  async setToken(value: Token) {
+    this.setItem('token', value)
+  }
+
+  async removeToken() {
+    this.removeItem('token')
   }
 
   async setFileId(id: string) {
@@ -82,5 +94,29 @@ export class Storage {
     const result = fileIds.filter((item) => item !== id)
 
     this.setItem('fileIds', result)
+  }
+
+  async getLanguage() {
+    const item = (await this.getItem('language')) as string
+    return item || ''
+  }
+  async setLanguage(key: string) {
+    this.setItem('language', key)
+  }
+
+  async getPageTransition() {
+    const item = (await this.getItem('pageTransition')) as string
+    return item || ''
+  }
+  async setPageTransition(key: string) {
+    this.setItem('pageTransition', key)
+  }
+
+  async getDarkMode() {
+    const item = (await this.getItem('darkMode')) as string
+    return item === 'true' || false
+  }
+  async setDarkMode(key: boolean) {
+    this.setItem('darkMode', `${key}`)
   }
 }

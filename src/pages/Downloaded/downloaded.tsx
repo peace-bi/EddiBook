@@ -4,12 +4,11 @@ import { Book, BookRenderItem } from 'pages/BookShelf/+model'
 import { bookshelfSelector } from 'pages/BookShelf/+state/bookshelf.selector'
 import * as Styled from 'pages/BookShelf/BookShelf.contant'
 import React, { useCallback } from 'react'
-import { FlatList, Text, View } from 'react-native'
+import { FlatList, View } from 'react-native'
 import DeviceInfo from 'react-native-device-info'
 import { useSelector } from 'react-redux'
 import { StyledHeaderText } from 'shared/components'
 import { BookAction, TabType } from 'shared/model'
-import { RootReducer } from 'shared/store/rootReducer'
 
 const keyExtractor = (item: Book) => {
   return item.bookId.toString()

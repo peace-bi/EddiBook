@@ -7,7 +7,7 @@ export const StyledTitleText = styled.Text`
 `
 
 export const StyledDescText = styled.Text`
-  font-size: 12px;
+  font-size: 13px;
   color: ${(props) => props.theme.color_text_paragraph};
 `
 

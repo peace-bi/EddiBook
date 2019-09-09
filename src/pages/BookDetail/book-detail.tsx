@@ -1,10 +1,16 @@
-import { Button, Icon, WhiteSpace, WingBlank } from '@ant-design/react-native'
+import {
+  ActivityIndicator,
+  Button,
+  Icon,
+  WhiteSpace,
+  WingBlank
+} from '@ant-design/react-native'
 import { Localize } from 'core/localize'
 
-import { Book } from 'pages/BookShelf/+model'
 import React from 'react'
 import {
   Animated,
+  Image,
   StatusBar,
   Text,
   TouchableWithoutFeedback,
@@ -13,6 +19,9 @@ import {
 import FastImage from 'react-native-fast-image'
 import { useScreens } from 'react-native-screens'
 import { Header, NavigationScreenProps, ScrollView } from 'react-navigation'
+import { connect } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
+import { PlainAction } from 'redux-typed-actions'
 import { getHost } from 'shared/api'
 import {
   StyledBodyText,
@@ -22,7 +31,13 @@ import {
   StyledTitleText,
   StyledTouchableText
 } from 'shared/components'
+import { BookAction } from 'shared/model'
+import { RootReducer } from 'shared/store/rootReducer'
+import { EddiIcon, formatBytes } from 'shared/util'
 import styled, { DefaultTheme } from 'styled-components/native'
+import { getBookDetail, getRelatedBook } from './+state/book-detail.effect'
+import { Author, BookDetailResponse } from './+state/book-detail.model'
+import { bookDetailSelector } from './+state/book-detail.selector'
 import { styles } from './book-detail.constant'
 import { BookActionButton } from './BookAction'
 import { RelatedBook } from './RelatedBook'
@@ -35,7 +50,11 @@ const STATUS_BAR_HEIGHT = StatusBar.currentHeight || 20
 const HEADER_MIN_HEIGHT = Header.HEIGHT + STATUS_BAR_HEIGHT
 const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT
 
-interface Props extends NavigationScreenProps<any> {}
+interface Props extends NavigationScreenProps<any> {
+  dispatch: ThunkDispatch<{}, {}, PlainAction>
+  book: BookDetailResponse | null
+  bookStatus: BookAction
+}
 
 interface State {}
 
@@ -107,22 +126,79 @@ const StyledHeader = styled.View`
 const HeaderComponent = Animated.createAnimatedComponent(
   StyledAnimatedHeaderView
 )
-export default class BookDetail extends React.Component<Props, State> {
+
+class BookDetail extends React.Component<Props, State> {
   static navigationOptions = () => ({
     header: null
   })
   scrollY = new Animated.Value(0)
+  private inputRef: React.RefObject<any>
 
   constructor(props: Props) {
     super(props)
+
+    this.inputRef = React.createRef()
+  }
+
+  componentDidMount(): void {
+    const bookId = this.props.navigation.getParam('bookId')
+    this.props.dispatch(getBookDetail(bookId))
+    this.props.dispatch(getRelatedBook(bookId))
   }
 
   backPress = () => {
     this.props.navigation.pop()
   }
 
+  getAuthors = (authors: Author[] | undefined) => {
+    return authors
+      ? authors.reduce((sum, curr, index) => {
+          const name = index === 0 ? curr.name : `, ${curr.name}`
+          return sum + name
+        }, '')
+      : ''
+  }
+
+  renderLicenseTime = (item: BookDetailResponse) => {
+    if (item.hasLicenseExpired) {
+      return Localize.t('Book.LicenseDate', {
+        p: Localize.t('Common.Expired')
+      })
+    }
+    if (item.licenseStatus === 'Perpetual') {
+      return null
+    }
+    if (item.licenseEndDate) {
+      return Localize.t('Book.LicenseDate', {
+        p: Localize.strftime(new Date(item.licenseEndDate), '%Y/%m/%d')
+      })
+    }
+    return null
+  }
+
+  /*
+   * size: number (bytes)
+   * */
+  getBookSize = (size: number) => {
+    return formatBytes(size)
+  }
+
+  deleteBook = () => {
+    if (this.inputRef.current) {
+      this.inputRef.current.deleteBook()
+    }
+  }
+
   render() {
-    const book: Book = this.props.navigation.getParam('item')
+    const { book, bookStatus } = this.props
+
+    if (!book) {
+      return (
+        <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )
+    }
 
     const headerHeightExtended = this.scrollY.interpolate({
       inputRange: [0, HEADER_SCROLL_DISTANCE * 1.25],
@@ -139,6 +215,17 @@ export default class BookDetail extends React.Component<Props, State> {
       outputRange: [4, 0],
       extrapolate: 'clamp'
     })
+
+    const {
+      authors,
+      name,
+      bookId,
+      categoryName,
+      bookSize,
+      pdf,
+      description
+    } = book
+
     return (
       <StyledContainer style={styles.container}>
         <StatusBar translucent={true} backgroundColor="transparent" />
@@ -158,10 +245,14 @@ export default class BookDetail extends React.Component<Props, State> {
               <StyledView alignItems={'center'}>
                 <WhiteSpace />
                 <WhiteSpace />
-                <StyledBookName>{book.name}</StyledBookName>
+                <StyledBookName>{name}</StyledBookName>
                 <WhiteSpace size="xs" />
-                <StyledDescText>Patricia Brennan Demuth</StyledDescText>
-                <BookActionButton bookId={book.bookId} bookUrl={book.pdf} />
+                <StyledDescText>{this.getAuthors(authors)}</StyledDescText>
+                <BookActionButton
+                  ref={this.inputRef}
+                  bookId={bookId}
+                  bookUrl={pdf}
+                />
               </StyledView>
               <WhiteSpace />
               <WhiteSpace />
@@ -170,18 +261,18 @@ export default class BookDetail extends React.Component<Props, State> {
                 <StyledTitleText>
                   {Localize.t('BookingDetail.Intro')}
                 </StyledTitleText>
-                <StyledCategoryCustom>{book.category}</StyledCategoryCustom>
+                <StyledCategoryCustom>{categoryName}</StyledCategoryCustom>
               </StyledHorizontalView>
               <WhiteSpace size="lg" />
               <WhiteSpace size="xs" />
               <StyledHorizontalView alignItems="center" py-0={true}>
                 <StyledDescMutedText>
-                  {Localize.t('BookingDetail.ExpiryDate', {
-                    p: Localize.strftime(new Date(), '%m/%d/%Y')
-                  })}
+                  {this.renderLicenseTime(book)}
                 </StyledDescMutedText>
                 <StyledDescMutedText>
-                  {Localize.t('BookingDetail.Size', { p: '150mb' })}
+                  {Localize.t('BookingDetail.Size', {
+                    p: this.getBookSize(bookSize)
+                  })}
                 </StyledDescMutedText>
               </StyledHorizontalView>
               <WhiteSpace size="xs" />
@@ -191,13 +282,7 @@ export default class BookDetail extends React.Component<Props, State> {
                 })}
               </StyledDescMutedText>
               <WhiteSpace size="md" />
-              <StyledBodyText>
-                Bill Gates, born in Seattle, Washington, in 1955, is an American
-                business magnate, investor, philanthropist, and author. In this
-                Who Was...? biography, children will learn of Gates' childhood
-                passion for computer technology, which led him to revolutionize
-                personal computers
-              </StyledBodyText>
+              <StyledBodyText>{description}</StyledBodyText>
             </WingBlank>
             <StyledDivider />
             <WhiteSpace size="md" />
@@ -251,6 +336,23 @@ export default class BookDetail extends React.Component<Props, State> {
                   {Localize.t('BookingDetail.BookInfo')}
                 </Text>
               </View>
+              {bookStatus === BookAction.DOWNLOADED ||
+              bookStatus === BookAction.UPDATE ? (
+                <View style={[styles.backButtonWrapper]}>
+                  <Button
+                    activeStyle={{ backgroundColor: 'transparent' }}
+                    style={[styles.backButton, { alignSelf: 'flex-end' }]}
+                    onPress={this.deleteBook}
+                  >
+                    {/*<EddiIcon*/}
+                    {/*  name="eraser"*/}
+                    {/*  style={styles.backButtonIcon}*/}
+                    {/*  size={16}*/}
+                    {/*/>*/}
+                    <Image source={require('assets/img/delete_infobook.png')} />
+                  </Button>
+                </View>
+              ) : null}
             </View>
           </View>
           <Animated.View style={{ opacity, top: headerHeightInverted }}>
@@ -291,3 +393,11 @@ export default class BookDetail extends React.Component<Props, State> {
     )
   }
 }
+
+export default connect((state: RootReducer, props: any) => {
+  const bookId = props.navigation.getParam('bookId')
+  return {
+    book: bookDetailSelector.getBookDetail(bookId)(state),
+    bookStatus: state.BookShelfState.actionStatus[bookId.toString()]
+  }
+})(BookDetail)
