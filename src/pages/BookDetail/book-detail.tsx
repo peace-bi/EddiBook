@@ -10,6 +10,7 @@ import { Localize } from 'core/localize'
 import React from 'react'
 import {
   Animated,
+  Image,
   StatusBar,
   Text,
   TouchableWithoutFeedback,
@@ -343,11 +344,12 @@ class BookDetail extends React.Component<Props, State> {
                     style={[styles.backButton, { alignSelf: 'flex-end' }]}
                     onPress={this.deleteBook}
                   >
-                    <EddiIcon
-                      name="eraser"
-                      style={styles.backButtonIcon}
-                      size={16}
-                    />
+                    {/*<EddiIcon*/}
+                    {/*  name="eraser"*/}
+                    {/*  style={styles.backButtonIcon}*/}
+                    {/*  size={16}*/}
+                    {/*/>*/}
+                    <Image source={require('assets/img/delete_infobook.png')} />
                   </Button>
                 </View>
               ) : null}

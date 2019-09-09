@@ -1,10 +1,20 @@
 import axios from 'axios'
 import * as t from 'io-ts'
-import { from, Observable, of, throwError } from 'rxjs'
+import { EMPTY, from, Observable, of, throwError } from 'rxjs'
 
 import { Either, Left, Right } from 'fp-ts/lib/Either'
 import { TypeOf } from 'io-ts'
-import { catchError, flatMap, map, take, tap, timeout } from 'rxjs/operators'
+import {
+  catchError,
+  flatMap,
+  map,
+  retryWhen,
+  scan,
+  switchMap,
+  take,
+  takeWhile,
+  timeout
+} from 'rxjs/operators'
 import { Storage } from './storage'
 import { Config } from './util'
 
@@ -153,15 +163,28 @@ export const requestApi: (
           }
         )
       ).pipe(
-        catchError((err: any, source) => {
-          if (err.response) {
-            if (err.response.data.error === 'invalid_token') {
-              return refreshToken(refresh_token, source)
-            }
-            return throwError(err.response.data)
-          }
-          return throwError(err)
+        retryWhen((errors) => {
+          return refresh(errors, refresh_token)
         })
+        // catchError((err: any, source) => {
+        //   if (err.response) {
+        //     if (err.response.data.error === 'invalid_token') {
+        //       refreshToken(refresh_token, source).pipe(
+        //         first()
+        //       ).subscribe()
+        //       return throwError({
+        //         response: {
+        //           data: {
+        //             error: 'Refresh Token Fail',
+        //             error_description: 'Can not refresh token'
+        //           }
+        //         }
+        //       })
+        //     }
+        //     return throwError(err.response.data)
+        //   }
+        //   return throwError(err)
+        // })
       )
     ),
     take(1),
@@ -169,10 +192,28 @@ export const requestApi: (
   )
 }
 
-function refreshToken(
-  refresh_token: string,
-  source: Observable<unknown>
-): Observable<any> {
+function refresh(obs: Observable<any>, refreshToken: string): Observable<any> {
+  return obs.pipe(
+    switchMap((err) => {
+      if (err.response) {
+        if (err.response.data.error === 'invalid_token') {
+          return of(err)
+        }
+        return throwError(err.response.data)
+      }
+      return throwError(err)
+    }),
+    scan((acc) => {
+      return acc + 1
+    }, 0),
+    takeWhile((acc) => acc < 3),
+    flatMap(() => {
+      return fetchNewToken(refreshToken)
+    })
+  )
+}
+
+function fetchNewToken(refresh_token: string): Observable<any> {
   return from(
     requestHttp(
       `${getHost()}uaa/oauth/token`,
@@ -189,22 +230,19 @@ function refreshToken(
       }
     )
   ).pipe(
-    tap((res: any) => {
+    flatMap((res: any) => {
+      const data = res.data
       Storage.getInstance().setToken({
-        jwt: res.access_token,
-        refresh: res.refresh_token
+        jwt: data.access_token,
+        refresh: data.refresh_token
       })
+
+      // Stop retry fetch token
+      return EMPTY
     }),
-    flatMap(() => source),
-    catchError(() =>
-      throwError({
-        response: {
-          data: {
-            error: 'Refresh Token Fail',
-            error_description: 'Can not refresh token'
-          }
-        }
-      })
-    )
+    catchError((err) => {
+      // Retry fetch token
+      return of(err)
+    })
   )
 }
