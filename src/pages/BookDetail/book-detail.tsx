@@ -339,18 +339,9 @@ class BookDetail extends React.Component<Props, State> {
               {bookStatus === BookAction.DOWNLOADED ||
               bookStatus === BookAction.UPDATE ? (
                 <View style={[styles.backButtonWrapper]}>
-                  <Button
-                    activeStyle={{ backgroundColor: 'transparent' }}
-                    style={[styles.backButton, { alignSelf: 'flex-end' }]}
-                    onPress={this.deleteBook}
-                  >
-                    {/*<EddiIcon*/}
-                    {/*  name="eraser"*/}
-                    {/*  style={styles.backButtonIcon}*/}
-                    {/*  size={16}*/}
-                    {/*/>*/}
-                    <Image source={require('assets/img/delete_infobook.png')} />
-                  </Button>
+                  <TouchableWithoutFeedback onPress={this.deleteBook}>
+                    <Image source={require('assets/img/delete_infobook.png')} style={[styles.backButton, { alignSelf: 'flex-end', marginRight: 16 }]} resizeMode={'contain'} />
+                  </TouchableWithoutFeedback>
                 </View>
               ) : null}
             </View>

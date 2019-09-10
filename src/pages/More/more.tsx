@@ -7,6 +7,7 @@ import { ScrollView } from 'react-native'
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { useNavigation } from 'react-navigation-hooks'
 import { useSelector } from 'react-redux'
+import { getHost } from 'shared/api'
 import { TabType } from 'shared/model'
 import { Storage } from 'shared/storage'
 import { RootReducer } from 'shared/store/rootReducer'
@@ -34,7 +35,7 @@ export default function More() {
         <Styled.Background
           source={{
             uri:
-              'https://png.pngtree.com/thumb_back/fw800/back_pic/00/08/53/17562a43dac4e41.jpg'
+              'http://pic.soutu123.com/back_pic/00/00/40/82/a6ed60e616c58fd9f2e8dc81235d3198.jpg!/fw/556/quality/90/unsharp/true/compress/true'
           }}
         />
       </Styled.Wrapper>
@@ -44,8 +45,8 @@ export default function More() {
             <Styled.Avatar
               source={{
                 uri:
-                  profile && profile.userProfile
-                    ? profile.userProfile.avatar
+                  (profile && profile.userProfile)
+                    ? `${getHost()}/${profile.userProfile.avatar}`
                     : 'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1'
               }}
             />

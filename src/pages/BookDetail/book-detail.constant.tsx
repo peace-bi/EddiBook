@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 import { Header } from 'react-navigation'
 
 export const styles = StyleSheet.create({
@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   backButtonWrapper: {
-    paddingTop: 16,
+    paddingTop: Platform.OS === 'ios' ? 16 : 0,
     justifyContent: 'center',
     flex: 0.3
   },
@@ -54,7 +54,7 @@ export const styles = StyleSheet.create({
   },
   backButtonIcon: { color: '#fff' },
   titleWrapper: {
-    paddingTop: 16,
+    paddingTop: Platform.OS === 'ios' ? 16 : 0,
     justifyContent: 'center',
     flex: 0.4
   },

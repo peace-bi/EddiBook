@@ -13,7 +13,6 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.BV.LinearGradient.LinearGradientPackage;
-import com.reactlibrary.RNPdfTronUtilsPackage;
 import com.pdftron.reactnative.RNPdftronPackage;
 import com.reactcommunity.rnlocalize.RNLocalizePackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -47,7 +46,6 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
             new LinearGradientPackage(),
             new FastImageViewPackage(),
             new RNDeviceInfo(),
-            new RNPdfTronUtilsPackage(),
             new RNPdftronPackage(),
             new RNLocalizePackage(),
             new RNGestureHandlerPackage(),
