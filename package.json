@@ -20,7 +20,7 @@
     "@react-native-community/netinfo": "3.2.1",
     "@types/i18n-js": "^3.0.1",
     "@types/lodash": "^4.14.135",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bugsnag-react-native": "^2.22.2",
     "formik": "^1.5.7",
     "fp-ts": "1.19.4",
